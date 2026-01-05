@@ -4,59 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self';">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="no-referrer">
     <title>Ranginx – Watch 18+ Web Series & Movies Online</title>
     <meta name="description" content="Watch latest HD web series and movies online. Free streaming on Ranginx.">
     <meta name="robots" content="index, follow">
     
-    <meta name="rating" content="RTA-5042-1996-1400-1577-RTA" />
-    <meta name="adult" content="true" />
-
-    <meta property="og:site_name" content="Ranginx">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ranginx - Premium Streaming">
-    <meta property="og:description" content="Watch latest HD web series and movies online. Free streaming on Ranginx.">
-    <meta property="og:image" content="https://ranginx.fun/og-image.jpg">
-    <meta property="og:url" content="https://ranginx.fun/">
-    
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Ranginx - Premium Streaming">
-    <meta name="twitter:description" content="Watch latest HD web series and movies online. Free streaming on Ranginx.">
-    
-    <script type="application/ld+json" id="schema-json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "WebSite",
-          "name": "Ranginx",
-          "alternateName": "Ranginx Streaming",
-          "url": "https://ranginx.fun/",
-          "description": "Watch latest 18+ web series and movies online in HD quality.",
-          "inLanguage": "en",
-          "isFamilyFriendly": false
-        },
-        {
-          "@type": "Organization",
-          "name": "Ranginx",
-          "url": "https://ranginx.fun/",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://ranginx.fun/logo.png"
-          }
-        }
-      ]
-    }
-    </script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <script>
@@ -84,13 +42,13 @@
         ::-webkit-scrollbar-thumb:hover { background: #e50914; }
         
         .glass-nav {
-            background: rgba(10, 10, 10, 0.85);
+            background: rgba(10, 10, 10, 0.9);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .ad-slot { display: none; width: 100%; margin: 30px 0; justify-content: center; overflow: hidden; }
+        .ad-slot { display: none; width: 100%; margin: 20px 0; justify-content: center; overflow: hidden; }
         .ad-slot.active { display: flex; border: 1px solid #262626; background: #0f0f0f; min-height: 90px; }
+        
         .ep-btn { 
             display: flex; align-items: center; justify-content: center; height: 40px; border-radius: 6px; 
             border: 1px solid #262626; background: #141414; color: #aaa; font-size: 14px; font-weight: 500; 
@@ -98,35 +56,18 @@
         }
         .ep-btn:hover { background: #222; color: white; border-color: #444; }
         .ep-btn.active { background: #e50914; color: white; border-color: #e50914; pointer-events: none; }
-        .footer-link { cursor: pointer; color: #888; font-size: 14px; margin-bottom: 8px; display: block; transition: 0.2s; }
-        .footer-link:hover { color: #e50914; }
         
-        /* --- SEO CONTENT BLOCK STYLING --- */
-        .seo-content-wrapper {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            border-top: 1px solid #262626;
-            margin-top: 3rem;
-            background: #0f0f0f;
-            border-radius: 12px;
-        }
+        /* Custom Default Player Styling */
+        video { width: 100%; height: 100%; background: #000; outline: none; }
+        
+        /* SEO Content Block */
+        .seo-content-wrapper { max-width: 1600px; margin: 3rem auto; padding: 2rem 1.5rem; border-top: 1px solid #262626; background: #0f0f0f; border-radius: 12px; }
         #seo-content { color: #9ca3af; font-size: 0.95rem; line-height: 1.8; }
-        #seo-content h2 { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 1rem; margin-top: 0; }
-        #seo-content h3 { font-size: 1.25rem; font-weight: 600; color: white; margin-bottom: 0.75rem; margin-top: 1.5rem; }
+        #seo-content h2 { font-size: 1.5rem; font-weight: 700; color: white; margin: 1rem 0; }
         #seo-content p { margin-bottom: 1rem; }
-        #seo-content strong { color: #e5e5e5; }
-        #seo-content a { color: #e50914; text-decoration: underline; }
-        
-        /* Cinema Mode */
-        .cinema-mode { position: fixed; inset: 0; background: black; z-index: 100; padding: 0; display: flex; align-items: center; justify-content: center; }
-        .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section, .cinema-mode #player-ad-top, .cinema-mode #player-ad-bot { display: none !important; }
-        .cinema-mode .player-container { width: 100% !important; max-width: 100% !important; height: 100vh; }
-        .cinema-mode #player-wrapper { height: 100vh !important; }
     </style>
 </head>
 <body>
-<script src="https://pl28295471.effectivegatecpm.com/f5/76/ea/f576ea86d7e7c1a91485425829516236.js"></script>
 
 <nav class="fixed top-0 w-full h-16 glass-nav z-[60] flex items-center justify-between px-4 lg:px-8 transition-all duration-300">
     <div class="flex items-center gap-6">
@@ -137,7 +78,7 @@
     </div>
 
     <div class="hidden md:flex flex-grow max-w-md mx-8 relative">
-        <input type="text" id="desktop-search" placeholder="Search movies, series..." class="w-full bg-[#141414] border border-[#262626] pl-10 pr-4 py-2.5 rounded-full outline-none text-sm text-white focus:border-brand focus:ring-1 focus:ring-brand transition shadow-inner">
+        <input type="text" id="desktop-search" placeholder="Search..." class="w-full bg-[#141414] border border-[#262626] pl-10 pr-4 py-2.5 rounded-full outline-none text-sm text-white focus:border-brand transition shadow-inner">
         <i data-lucide="search" class="w-4 h-4 text-gray-500 absolute left-3.5 top-3"></i>
     </div>
     <button class="md:hidden p-2 text-white" onclick="document.getElementById('mobile-search').classList.toggle('hidden')"><i data-lucide="search" class="w-6 h-6"></i></button>
@@ -174,170 +115,105 @@
     </div>
 </div>
 
-<noscript>
-    <div style="padding: 20px; max-width: 800px; margin: 0 auto; color: #e5e5e5; font-family: sans-serif;">
-        <h1 style="color: #e50914;">Watch Free Web Series & Movies Online - Ranginx</h1>
-        <p>Ranginx is a premium streaming platform offering the latest HD web series and movies. Browse our extensive catalog of 18+ web series, Bollywood movies, and trending episodes without registration.</p>
-        <h2>Popular Categories</h2>
-        <ul><li><a href="/movies" style="color: #fff;">HD Movies</a></li><li><a href="/series" style="color: #fff;">Web Series</a></li></ul>
-    </div>
-</noscript>
-
 <main id="app" class="pt-16 min-h-screen"></main>
 
 <script>
-    // --- 🔴 ADS CONFIGURATION ---
+    // --- 🔴 ADS CONFIGURATION (Paste Ads Here) ---
     const ADS = {
-        header: ``,       
-        footer: ``,       
-        playerTop: ``,    
-        playerBottom: ``, 
-        grid: ``          
+        header: ``,       // Home Top Ad
+        footer: ``,       // Home Bottom Ad
+        playerTop: ``,    // Player Top Ad
+        playerBottom: ``, // Player Bottom Ad
+        grid: ``          // Grid Insert Ad
     };
 
     let allContent = [];
-    const STATE = { player: null, hls: null, filter: 'all' };
+    let STATE = { hls: null };
 
-    // --- ANALYTICS STUB ---
-    function isAnalyticsSafe() { return true; }
-    function incrementViewSafe(collectionName, docId, uniqueKey) { /* Track view */ }
+    // --- UTILS ---
+    function createSlug(name) { return name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-'); }
     
-    let currentTrackId = null;
-    let trackStartTime = Date.now();
-    function trackPageActivity() { /* Analytics Logic */ }
-
-    // --- SEO UPDATER ---
-    function updateSEO(meta) {
-        document.title = meta.title;
-
-        let descMeta = document.querySelector('meta[name="description"]');
-        if (!descMeta) { descMeta = document.createElement('meta'); descMeta.setAttribute('name', 'description'); document.head.appendChild(descMeta); }
-        descMeta.setAttribute("content", meta.desc);
-
-        let robotsMeta = document.querySelector('meta[name="robots"]');
-        if (!robotsMeta) { robotsMeta = document.createElement('meta'); robotsMeta.setAttribute('name', 'robots'); document.head.appendChild(robotsMeta); }
-        robotsMeta.setAttribute("content", meta.robots || "index, follow");
-
-        let canonicalUrl = meta.url || `https://ranginx.fun${window.location.pathname}`;
-        if (canonicalUrl.endsWith('/') && canonicalUrl !== 'https://ranginx.fun/') canonicalUrl = canonicalUrl.slice(0, -1);
-        
-        let linkCanon = document.querySelector('link[rel="canonical"]');
-        if(!linkCanon) { linkCanon = document.createElement('link'); linkCanon.setAttribute('rel', 'canonical'); document.head.appendChild(linkCanon); }
-        linkCanon.setAttribute("href", canonicalUrl);
-
-        const setMeta = (selector, attr, value) => {
-            let el = document.querySelector(selector);
-            if (!el) { el = document.createElement('meta'); if(selector.includes('property')) el.setAttribute('property', selector.split('"')[1]); if(selector.includes('name')) el.setAttribute('name', selector.split('"')[1]); document.head.appendChild(el); }
-            el.setAttribute(attr, value);
-        };
-
-        setMeta('meta[property="og:title"]', 'content', meta.title);
-        setMeta('meta[property="og:description"]', 'content', meta.desc);
-        setMeta('meta[property="og:url"]', 'content', canonicalUrl);
-        setMeta('meta[property="og:type"]', 'content', meta.ogType || "website");
-        if (meta.image) setMeta('meta[property="og:image"]', 'content', meta.image);
-        
-        const schemaData = { "@context": "https://schema.org", "@graph": [ { "@type": "WebSite", "name": "Ranginx", "url": "https://ranginx.fun/" }, ...(Array.isArray(meta.schema) ? meta.schema : (meta.schema ? [meta.schema] : [])) ] };
-        document.getElementById('schema-json').textContent = JSON.stringify(schemaData);
-    }
-
-    // --- AUTO STORYLINE GENERATOR ---
-    function getAutoStoryline(item) {
-        if (item.description && item.description.length > 50) return item.description;
-        // Fallback Description
-        return `Watch <strong>${item.name}</strong> full online on Ranginx. This is a popular 18+ web series in Hindi. Stream full HD episodes of ${item.name} for free. No registration required.`;
-    }
-
-    function getSeoContentHTML(item) {
-        if (item.seoContent && item.seoContent.trim() !== "") return item.seoContent; 
-        return `<h2>Watch ${item.name} Web Series Online</h2><p>${getAutoStoryline(item)}</p>`;
-    }
-
-    window.route = (event) => { event = event || window.event; event.preventDefault(); window.history.pushState({}, "", event.currentTarget.href); handleLocation(); };
-    window.onpopstate = handleLocation;
-
-    // --- MAIN ROUTING LOGIC ---
-    async function handleLocation() {
-        const path = window.location.pathname;
-        const parts = path.split('/').filter(p => p);
-        
-        document.getElementById('sidebar').classList.add('-translate-x-full');
-        document.getElementById('overlay').classList.add('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        destroyPlayer();
-
-        if (window.location.pathname.length > 1 && window.location.pathname.endsWith('/')) {
-            window.history.replaceState({}, "", window.location.pathname.slice(0, -1));
-        }
-
-        // 1. Home / Filters
-        if (parts.length === 0 || path === '/index.html' || path === '/') { renderHome(); return; }
-        if (parts[0] === 'movies') { renderHome('movie'); return; }
-        if (parts[0] === 'series') { renderHome('series'); return; }
-
-        // 2. Content Matching
-        const slug = decodeURIComponent(parts[0]);
-        const item = allContent.find(i => (i.slug || createSlug(i.name)).toLowerCase() === slug.toLowerCase());
-
-        if (!item) { render404(); return; }
-
-        // 3. Detail vs Player Logic
-        const subPage = parts[1]; 
-
-        if (item.type === 'series') {
-            if (parts.length === 1) renderSeriesLanding(slug);
-            else if (parts.length === 2 && parts[1].startsWith('episode-')) {
-                const epNum = parseInt(parts[1].replace('episode-', ''));
-                if (Number.isInteger(epNum) && epNum > 0 && item.episodes && epNum <= item.episodes.length) renderPlayer(slug, epNum - 1);
-                else { window.history.replaceState({}, "", `/${slug}`); renderSeriesLanding(slug); }
-            } else { window.history.replaceState({}, "", `/${slug}`); renderSeriesLanding(slug); }
-        } else {
-            // Movies
-            if (subPage === 'watch') renderPlayer(slug, 0);
-            else renderSeriesLanding(slug);
-        }
-        
-        trackPageActivity();
-    }
-
-    const getSkeleton = () => `<div class="px-4 lg:px-8 py-8 max-w-[1600px] mx-auto"><div class="w-full h-[40vh] md:h-[50vh] bg-[#141414] rounded-2xl animate-pulse mb-10"></div><div class="grid grid-cols-2 md:grid-cols-3 gap-4">${Array(6).fill(0).map(() => `<div class="aspect-video bg-[#141414] rounded-xl animate-pulse"></div>`).join('')}</div></div>`;
-
+    // --- INIT ---
     async function init() {
         document.getElementById('app').innerHTML = getSkeleton();
         try {
-            // LOAD FROM JSON
             const res = await fetch('data/normal.json');
             if(!res.ok) throw new Error("JSON Not Found");
             const json = await res.json();
             
-            // MAP JSON to Code Expected Format
+            // Map JSON to Internal Format
             allContent = json.map(item => ({
-                ...item,
-                name: item.title,       // Map title -> name
-                imageUrl: item.thumbnail, // Map thumbnail -> imageUrl
-                seoIndex: true          
+                id: createSlug(item.title), // Unique ID from slug
+                name: item.title,
+                imageUrl: item.thumbnail,
+                description: item.description,
+                type: item.type || 'movie',
+                slug: item.slug || createSlug(item.title),
+                episodes: item.episodes || [],
+                video: item.video || '', // For movies
+                category: item.category || 'HD'
             })).reverse();
             
+            renderAd('header-ad', ADS.header);
             handleLocation();
         } catch(e) { 
-            console.error(e);
             document.getElementById('app').innerHTML = `<div class="h-screen flex justify-center items-center text-red-500">Error: data/normal.json not found</div>`;
         }
     }
 
-    function render404() {
-        updateSEO({ title: "Page Not Found", desc: "Content does not exist.", robots: "noindex" });
-        document.getElementById('app').innerHTML = `<div class="min-h-screen flex flex-col items-center justify-center text-center px-4"><h1 class="text-6xl font-bold text-brand mb-4">404</h1><p class="text-xl text-gray-300 mb-8">Content not found.</p><a href="/" onclick="route(event)" class="bg-white text-black px-6 py-3 rounded-lg font-bold">Go Home</a></div>${getFooter()}`;
+    // --- ROUTER ---
+    window.route = (event) => { event.preventDefault(); window.history.pushState({}, "", event.currentTarget.href); handleLocation(); };
+    window.onpopstate = handleLocation;
+
+    async function handleLocation() {
+        document.getElementById('sidebar').classList.add('-translate-x-full');
+        document.getElementById('overlay').classList.add('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Clean up previous video
+        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+
+        const path = window.location.pathname;
+        const parts = path.split('/').filter(p => p);
+        
+        // 1. Home
+        if (parts.length === 0 || path === '/index.html' || path === '/') { renderHome(); return; }
+        if (parts[0] === 'movies') { renderHome('movie'); return; }
+        if (parts[0] === 'series') { renderHome('series'); return; }
+
+        // 2. Find Item
+        const slug = decodeURIComponent(parts[0]);
+        const item = allContent.find(i => i.slug.toLowerCase() === slug.toLowerCase());
+
+        if (!item) { render404(); return; }
+
+        // 3. Render Views
+        const subPage = parts[1];
+        if (item.type === 'series') {
+            if (subPage && subPage.startsWith('episode-')) {
+                const epNum = parseInt(subPage.replace('episode-', ''));
+                renderPlayer(item, epNum || 1);
+            } else {
+                renderSeriesLanding(item);
+            }
+        } else {
+            // Movie Logic
+            if (subPage === 'watch') renderPlayer(item, 0); // 0 index for movie
+            else renderSeriesLanding(item); // Show detail page first for movies too
+        }
     }
 
-    // --- HOME PAGE (Separated Logic) ---
-    function renderHome(filterType = null) {
-        updateSEO({ title: "Ranginx - Watch Latest Web Series & Movies", desc: "Premium streaming destination.", robots: "index, follow" });
+    // --- VIEWS ---
+    const getSkeleton = () => `<div class="px-4 py-8 max-w-[1600px] mx-auto animate-pulse"><div class="w-full h-64 bg-[#141414] rounded-2xl mb-8"></div><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${Array(8).fill(0).map(()=>`<div class="aspect-video bg-[#141414] rounded-xl"></div>`).join('')}</div></div>`;
 
+    function renderHome(filterType = null) {
+        document.title = "Ranginx - Watch Online";
         const data = filterType ? allContent.filter(i => i.type === filterType) : allContent;
-        const featured = data.find(i => i.isFeatured === true) || (data.length > 0 ? data[0] : null);
+        const featured = data.find(i => i.isFeatured) || data[0];
         
-        let html = `<div class="px-4 md:px-8 py-6 max-w-[1600px] mx-auto min-h-screen">
+        let html = `
+        <div id="header-ad" class="ad-slot">${ADS.header}</div>
+        <div class="px-4 md:px-8 py-6 max-w-[1600px] mx-auto min-h-screen">
             <div class="flex gap-3 overflow-x-auto pb-6 sticky top-16 bg-[#0a0a0a] z-20 py-2 no-scrollbar">
                 <a href="/" onclick="route(event)" class="${!filterType?'bg-white text-black':'bg-[#141414] text-gray-400 hover:text-white border border-[#262626]'} px-6 py-2 rounded-full text-sm font-bold whitespace-nowrap transition shadow-lg">All</a>
                 <a href="/series" onclick="route(event)" class="${filterType==='series'?'bg-white text-black':'bg-[#141414] text-gray-400 hover:text-white border border-[#262626]'} px-6 py-2 rounded-full text-sm font-bold whitespace-nowrap transition shadow-lg">Series</a>
@@ -349,57 +225,54 @@
                 <div class="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105" style="background-image: url('${featured.imageUrl}');"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 md:p-12 w-full md:w-2/3">
-                    <span class="bg-brand text-white text-[10px] md:text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mb-3 inline-block shadow-lg">Featured</span>
+                    <span class="bg-brand text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider mb-3 inline-block shadow-lg">Featured</span>
                     <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight drop-shadow-lg">${featured.name}</h1>
-                    <p class="text-gray-300 text-sm md:text-base line-clamp-2 mb-6 max-w-lg">${getAutoStoryline(featured)}</p>
-                    <a href="/${createSlug(featured.name)}" onclick="route(event)" class="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-bold hover:bg-gray-200 transition"><i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now</a>
+                    <a href="/${featured.slug}" onclick="route(event)" class="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-bold hover:bg-gray-200 transition"><i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now</a>
                 </div>
             </div>` : ''}
             
-            <div class="animate-fade">
-        `;
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 animate-fade">`;
 
-        if (!filterType) {
-            const series = allContent.filter(i => i.type === 'series');
-            const movies = allContent.filter(i => i.type === 'movie');
-
-            if(series.length > 0) {
-                html += `<h2 class="text-xl font-bold text-white mb-6 border-l-4 border-brand pl-3">Latest Web Series</h2>`;
-                html += `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8 mb-12">`;
-                html += generateGridItemsWithAds(series.slice(0, 8)); // Limit to 8
-                html += `</div>`;
+        let count = 0;
+        data.forEach((item) => {
+            html += `
+            <a href="/${item.slug}" onclick="route(event)" class="group block relative">
+                <div class="relative aspect-video rounded-xl overflow-hidden mb-3 shadow-lg bg-[#141414] border border-[#222]">
+                    <img src="${item.imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                         <div class="bg-brand/90 p-3 rounded-full shadow-xl transform scale-50 group-hover:scale-100 transition duration-300"><i data-lucide="play" class="w-6 h-6 fill-white text-white"></i></div>
+                    </div>
+                    <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded border border-white/10 uppercase">${item.type === 'series' ? 'TV' : 'MOV'}</div>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-200 line-clamp-1 group-hover:text-brand transition">${item.name}</h3>
+                    <div class="flex items-center justify-between mt-1"><span class="text-[11px] text-gray-500">2025</span><span class="text-[10px] border border-gray-700 text-gray-400 px-1 rounded">HD</span></div>
+                </div>
+            </a>`;
+            
+            count++;
+            if(count % 5 === 0 && ADS.grid) {
+                html += `<div class="col-span-full ad-slot active">${ADS.grid}</div>`;
             }
-
-            if(movies.length > 0) {
-                html += `<h2 class="text-xl font-bold text-white mb-6 border-l-4 border-brand pl-3">Latest Movies</h2>`;
-                html += `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8">`;
-                html += generateGridItemsWithAds(movies.slice(0, 8));
-                html += `</div>`;
-            }
-        } else {
-            html += `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-8">`;
-            html += generateGridItemsWithAds(data);
-            html += `</div>`;
-        }
+        });
 
         html += `</div></div>${getFooter()}`;
         document.getElementById('app').innerHTML = html;
+        renderAd('header-ad', ADS.header);
+        renderAd('footer-ad', ADS.footer);
         lucide.createIcons();
     }
 
-    // --- DETAIL PAGE ---
-    function renderSeriesLanding(slug) {
-        const item = allContent.find(i => createSlug(i.name) === slug);
-        if(!item) return render404(); 
-
+    // --- DETAIL PAGE (Layout like screenshot) ---
+    function renderSeriesLanding(item) {
+        document.title = `${item.name} - Watch Free`;
         const isSeries = item.type === 'series';
-        const pageTitle = `${item.name} (18+) Watch Online | Ranginx`;
         const actionBtn = isSeries 
-            ? `<a href="/${slug}/episode-1" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 transition transform hover:scale-105"><i data-lucide="play-circle" class="w-5 h-5"></i> Start Watching Episode 1</a>`
-            : `<a href="/${slug}/watch" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 transition transform hover:scale-105"><i data-lucide="play" class="w-5 h-5"></i> Play Movie</a>`;
+            ? `<a href="/${item.slug}/episode-1" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 transition"><i data-lucide="play-circle" class="w-5 h-5"></i> Start Watching Episode 1</a>`
+            : `<a href="/${item.slug}/watch" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 transition"><i data-lucide="play" class="w-5 h-5"></i> Play Movie</a>`;
 
-        updateSEO({ title: pageTitle, desc: getAutoStoryline(item), image: item.imageUrl });
-        
+        const desc = item.description || `Watch ${item.name} full online. This is a premium HD content available on Ranginx.`;
+
         let html = `
         <div class="min-h-screen">
             <div class="relative w-full h-[60vh] lg:h-[70vh]">
@@ -411,183 +284,200 @@
                     <div class="mb-4">
                         <span class="bg-brand text-white text-xs font-bold px-2 py-1 rounded uppercase mb-3 inline-block">${isSeries ? 'Web Series' : 'Movie'}</span>
                         <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">${item.name}</h1>
-                        <p class="text-gray-300 text-sm md:text-lg max-w-2xl line-clamp-3 mb-6">${getAutoStoryline(item)}</p>
+                        <p class="text-gray-300 text-sm md:text-lg max-w-2xl line-clamp-3 mb-6">${desc}</p>
                         <div class="flex flex-wrap gap-4">${actionBtn}</div>
                     </div>
                 </div>
             </div>
+            
+            <div id="detail-ad-top" class="ad-slot">${ADS.playerTop}</div>
+
             <div class="max-w-[1600px] mx-auto px-6 py-12">
                 ${isSeries && item.episodes ? `
                 <div class="flex items-center justify-between mb-8 border-b border-[#262626] pb-4"><h2 class="text-2xl font-bold text-white flex items-center gap-2"><i data-lucide="layers" class="text-brand"></i> All Episodes <span class="text-gray-500 text-lg font-normal">(${item.episodes.length})</span></h2></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
                     ${item.episodes.map((ep, index) => `
-                        <a href="/${slug}/episode-${index+1}" onclick="route(event)" class="group bg-[#141414] border border-[#262626] hover:border-brand rounded-xl overflow-hidden transition hover:shadow-lg flex md:block">
+                        <a href="/${item.slug}/episode-${index+1}" onclick="route(event)" class="group bg-[#141414] border border-[#262626] hover:border-brand rounded-xl overflow-hidden transition hover:shadow-lg flex md:block">
                             <div class="w-32 md:w-full md:aspect-video relative overflow-hidden bg-black flex-shrink-0"><img src="${item.imageUrl}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition duration-500"><div class="absolute inset-0 flex items-center justify-center"><div class="bg-white/10 backdrop-blur-sm p-2 rounded-full group-hover:bg-brand group-hover:text-white transition"><i data-lucide="play" class="w-5 h-5 fill-current"></i></div></div></div>
                             <div class="p-4 flex flex-col justify-center">
                                 <h3 class="font-bold text-white group-hover:text-brand transition text-lg">Episode ${index + 1}</h3>
-                                ${ep.title ? `<p class="text-gray-400 text-xs mt-1 font-medium">${ep.title}</p>` : ''}
+                                <p class="text-gray-500 text-xs mt-1 font-medium">${ep.title || 'HD'}</p>
                             </div>
                         </a>`).join('')}
                 </div>` : ''}
-                <section class="seo-content-wrapper"><article id="seo-content">${getSeoContentHTML(item)}</article></section>
+                
+                <section class="seo-content-wrapper">
+                    <article id="seo-content">
+                        <h2>Watch ${item.name} Online</h2>
+                        <p>${desc}</p>
+                        <p>Enjoy streaming <strong>${item.name}</strong> on Ranginx. We provide full HD quality for free.</p>
+                    </article>
+                </section>
             </div>${getFooter()}`;
         document.getElementById('app').innerHTML = html;
+        renderAd('detail-ad-top', ADS.playerTop);
         lucide.createIcons();
     }
 
-    // --- PLAYER PAGE ---
-    function renderPlayer(slug, epIndex) {
-        const item = allContent.find(i => createSlug(i.name) === slug);
-        if(!item) return render404(); 
-
+    // --- PLAYER PAGE (FAST NATIVE PLAYER) ---
+    function renderPlayer(item, epIndex) {
         const isSeries = item.type === 'series';
-        let videoSrc = "", pageTitle = item.name, metaDesc = item.description;
+        let videoSrc = "", pageTitle = item.name, metaDesc = item.description || item.name;
         
         if(isSeries) {
-            const ep = item.episodes[epIndex];
+            const ep = item.episodes[epIndex-1]; // epIndex is 1-based from URL
             if(!ep) return render404();
             videoSrc = ep.url;
-            pageTitle = `${item.name} - Episode ${epIndex+1}`;
-            metaDesc = getAutoStoryline(item);
+            pageTitle = `${item.name} - Episode ${epIndex}`;
+            metaDesc = ep.description || item.description;
         } else {
-            videoSrc = item.video || item.url || "";
+            videoSrc = item.video || ""; 
         }
 
-        updateSEO({ title: pageTitle, desc: metaDesc, image: item.imageUrl });
+        document.title = pageTitle;
 
-        // FIX: Recommendations (Show movies for movie, series for series)
-        const suggestions = allContent
-            .filter(i => i.type === item.type && i.id !== item.id)
-            .slice(0, 10);
+        // Recommendations (Filter by same type, exclude current)
+        const recs = allContent.filter(i => i.type === item.type && i.id !== item.id).slice(0, 10);
 
         let html = `
-        <div class="max-w-[1800px] mx-auto lg:px-6 py-6">
-            <div class="px-4 lg:px-0 text-sm text-gray-400 mb-4 flex items-center gap-2"><a href="/" onclick="route(event)" class="hover:text-white">Home</a> / <a href="/${slug}" onclick="route(event)" class="hover:text-white">${item.name}</a> / <span class="text-brand">Watch</span></div>
+        <div class="max-w-[1800px] mx-auto lg:px-6 py-6 animate-fade">
+            <div class="px-4 lg:px-0 text-sm text-gray-400 mb-4 flex items-center gap-2"><a href="/" onclick="route(event)" class="hover:text-white">Home</a> / <a href="/${item.slug}" onclick="route(event)" class="hover:text-white">${item.name}</a> / <span class="text-brand">Watch</span></div>
             <div class="flex flex-col lg:flex-row gap-8">
                 <div class="w-full lg:w-[75%]">
-                    <div class="ad-container bg-[#111] mb-2">${ADS.playerTop}</div>
+                    <div id="player-ad-top" class="ad-slot">${ADS.playerTop}</div>
                     
                     <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl border border-[#262626]">
                         <div class="aspect-video w-full relative z-10" id="player-wrapper">
-                            <video id="plyr-video" class="w-full h-full" controls playsinline poster="${item.imageUrl}"></video>
-                        </div>
+                            </div>
                     </div>
                     
-                    <div class="ad-container bg-[#111] mt-2">${ADS.playerBottom}</div>
-                    <div class="mt-6 animate-fade px-4 lg:px-0">
+                    <div id="player-ad-bot" class="ad-slot">${ADS.playerBottom}</div>
+
+                    <div class="mt-6 px-4 lg:px-0">
                         <div class="flex justify-between items-start mb-4">
                             <h1 class="text-2xl md:text-3xl font-bold text-white leading-tight">${pageTitle}</h1>
-                            <button onclick="document.body.classList.toggle('cinema-mode')" class="text-xs bg-[#262626] px-3 py-1.5 rounded hover:text-white transition">Cinema Mode</button>
                         </div>
-                        <a href="${videoSrc}" target="_blank" class="mb-6 inline-block bg-[#1a1a1a] text-brand text-xs px-4 py-2 rounded border border-[#333] hover:bg-[#222]">Video not playing? Click here</a>
-                        <div class="mb-8 p-5 bg-[#111] rounded-xl border border-[#262626] animate-fade">
-                            <h2 class="text-white font-semibold mb-3 text-lg">Storyline</h2>
-                            <p class="text-gray-300 text-sm leading-7">${metaDesc}</p>
+                        
+                        <a href="${videoSrc}" target="_blank" class="mb-6 inline-block bg-[#1a1a1a] text-brand text-xs px-4 py-2 rounded border border-[#333] hover:bg-[#222]">
+                            Video not playing? Click to watch directly
+                        </a>
+
+                        <div class="mb-8 p-5 bg-[#111] rounded-xl border border-[#262626]">
+                            <h2 class="text-white font-semibold mb-3 text-lg flex items-center gap-2"><i data-lucide="book-open" class="w-5 h-5 text-brand"></i> Storyline</h2>
+                            <p class="text-gray-300 text-sm leading-7">${metaDesc || 'No description available.'}</p>
                         </div>
-                        ${isSeries ? `<div class="mt-8 bg-[#141414] border border-[#262626] rounded-xl p-6"><div class="flex justify-between items-center mb-4"><h3 class="text-white font-semibold flex items-center gap-2"><i data-lucide="layers" class="w-5 h-5 text-brand"></i> Episodes</h3></div><div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">${item.episodes.map((ep, idx) => `<a href="/${slug}/episode-${idx+1}" onclick="route(event)" class="ep-btn ${idx === epIndex ? 'active' : ''}">${idx + 1}</a>`).join('')}</div></div>` : ''}
+
+                        ${isSeries ? `<div class="mt-8 bg-[#141414] border border-[#262626] rounded-xl p-6"><div class="flex justify-between items-center mb-4"><h3 class="text-white font-semibold flex items-center gap-2"><i data-lucide="layers" class="w-5 h-5 text-brand"></i> Episodes</h3></div><div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">${item.episodes.map((ep, idx) => `<a href="/${item.slug}/episode-${idx+1}" onclick="route(event)" class="ep-btn ${idx+1 === epIndex ? 'active' : ''}">${idx + 1}</a>`).join('')}</div></div>` : ''}
                     </div>
                 </div>
+                
                 <div class="w-full lg:w-[25%] px-4 lg:px-0">
-                    <h3 class="font-bold text-white text-lg mb-4 pl-2 border-l-4 border-brand">Recommended</h3>
+                    <h3 class="font-bold text-white text-lg mb-4 pl-2 border-l-4 border-brand">You may also like</h3>
                     <div class="flex flex-col gap-4">
-                        ${suggestions.map(s => `<a href="/${createSlug(s.name)}" onclick="route(event)" class="flex gap-3 group bg-[#141414] hover:bg-[#1a1a1a] p-2 rounded-lg transition border border-transparent hover:border-[#333]"><div class="w-28 aspect-video bg-[#222] rounded overflow-hidden flex-shrink-0 relative"><img src="${s.imageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition" loading="lazy"></div><div class="py-1 min-w-0 flex flex-col justify-center"><h4 class="text-sm font-semibold text-gray-200 line-clamp-2 group-hover:text-brand transition leading-snug">${s.name}</h4><p class="text-[11px] text-gray-500 mt-1">${s.type === 'series' ? 'Series' : 'Movie'}</p></div></a>`).join('')}
+                        ${recs.map(s => `
+                        <a href="/${s.slug}" onclick="route(event)" class="flex gap-3 group bg-[#141414] hover:bg-[#1a1a1a] p-2 rounded-lg transition border border-transparent hover:border-[#333]">
+                            <div class="w-28 aspect-video bg-[#222] rounded overflow-hidden flex-shrink-0 relative">
+                                <img src="${s.imageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition" loading="lazy">
+                            </div>
+                            <div class="py-1 min-w-0 flex flex-col justify-center">
+                                <h4 class="text-sm font-semibold text-gray-200 line-clamp-2 group-hover:text-brand transition leading-snug">${s.name}</h4>
+                                <span class="text-[10px] text-gray-500 mt-1">${s.type === 'series' ? 'Series' : 'Movie'}</span>
+                            </div>
+                        </a>`).join('')}
                     </div>
                 </div>
             </div>
         </div>${getFooter()}`;
 
         document.getElementById('app').innerHTML = html;
+        renderAd('player-ad-top', ADS.playerTop);
+        renderAd('player-ad-bot', ADS.playerBottom);
         lucide.createIcons();
-        initFastPlayer(videoSrc, item.imageUrl);
+        initNativePlayer(videoSrc, item.imageUrl);
     }
 
-    // --- LIGHTWEIGHT PLAYER (FAST LOAD) ---
-    function destroyPlayer() { if(STATE.player){ STATE.player.destroy(); STATE.player = null; } if(STATE.hls){ STATE.hls.destroy(); STATE.hls = null; } }
-    
-    function initFastPlayer(src, poster) {
-        destroyPlayer();
-        const video = document.getElementById('plyr-video');
-        if(!video) return;
+    // --- NATIVE PLAYER LOGIC (Fastest) ---
+    function initNativePlayer(src, poster) {
+        const wrapper = document.getElementById('player-wrapper');
+        wrapper.innerHTML = ''; // Clear previous
 
-        // If Iframe
+        // 1. Iframe check
         if (!src.includes('.mp4') && !src.includes('.m3u8')) {
-            const wrapper = document.getElementById('player-wrapper');
             wrapper.innerHTML = `<iframe src="${src}" class="w-full h-full border-0" allowfullscreen></iframe>`;
             return;
         }
 
-        // HLS Logic (Still needed for m3u8)
+        // 2. Native Video Tag
+        const video = document.createElement('video');
+        video.className = "w-full h-full bg-black";
+        video.controls = true;
+        video.poster = poster || '';
+        video.playsInline = true;
+        video.autoplay = true; 
+        
+        wrapper.appendChild(video);
+
+        // 3. HLS Support Check
         if (Hls.isSupported() && src.includes('.m3u8')) {
+            if(STATE.hls) STATE.hls.destroy();
             const hls = new Hls();
             hls.loadSource(src);
             hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                video.play().catch(e => console.log("Autoplay blocked, user must click play."));
+            });
             STATE.hls = hls;
-            STATE.player = new Plyr(video, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'] });
         } else {
+            // Standard MP4 or Native HLS (Safari)
             video.src = src;
-            STATE.player = new Plyr(video, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'] });
+            video.play().catch(e => console.log("Autoplay blocked."));
         }
     }
 
     // --- UTILS ---
-    function generateGridItemsWithAds(items) {
-        let html = '';
-        let count = 0;
-        items.forEach((item, index) => {
-            html += `
-            <a href="/${createSlug(item.name)}" onclick="route(event)" class="group block relative">
-                <div class="relative aspect-video rounded-xl overflow-hidden mb-3 shadow-lg bg-[#141414] border border-[#222]">
-                    <img src="${item.imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center backdrop-blur-[2px]">
-                         <div class="bg-brand/90 p-3 rounded-full shadow-xl transform scale-50 group-hover:scale-100 transition duration-300"><i data-lucide="play" class="w-6 h-6 fill-white text-white"></i></div>
-                    </div>
-                    <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded border border-white/10 uppercase">${item.type==='series'?'TV':'MOV'}</div>
-                </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-200 line-clamp-1 group-hover:text-brand transition">${item.name}</h3>
-                    <div class="flex items-center justify-between mt-1"><span class="text-[11px] text-gray-500">2025</span><span class="text-[10px] border border-gray-700 text-gray-400 px-1 rounded">HD</span></div>
-                </div>
-            </a>`;
-            count++;
-            if (count % 5 === 0 && ADS.grid) {
-                html += `<div class="col-span-2 md:col-span-3 lg:col-span-4 ad-container bg-[#111] border border-[#222] rounded-lg p-2 min-h-[90px] flex justify-center items-center">${ADS.grid}</div>`;
-            }
-        });
-        return html;
+    function renderAd(id, code) {
+        const el = document.getElementById(id);
+        if(el && code && code.trim() !== '') {
+            el.innerHTML = code;
+            el.classList.add('active');
+        }
     }
 
-    function createSlug(name) { return name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-'); }
     function getFooter() {
         return `
+        <div id="footer-ad" class="ad-slot">${ADS.footer}</div>
         <footer class="bg-[#050505] border-t border-[#1a1a1a] pt-16 pb-10 mt-12">
             <div class="max-w-[1400px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-10">
-                <div class="col-span-2 md:col-span-1"><h3 class="text-white font-bold text-xl mb-4 tracking-tight">Ranginx</h3><p class="text-gray-500 text-sm leading-relaxed">The best place to watch movies and web series for free in HD quality. No registration required.</p></div>
+                <div class="col-span-2 md:col-span-1"><h3 class="text-white font-bold text-xl mb-4 tracking-tight">Ranginx</h3><p class="text-gray-500 text-sm leading-relaxed">The best place to watch movies and web series for free in HD quality.</p></div>
                 <div><h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Browse</h4><a href="/movies" onclick="route(event)" class="footer-link">Movies</a><a href="/series" onclick="route(event)" class="footer-link">Web Series</a></div>
                 <div><h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Support</h4><button onclick="openModal('dmca')" class="footer-link text-left w-full">DMCA</button><button onclick="openModal('privacy')" class="footer-link text-left w-full">Privacy Policy</button></div>
             </div>
-            <div class="text-center pt-8 border-t border-[#1a1a1a] mt-10 text-[11px] text-[#444]">&copy; 2025 Ranginx. All rights reserved.</div>
+            <div class="text-center pt-8 border-t border-[#1a1a1a] mt-10 text-[11px] text-[#444]">&copy; 2025 Ranginx.</div>
         </footer>`;
     }
-    
-    // Global Event Handlers
+
+    function render404() { document.getElementById('app').innerHTML = `<div class="h-screen flex flex-col justify-center items-center"><h1 class="text-6xl font-bold text-brand">404</h1><p class="text-gray-400 mt-2">Content not found</p><a href="/" onclick="route(event)" class="mt-4 text-white underline">Go Home</a></div>`; }
+
+    // Global Events
+    window.openModal = (t) => { document.getElementById('legal-modal').classList.remove('hidden'); document.getElementById('legal-modal').classList.add('flex'); document.getElementById('modal-body').innerHTML = t==='dmca'?'DMCA Content...':'Privacy Policy...'; };
+    window.closeModal = () => { document.getElementById('legal-modal').classList.add('hidden'); document.getElementById('legal-modal').classList.remove('flex'); };
     window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('overlay').classList.toggle('hidden'); };
     document.getElementById('menu-btn').onclick = toggleSidebar;
     
+    // Search
     window.handleSearch = (val) => {
         if(!val) { renderHome(); return; }
         const v = val.toLowerCase();
         const filtered = allContent.filter(i => i.name.toLowerCase().includes(v));
-        let html = `<div class="px-4 py-8 max-w-[1600px] mx-auto"><h2 class="text-xl font-bold text-white mb-6">Search Results</h2><div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">`;
-        html += generateGridItemsWithAds(filtered);
+        let html = `<div class="px-4 py-8 max-w-[1600px] mx-auto"><h2 class="text-xl font-bold text-white mb-6">Search Results</h2><div class="grid grid-cols-2 md:grid-cols-4 gap-4">`;
+        filtered.forEach(item => {
+            html += `<a href="/${item.slug}" onclick="route(event)" class="block"><div class="aspect-video bg-[#141414] mb-2 rounded overflow-hidden"><img src="${item.imageUrl}" class="w-full h-full object-cover"></div><h3 class="text-sm text-gray-200">${item.name}</h3></a>`;
+        });
         html += `</div></div>${getFooter()}`;
         document.getElementById('app').innerHTML = html;
-        lucide.createIcons();
+        document.getElementById('mobile-search').classList.add('hidden');
     };
     document.getElementById('desktop-search').addEventListener('keyup', (e) => { if (e.key === 'Enter') handleSearch(e.target.value) });
-
-    const LEGAL_TEXT = { dmca: "<h3>DMCA Notice</h3><p>We do not host files. Content is provided by non-affiliated third parties.</p>", privacy: "<h3>Privacy Policy</h3><p>We do not collect personal data.</p>" };
-    window.openModal = (t) => { document.getElementById('legal-modal').classList.remove('hidden'); document.getElementById('legal-modal').classList.add('flex'); document.getElementById('modal-body').innerHTML = LEGAL_TEXT[t]; };
-    window.closeModal = () => { document.getElementById('legal-modal').classList.add('hidden'); document.getElementById('legal-modal').classList.remove('flex'); };
 
     init();
 </script>
