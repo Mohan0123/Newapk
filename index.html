@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer"> <title>Ranginx - Premium Streaming</title>
+    <meta name="referrer" content="no-referrer">
+    <title>Ranginx - Premium Streaming</title>
     
     <meta name="description" content="Watch latest HD web series and movies online for free on Ranginx.">
     <meta name="robots" content="index, follow">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ranginx - Premium Streaming">
-    <meta property="og:description" content="Stream latest HD content online.">
-    <meta property="og:image" content="https://ranginx.fun/og-image.jpg">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -39,13 +35,10 @@
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #e50914; border-radius: 4px; }
         
-        .html-desc h1, .html-desc h2 { font-size: 1.1rem; font-weight: bold; margin: 1rem 0 0.5rem; color: #fff; }
+        .html-desc h1 { font-size: 1.2rem; font-weight: bold; margin: 1rem 0; color: #fff; }
         .html-desc p { margin-bottom: 0.8rem; opacity: 0.8; line-height: 1.6; }
         .html-desc strong { color: #e50914; }
         
-        .legal-content h3 { color: white; font-size: 1.2rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-        .legal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5; }
-
         .cinema-mode { position: fixed; inset: 0; background: black; z-index: 100; padding: 0; display: flex; align-items: center; justify-content: center; }
         .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section { display: none !important; }
         .cinema-mode .player-container { width: 100% !important; max-width: 100% !important; height: 100vh; }
@@ -63,7 +56,6 @@
             <a href="/" onclick="filterPage('series')" class="cursor-pointer hover:text-white transition">Web Series</a>
         </div>
     </div>
-    
     <div class="flex items-center gap-4">
         <div class="relative hidden md:block w-64">
             <input type="text" id="search-input" placeholder="Search..." class="w-full pl-10 pr-4 py-1.5 rounded-full text-sm outline-none bg-[#141414] border border-[#333] focus:border-brand text-white">
@@ -109,29 +101,13 @@
 
     // --- FULL LEGAL CONTENT ---
     const LEGAL_TEXT = {
-        dmca: `
-            <h3>DMCA Notice</h3>
-            <p>Ranginx is an online service provider as defined in the Digital Millennium Copyright Act. We do not host any content on our own servers.</p>
-            <p>We serve as a search engine that links to third-party content. If you are a copyright owner and want to report an infringement, please contact the hosting sites directly.</p>
-            <p>However, we strictly respect copyright laws. If you find a link that infringes on your rights, contact us, and we will remove it from our index within 48 hours.</p>
-        `,
-        privacy: `
-            <h3>Privacy Policy</h3>
-            <p><strong>1. Data Collection:</strong> We do not collect personally identifiable information. We may use cookies to improve user experience (like remembering volume settings).</p>
-            <p><strong>2. Third Parties:</strong> This site uses third-party embedded videos. These third parties may track your interaction with their content.</p>
-            <p><strong>3. Security:</strong> While we strive to use commercially acceptable means to protect your data, remember that no method of transmission over the internet is 100% secure.</p>
-        `,
-        terms: `
-            <h3>Terms of Service</h3>
-            <p><strong>1. Acceptance:</strong> By using Ranginx, you agree to these terms.</p>
-            <p><strong>2. Use License:</strong> Permission is granted to temporarily view the materials on Ranginx's website for personal, non-commercial transitory viewing only.</p>
-            <p><strong>3. Disclaimer:</strong> The materials on Ranginx are provided on an 'as is' basis. We make no warranties, expressed or implied.</p>
-        `
+        dmca: `<h3>DMCA Notice</h3><p>Ranginx does not host any files on its servers. All content is provided by non-affiliated third parties.</p>`,
+        privacy: `<h3>Privacy Policy</h3><p>We do not collect personal data. Cookies are used for functionality.</p>`,
+        terms: `<h3>Terms of Service</h3><p>By using Ranginx, you agree to watch content for personal use only.</p>`
     };
 
     // --- INIT ---
     document.addEventListener('DOMContentLoaded', async () => {
-        // Global Click Listener for SPA (Fixes Navigation Issue)
         document.body.addEventListener('click', e => {
             const link = e.target.closest('a.spa-link');
             if (link) { 
@@ -142,7 +118,6 @@
             }
         });
 
-        // Search Handlers
         const handleSearch = (e) => {
             const val = e.target.value;
             if(!val) { STATE.filter = 'all'; router(); return; }
@@ -169,63 +144,66 @@
         }
     }
 
-    // --- ROUTING ENGINE ---
+    // --- ROUTER V2 (Clean URL Support) ---
     function router() {
         window.scrollTo(0, 0);
         destroyPlayer();
         document.getElementById('mobile-search').classList.add('hidden');
 
-        // URL Parsing
-        const path = window.location.pathname.replace(/\/$/, '');
-        const slug = decodeURIComponent(path.substring(1)); // Decode for special chars
-
-        // Route Handling
-        if (path === '' || path === '/index.html') {
+        // Path splitting logic
+        const path = window.location.pathname;
+        const parts = path.split('/').filter(p => p); // Remove empty strings
+        
+        // Root: Home
+        if (parts.length === 0 || parts[0] === 'index.html') {
             if (STATE.filter === 'all') renderHomeSeparated(STATE.data);
             else renderFilteredHome(STATE.filter);
-            
             updateSEO('Ranginx - Home', 'Stream Movies & Web Series Online.');
         } 
+        // Detail View: /slug or /slug/episode-x
         else {
+            const slug = decodeURIComponent(parts[0]);
+            const episodeSegment = parts[1]; // e.g. "episode-2"
+
             const item = STATE.data.find(i => i.slug.toLowerCase() === slug.toLowerCase());
-            if (item) renderWatch(item);
-            else render404();
+            
+            if (item) {
+                // Parse episode number from URL if exists
+                let epNum = 1;
+                if (episodeSegment && episodeSegment.startsWith('episode-')) {
+                    epNum = parseInt(episodeSegment.replace('episode-', ''));
+                }
+                renderWatch(item, epNum || 1);
+            } else {
+                render404();
+            }
         }
     }
 
-    // --- SEO UPDATE FUNCTION ---
     function updateSEO(title, desc) {
         document.title = title;
-        // Strip HTML tags for clean meta description
         const cleanDesc = desc ? desc.replace(/<[^>]*>?/gm, '') : '';
-        
         let m = document.querySelector('meta[name="description"]');
         if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
         m.content = cleanDesc;
-
-        let ogT = document.querySelector('meta[property="og:title"]'); if(ogT) ogT.content = title;
-        let ogD = document.querySelector('meta[property="og:description"]'); if(ogD) ogD.content = cleanDesc;
     }
 
-    // --- VIEW: SEPARATED HOME (Movies vs Series) ---
+    // --- HOME VIEWS ---
     function renderHomeSeparated(list) {
         const movies = list.filter(i => i.type && i.type.toLowerCase().includes('movie'));
         const series = list.filter(i => i.type && i.type.toLowerCase().includes('series'));
-        const featured = list[0]; // Newest Item as Hero
+        const featured = list[0]; 
 
         let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade">`;
 
-        // Hero Banner
         if (featured) {
-            const heroDesc = featured.description ? featured.description.replace(/<[^>]*>?/gm, '') : 'Watch Now.';
             html += `
             <div class="relative w-full aspect-video md:h-[70vh] rounded-xl overflow-hidden mb-12 group border border-[#222] hidden md:block">
                 <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${featured.thumbnail}');"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-12 w-full md:w-2/3">
-                    <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase mb-4 inline-block">New Release</span>
+                    <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase mb-4 inline-block">New</span>
                     <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-xl">${featured.title}</h1>
-                    <p class="text-gray-300 text-lg mb-6 line-clamp-2 max-w-xl">${heroDesc}</p>
                     <a href="/${featured.slug}" class="spa-link bg-white text-black px-8 py-3 rounded font-bold hover:bg-gray-200 inline-flex items-center gap-2">
                         <i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now
                     </a>
@@ -233,7 +211,6 @@
             </div>`;
         }
 
-        // Section 1: Web Series
         if (series.length > 0) {
             html += `<h2 class="text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Web Series</h2>`;
             html += `<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-6 mb-10">`;
@@ -241,7 +218,6 @@
             html += `</div>`;
         }
 
-        // Section 2: Movies
         if (movies.length > 0) {
             html += `<h2 class="text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Movies</h2>`;
             html += `<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-6 mb-10">`;
@@ -254,7 +230,30 @@
         lucide.createIcons();
     }
 
-    // Helper: Generate Grid Cards
+    function renderFilteredHome(type) {
+        const filtered = STATE.data.filter(i => i.type && i.type.toLowerCase().includes(type));
+        let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade pt-6">
+            <h2 class="text-xl font-bold text-white mb-6 border-b border-[#222] pb-2">${type === 'movie' ? "Movies" : "Web Series"}</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                ${generateGridItems(filtered)}
+            </div>
+        </div>`;
+        document.getElementById('app').innerHTML = html;
+        lucide.createIcons();
+    }
+
+    function renderSearchResults(val) {
+        const filtered = STATE.data.filter(i => i.title.toLowerCase().includes(val.toLowerCase()));
+        let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade pt-6">
+            <h2 class="text-xl font-bold text-white mb-6 border-b border-[#222] pb-2">Search Results</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                ${generateGridItems(filtered)}
+            </div>
+        </div>`;
+        document.getElementById('app').innerHTML = html;
+        lucide.createIcons();
+    }
+
     function generateGridItems(items) {
         return items.map(item => `
             <a href="/${item.slug}" class="spa-link group block">
@@ -277,50 +276,26 @@
         `).join('');
     }
 
-    // --- VIEW: SEARCH & FILTER ---
-    function renderFilteredHome(type) {
-        const filtered = STATE.data.filter(i => i.type && i.type.toLowerCase().includes(type));
-        renderSimpleGrid(filtered, type === 'movie' ? "Movies" : "Web Series");
-    }
-
-    function renderSearchResults(val) {
-        const filtered = STATE.data.filter(i => i.title.toLowerCase().includes(val.toLowerCase()));
-        renderSimpleGrid(filtered, "Search Results");
-    }
-
-    function renderSimpleGrid(list, title) {
-        let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade pt-6">
-            <h2 class="text-xl font-bold text-white mb-6 border-b border-[#222] pb-2">${title}</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                ${generateGridItems(list)}
-            </div>
-        </div>`;
-        document.getElementById('app').innerHTML = html;
-        lucide.createIcons();
-    }
-
-    // --- VIEW: WATCH PAGE (Updates on Click) ---
-    function renderWatch(item) {
-        // Prepare Description
-        const fallbackDesc = `<p>Watch <strong>${item.title}</strong> full HD online on Ranginx. Enjoy the best content for free.</p>`;
+    // --- VIEW: WATCH PAGE (Clean URL Logic) ---
+    function renderWatch(item, epNum) {
+        const fallbackDesc = `<p>Watch <strong>${item.title}</strong> full HD online.</p>`;
         const finalDesc = (item.description && item.description.trim() !== "") ? item.description : fallbackDesc;
         
-        // **CRITICAL: Update Title & SEO Immediately**
-        updateSEO(`Watch ${item.title}`, finalDesc);
+        // Update Title & SEO
+        const pageTitle = epNum > 1 ? `${item.title} - Episode ${epNum}` : `Watch ${item.title}`;
+        updateSEO(pageTitle, finalDesc);
 
         const isSeries = item.episodes && item.episodes.length > 0;
-        
-        // URL Parameter Logic
-        const urlParams = new URLSearchParams(window.location.search);
-        const epParam = urlParams.get('ep');
         let activeEp = isSeries ? item.episodes[0] : null;
-        if(isSeries && epParam) {
-            const found = item.episodes.find(e => e.ep == epParam);
+        
+        // Find correct episode
+        if(isSeries && epNum) {
+            const found = item.episodes.find(e => e.ep == epNum);
             if(found) activeEp = found;
         }
 
         const src = activeEp ? activeEp.url : item.video;
-        const title = activeEp ? `${item.title} - Episode ${activeEp.ep}` : item.title;
+        const displayTitle = activeEp ? `${item.title} - Episode ${activeEp.ep}` : item.title;
         const suggestions = STATE.data.filter(i => i.slug !== item.slug).slice(0, 8);
 
         let html = `
@@ -337,7 +312,7 @@
 
                     <div class="mt-4 details-section">
                         <div class="flex justify-between items-start mb-2">
-                            <h1 id="player-title" class="text-xl md:text-3xl font-bold text-white leading-tight">${title}</h1>
+                            <h1 id="player-title" class="text-xl md:text-3xl font-bold text-white leading-tight">${displayTitle}</h1>
                             <button onclick="toggleCinemaMode()" class="flex items-center gap-2 text-xs bg-[#222] text-white px-3 py-1.5 rounded hover:bg-brand transition">
                                 <i data-lucide="monitor" class="w-3 h-3"></i> Mode
                             </button>
@@ -355,8 +330,8 @@
                         <div class="mb-10">
                             <h3 class="text-white font-bold mb-3 text-lg">Episodes</h3>
                             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                                ${item.episodes.map((ep, idx) => `
-                                    <button onclick="playVideo('${ep.url}', '${item.title} - Episode ${ep.ep}', '${item.thumbnail}', this, ${ep.ep})" 
+                                ${item.episodes.map((ep) => `
+                                    <button onclick="playVideo('${ep.url}', '${item.title} - Episode ${ep.ep}', '${item.thumbnail}', this, ${ep.ep}, '${item.slug}')" 
                                         class="ep-btn ${activeEp && activeEp.ep === ep.ep ? 'bg-brand text-white border-brand' : 'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} 
                                         border p-2 rounded text-xs font-medium transition text-center truncate">
                                         Ep ${ep.ep}
@@ -377,7 +352,6 @@
                             </div>
                             <div class="flex flex-col justify-center min-w-0">
                                 <h4 class="text-gray-200 font-bold text-xs line-clamp-2 group-hover:text-brand">${s.title}</h4>
-                                <span class="text-[10px] text-gray-500 mt-1">${s.category || 'Movie'}</span>
                             </div>
                         </a>`).join('')}
                     </div>
@@ -386,7 +360,7 @@
         </div>`;
 
         document.getElementById('app').innerHTML = html;
-        playVideo(src, title, item.thumbnail, null, activeEp ? activeEp.ep : null);
+        playVideo(src, displayTitle, item.thumbnail, null, activeEp ? activeEp.ep : 1, item.slug, false);
         lucide.createIcons();
     }
 
@@ -394,20 +368,19 @@
         document.getElementById('app').innerHTML = `<div class="h-[60vh] flex flex-col justify-center items-center text-center"><h1 class="text-6xl font-bold text-brand">404</h1><a href="/" class="spa-link mt-4 text-white underline">Home</a></div>`;
     }
 
-    // --- PLAYER ENGINE ---
+    // --- PLAYER ENGINE (Updates Clean URL) ---
     function destroyPlayer() {
         if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
         if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
     }
 
-    function playVideo(url, title, poster, btn, epNum) {
+    function playVideo(url, title, poster, btn, epNum, slug, updateHistory = true) {
         if(title) document.getElementById('player-title').innerText = title;
         
-        // **CRITICAL: UPDATE URL Without Reload**
-        if(epNum) {
-            const newUrl = new URL(window.location);
-            newUrl.searchParams.set('ep', epNum);
-            history.pushState({}, '', newUrl);
+        // **Clean URL Update: /slug/episode-1**
+        if(updateHistory && slug && epNum) {
+            const cleanUrl = `/${slug}/episode-${epNum}`;
+            history.pushState(null, '', cleanUrl);
         }
 
         const fallback = document.getElementById('fallback-btn');
@@ -424,7 +397,6 @@
 
         const isHls = url.includes('.m3u8');
         
-        // Video Tag (Opaque Request to avoid CORS)
         const video = document.createElement('video');
         video.className = "w-full h-full";
         video.controls = true;
@@ -435,7 +407,7 @@
         const options = { 
             controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
             autoplay: true,
-            muted: false // Attempt unmuted autoplay
+            muted: false
         };
 
         if (isHls && Hls.isSupported()) {
@@ -468,7 +440,6 @@
         document.getElementById('legal-modal').classList.remove('flex');
     }
     
-    // Navbar Filter
     window.filterPage = (type) => {
         STATE.filter = type;
         if(window.location.pathname !== '/') history.pushState(null, '', '/');
