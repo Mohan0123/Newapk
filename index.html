@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer">
-    <title>Ranginx - Premium Streaming</title>
+    <meta name="referrer" content="no-referrer"> <title>Ranginx - Premium Streaming</title>
     
     <meta name="description" content="Watch latest HD web series and movies online for free on Ranginx.">
     <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ranginx - Premium Streaming">
+    <meta property="og:description" content="Stream latest HD content online.">
+    <meta property="og:image" content="https://ranginx.fun/og-image.jpg">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,22 +34,18 @@
 
     <style>
         body { background-color: #000000; color: #ffffff; font-family: sans-serif; overflow-x: hidden; }
-        .glass-nav { background: rgba(0,0,0,0.95); border-bottom: 1px solid #222; }
+        .glass-nav { background: rgba(0,0,0,0.95); border-bottom: 1px solid #222; backdrop-filter: blur(5px); }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #e50914; border-radius: 4px; }
         
-        /* HTML Description */
-        .html-desc h1 { font-size: 1.2rem; font-weight: bold; margin: 1rem 0; color: #fff; }
+        .html-desc h1, .html-desc h2 { font-size: 1.1rem; font-weight: bold; margin: 1rem 0 0.5rem; color: #fff; }
         .html-desc p { margin-bottom: 0.8rem; opacity: 0.8; line-height: 1.6; }
         .html-desc strong { color: #e50914; }
-        .html-desc ul { list-style: disc; margin-left: 1.5rem; }
-
-        /* Modal */
-        .legal-content h3 { color: white; font-size: 1.1rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-        .legal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5; }
         
-        /* Cinema Mode */
+        .legal-content h3 { color: white; font-size: 1.2rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        .legal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5; }
+
         .cinema-mode { position: fixed; inset: 0; background: black; z-index: 100; padding: 0; display: flex; align-items: center; justify-content: center; }
         .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section { display: none !important; }
         .cinema-mode .player-container { width: 100% !important; max-width: 100% !important; height: 100vh; }
@@ -63,6 +63,7 @@
             <a href="/" onclick="filterPage('series')" class="cursor-pointer hover:text-white transition">Web Series</a>
         </div>
     </div>
+    
     <div class="flex items-center gap-4">
         <div class="relative hidden md:block w-64">
             <input type="text" id="search-input" placeholder="Search..." class="w-full pl-10 pr-4 py-1.5 rounded-full text-sm outline-none bg-[#141414] border border-[#333] focus:border-brand text-white">
@@ -109,29 +110,28 @@
     // --- FULL LEGAL CONTENT ---
     const LEGAL_TEXT = {
         dmca: `
-            <h3>DMCA Notice & Takedown Policy</h3>
-            <p>Ranginx operates as a search engine and indexing tool. We do not host, upload, or store any video files on our servers. All content displayed on this site is provided by non-affiliated third parties.</p>
-            <p>If you believe that your copyrighted work has been copied in a way that constitutes copyright infringement and is accessible on this site, please contact the hosting service directly. We have no control over the content hosted on external servers.</p>
-            <p>However, we are happy to remove links to infringing content upon valid request.</p>
+            <h3>DMCA Notice</h3>
+            <p>Ranginx is an online service provider as defined in the Digital Millennium Copyright Act. We do not host any content on our own servers.</p>
+            <p>We serve as a search engine that links to third-party content. If you are a copyright owner and want to report an infringement, please contact the hosting sites directly.</p>
+            <p>However, we strictly respect copyright laws. If you find a link that infringes on your rights, contact us, and we will remove it from our index within 48 hours.</p>
         `,
         privacy: `
             <h3>Privacy Policy</h3>
-            <p><strong>1. Information Collection:</strong> We do not collect personal information such as names, addresses, or phone numbers. We may collect anonymous usage data (like page views) to improve the site.</p>
-            <p><strong>2. Cookies:</strong> We use local storage and cookies solely for website functionality (e.g., remembering your theme or volume settings). No third-party tracking cookies are used.</p>
-            <p><strong>3. External Links:</strong> This site contains links to other websites. We are not responsible for the privacy practices or content of these external sites.</p>
+            <p><strong>1. Data Collection:</strong> We do not collect personally identifiable information. We may use cookies to improve user experience (like remembering volume settings).</p>
+            <p><strong>2. Third Parties:</strong> This site uses third-party embedded videos. These third parties may track your interaction with their content.</p>
+            <p><strong>3. Security:</strong> While we strive to use commercially acceptable means to protect your data, remember that no method of transmission over the internet is 100% secure.</p>
         `,
         terms: `
-            <h3>Terms & Conditions</h3>
-            <p><strong>1. Acceptance:</strong> By accessing Ranginx, you agree to be bound by these terms.</p>
-            <p><strong>2. Usage:</strong> This website is for personal, non-commercial use only. You must not use this site for any illegal purposes.</p>
-            <p><strong>3. Content:</strong> We do not guarantee the availability or quality of the content. All videos are hosted by third parties.</p>
-            <p><strong>4. Age Restriction:</strong> You must be at least 18 years old to use this service if the content requires it in your jurisdiction.</p>
+            <h3>Terms of Service</h3>
+            <p><strong>1. Acceptance:</strong> By using Ranginx, you agree to these terms.</p>
+            <p><strong>2. Use License:</strong> Permission is granted to temporarily view the materials on Ranginx's website for personal, non-commercial transitory viewing only.</p>
+            <p><strong>3. Disclaimer:</strong> The materials on Ranginx are provided on an 'as is' basis. We make no warranties, expressed or implied.</p>
         `
     };
 
     // --- INIT ---
     document.addEventListener('DOMContentLoaded', async () => {
-        // Global SPA Link Handler
+        // Global Click Listener for SPA (Fixes Navigation Issue)
         document.body.addEventListener('click', e => {
             const link = e.target.closest('a.spa-link');
             if (link) { 
@@ -146,8 +146,7 @@
         const handleSearch = (e) => {
             const val = e.target.value;
             if(!val) { STATE.filter = 'all'; router(); return; }
-            const filtered = STATE.data.filter(i => i.title.toLowerCase().includes(val.toLowerCase()));
-            renderGridOnly(filtered, "Search Results");
+            renderSearchResults(val);
         };
         document.getElementById('search-input').addEventListener('keyup', handleSearch);
         document.getElementById('mobile-search-input').addEventListener('keyup', handleSearch);
@@ -176,20 +175,17 @@
         destroyPlayer();
         document.getElementById('mobile-search').classList.add('hidden');
 
-        // Path Parsing
-        const path = window.location.pathname.replace(/\/$/, ''); // Remove trailing slash
-        const slug = path.substring(1); // Remove leading slash
+        // URL Parsing
+        const path = window.location.pathname.replace(/\/$/, '');
+        const slug = decodeURIComponent(path.substring(1)); // Decode for special chars
 
-        // Route: Home
+        // Route Handling
         if (path === '' || path === '/index.html') {
-            if(STATE.filter === 'all') renderHomeSeparated(STATE.data);
-            else {
-                const filtered = STATE.data.filter(i => i.type && i.type.toLowerCase().includes(STATE.filter));
-                renderGridOnly(filtered, STATE.filter === 'movie' ? "Movies" : "Web Series");
-            }
-            updateSEO('Ranginx - Home', 'Stream HD Movies & Series');
+            if (STATE.filter === 'all') renderHomeSeparated(STATE.data);
+            else renderFilteredHome(STATE.filter);
+            
+            updateSEO('Ranginx - Home', 'Stream Movies & Web Series Online.');
         } 
-        // Route: Watch
         else {
             const item = STATE.data.find(i => i.slug.toLowerCase() === slug.toLowerCase());
             if (item) renderWatch(item);
@@ -197,31 +193,39 @@
         }
     }
 
+    // --- SEO UPDATE FUNCTION ---
     function updateSEO(title, desc) {
         document.title = title;
+        // Strip HTML tags for clean meta description
+        const cleanDesc = desc ? desc.replace(/<[^>]*>?/gm, '') : '';
+        
         let m = document.querySelector('meta[name="description"]');
         if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
-        m.content = desc.replace(/<[^>]*>?/gm, '');
+        m.content = cleanDesc;
+
+        let ogT = document.querySelector('meta[property="og:title"]'); if(ogT) ogT.content = title;
+        let ogD = document.querySelector('meta[property="og:description"]'); if(ogD) ogD.content = cleanDesc;
     }
 
-    // --- VIEW: HOME (SEPARATED SECTIONS) ---
+    // --- VIEW: SEPARATED HOME (Movies vs Series) ---
     function renderHomeSeparated(list) {
-        // Separate Content
-        const movies = list.filter(i => i.type === 'movie');
-        const series = list.filter(i => i.type === 'series');
-        const featured = list[0]; // First item as hero
+        const movies = list.filter(i => i.type && i.type.toLowerCase().includes('movie'));
+        const series = list.filter(i => i.type && i.type.toLowerCase().includes('series'));
+        const featured = list[0]; // Newest Item as Hero
 
         let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade">`;
 
-        // 1. HERO BANNER
+        // Hero Banner
         if (featured) {
+            const heroDesc = featured.description ? featured.description.replace(/<[^>]*>?/gm, '') : 'Watch Now.';
             html += `
             <div class="relative w-full aspect-video md:h-[70vh] rounded-xl overflow-hidden mb-12 group border border-[#222] hidden md:block">
                 <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${featured.thumbnail}');"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-12 w-full md:w-2/3">
-                    <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase mb-4 inline-block">New</span>
+                    <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase mb-4 inline-block">New Release</span>
                     <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-xl">${featured.title}</h1>
+                    <p class="text-gray-300 text-lg mb-6 line-clamp-2 max-w-xl">${heroDesc}</p>
                     <a href="/${featured.slug}" class="spa-link bg-white text-black px-8 py-3 rounded font-bold hover:bg-gray-200 inline-flex items-center gap-2">
                         <i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now
                     </a>
@@ -229,24 +233,20 @@
             </div>`;
         }
 
-        // 2. WEB SERIES SECTION
+        // Section 1: Web Series
         if (series.length > 0) {
-            html += `<div class="mb-10">
-                <h2 class="text-lg md:text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Web Series</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-6">
-                    ${generateGridItems(series.slice(0, 12))}
-                </div>
-            </div>`;
+            html += `<h2 class="text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Web Series</h2>`;
+            html += `<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-6 mb-10">`;
+            html += generateGridItems(series.slice(0, 12));
+            html += `</div>`;
         }
 
-        // 3. MOVIES SECTION
+        // Section 2: Movies
         if (movies.length > 0) {
-            html += `<div class="mb-10">
-                <h2 class="text-lg md:text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Movies</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-6">
-                    ${generateGridItems(movies.slice(0, 12))}
-                </div>
-            </div>`;
+            html += `<h2 class="text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Movies</h2>`;
+            html += `<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-6 mb-10">`;
+            html += generateGridItems(movies.slice(0, 12));
+            html += `</div>`;
         }
 
         html += `</div>`;
@@ -254,19 +254,7 @@
         lucide.createIcons();
     }
 
-    // --- VIEW: GRID ONLY (For Search/Filter) ---
-    function renderGridOnly(list, title) {
-        let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade pt-4">
-            <h2 class="text-xl font-bold text-white mb-6 border-b border-[#222] pb-2">${title}</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                ${generateGridItems(list)}
-            </div>
-        </div>`;
-        document.getElementById('app').innerHTML = html;
-        lucide.createIcons();
-    }
-
-    // Helper to generate Cards
+    // Helper: Generate Grid Cards
     function generateGridItems(items) {
         return items.map(item => `
             <a href="/${item.slug}" class="spa-link group block">
@@ -275,7 +263,7 @@
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                         <div class="bg-brand p-2 rounded-full shadow-lg"><i data-lucide="play" class="w-4 h-4 fill-white text-white"></i></div>
                     </div>
-                    <span class="absolute top-1 right-1 bg-brand text-white text-[8px] font-bold px-1.5 py-0.5 rounded">
+                    <span class="absolute top-1 right-1 bg-brand text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow">
                         ${item.type === 'series' ? 'TV' : 'HD'}
                     </span>
                 </div>
@@ -289,10 +277,36 @@
         `).join('');
     }
 
-    // --- VIEW: WATCH PLAYER ---
+    // --- VIEW: SEARCH & FILTER ---
+    function renderFilteredHome(type) {
+        const filtered = STATE.data.filter(i => i.type && i.type.toLowerCase().includes(type));
+        renderSimpleGrid(filtered, type === 'movie' ? "Movies" : "Web Series");
+    }
+
+    function renderSearchResults(val) {
+        const filtered = STATE.data.filter(i => i.title.toLowerCase().includes(val.toLowerCase()));
+        renderSimpleGrid(filtered, "Search Results");
+    }
+
+    function renderSimpleGrid(list, title) {
+        let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade pt-6">
+            <h2 class="text-xl font-bold text-white mb-6 border-b border-[#222] pb-2">${title}</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                ${generateGridItems(list)}
+            </div>
+        </div>`;
+        document.getElementById('app').innerHTML = html;
+        lucide.createIcons();
+    }
+
+    // --- VIEW: WATCH PAGE (Updates on Click) ---
     function renderWatch(item) {
-        const desc = item.description || `<p>Watch <strong>${item.title}</strong> full HD online.</p>`;
-        updateSEO(`Watch ${item.title}`, desc);
+        // Prepare Description
+        const fallbackDesc = `<p>Watch <strong>${item.title}</strong> full HD online on Ranginx. Enjoy the best content for free.</p>`;
+        const finalDesc = (item.description && item.description.trim() !== "") ? item.description : fallbackDesc;
+        
+        // **CRITICAL: Update Title & SEO Immediately**
+        updateSEO(`Watch ${item.title}`, finalDesc);
 
         const isSeries = item.episodes && item.episodes.length > 0;
         
@@ -334,22 +348,20 @@
                         </a>
 
                         <div class="bg-[#141414] p-4 rounded-xl border border-[#222] mb-6">
-                            <div class="html-desc text-gray-400 text-sm leading-relaxed">${desc}</div>
+                            <div class="html-desc text-gray-400 text-sm leading-relaxed">${finalDesc}</div>
                         </div>
 
                         ${isSeries ? `
                         <div class="mb-10">
                             <h3 class="text-white font-bold mb-3 text-lg">Episodes</h3>
                             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                                ${item.episodes.map((ep) => {
-                                    const isActive = activeEp.ep === ep.ep;
-                                    return `
+                                ${item.episodes.map((ep, idx) => `
                                     <button onclick="playVideo('${ep.url}', '${item.title} - Episode ${ep.ep}', '${item.thumbnail}', this, ${ep.ep})" 
-                                        class="ep-btn ${isActive?'bg-brand text-white border-brand':'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} 
+                                        class="ep-btn ${activeEp && activeEp.ep === ep.ep ? 'bg-brand text-white border-brand' : 'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} 
                                         border p-2 rounded text-xs font-medium transition text-center truncate">
                                         Ep ${ep.ep}
-                                    </button>`;
-                                }).join('')}
+                                    </button>
+                                `).join('')}
                             </div>
                         </div>` : ''}
                     </div>
@@ -365,6 +377,7 @@
                             </div>
                             <div class="flex flex-col justify-center min-w-0">
                                 <h4 class="text-gray-200 font-bold text-xs line-clamp-2 group-hover:text-brand">${s.title}</h4>
+                                <span class="text-[10px] text-gray-500 mt-1">${s.category || 'Movie'}</span>
                             </div>
                         </a>`).join('')}
                     </div>
@@ -381,7 +394,7 @@
         document.getElementById('app').innerHTML = `<div class="h-[60vh] flex flex-col justify-center items-center text-center"><h1 class="text-6xl font-bold text-brand">404</h1><a href="/" class="spa-link mt-4 text-white underline">Home</a></div>`;
     }
 
-    // --- PLAYER CORE (Fixed for CORS/Download Issue) ---
+    // --- PLAYER ENGINE ---
     function destroyPlayer() {
         if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
         if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
@@ -390,7 +403,7 @@
     function playVideo(url, title, poster, btn, epNum) {
         if(title) document.getElementById('player-title').innerText = title;
         
-        // URL Parameter Update
+        // **CRITICAL: UPDATE URL Without Reload**
         if(epNum) {
             const newUrl = new URL(window.location);
             newUrl.searchParams.set('ep', epNum);
@@ -411,7 +424,7 @@
 
         const isHls = url.includes('.m3u8');
         
-        // Create Video Tag (No crossorigin = Opaque Playback = No Download Force)
+        // Video Tag (Opaque Request to avoid CORS)
         const video = document.createElement('video');
         video.className = "w-full h-full";
         video.controls = true;
@@ -422,7 +435,7 @@
         const options = { 
             controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
             autoplay: true,
-            muted: false
+            muted: false // Attempt unmuted autoplay
         };
 
         if (isHls && Hls.isSupported()) {
@@ -455,7 +468,7 @@
         document.getElementById('legal-modal').classList.remove('flex');
     }
     
-    // Navbar filters
+    // Navbar Filter
     window.filterPage = (type) => {
         STATE.filter = type;
         if(window.location.pathname !== '/') history.pushState(null, '', '/');
