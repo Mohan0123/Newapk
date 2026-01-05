@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,25 +9,15 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
-        // --- AUTO THEME DETECTOR (Matches Index.html) ---
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            if (event.matches) document.documentElement.classList.add('dark');
-            else document.documentElement.classList.remove('dark');
-        });
-
+        // Force Dark Mode Configuration
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: { 
                         brand: '#e50914', 
-                        dark: { bg: '#0a0a0a', card: '#121212', border: '#262626' },
-                        light: { bg: '#f4f4f5', card: '#ffffff', border: '#e4e4e7' }
+                        // Pure Black Palette
+                        dark: { bg: '#000000', card: '#141414', border: '#333333', text: '#ffffff' }
                     }
                 }
             }
@@ -35,34 +25,50 @@
     </script>
 
     <style>
-        body { transition: background-color 0.3s, color 0.3s; }
+        /* Force Black Theme Defaults */
+        body { background-color: #000000; color: #ffffff; font-family: sans-serif; }
         
-        /* Dark Mode */
-        html.dark body { background-color: #0a0a0a; color: #e5e5e5; }
-        html.dark input, html.dark select, html.dark textarea { background-color: #141414; border-color: #262626; color: white; }
-        html.dark .card-bg { background-color: #121212; border-color: #262626; }
+        /* Inputs & Cards */
+        input, select, textarea { 
+            background-color: #141414 !important; 
+            border: 1px solid #333 !important; 
+            color: white !important; 
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+            outline: none;
+        }
         
-        /* Light Mode */
-        html:not(.dark) body { background-color: #f4f4f5; color: #18181b; }
-        html:not(.dark) input, html:not(.dark) select, html:not(.dark) textarea { background-color: #ffffff; border-color: #d4d4d8; color: black; }
-        html:not(.dark) .card-bg { background-color: #ffffff; border-color: #e4e4e7; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        /* Focus State */
+        input:focus, select:focus, textarea:focus { 
+            border-color: #e50914 !important; 
+            box-shadow: 0 0 0 1px #e50914;
+        }
+
+        .card-bg { 
+            background-color: #141414; 
+            border: 1px solid #333; 
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
         
-        /* Common */
-        input:focus, select:focus, textarea:focus { border-color: #e50914; outline: none; ring: 1px solid #e50914; }
         .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <nav class="border-b dark:border-[#262626] border-gray-300 dark:bg-black/90 bg-white/90 backdrop-blur sticky top-0 z-50">
+    <nav class="border-b border-[#333] bg-black/90 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <span class="text-2xl font-bold tracking-tight text-brand">Ranginx</span>
-                <span class="text-[10px] font-bold uppercase dark:bg-[#262626] bg-gray-200 text-gray-500 px-2 py-0.5 rounded">Admin Panel</span>
+                <span class="text-[10px] font-bold uppercase bg-[#222] text-gray-400 px-2 py-0.5 rounded border border-[#333]">Admin</span>
             </div>
-            <div class="text-sm dark:text-gray-400 text-gray-600">
-                System Mode: <span class="font-bold dark:text-white text-black">Auto-Detected</span>
+            <div class="flex items-center gap-2 text-xs text-gray-500">
+                <div class="w-2 h-2 rounded-full bg-green-500"></div> System Ready
             </div>
         </div>
     </nav>
@@ -70,68 +76,68 @@
     <main class="flex-grow p-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <div class="lg:col-span-8">
-            <div class="card-bg border rounded-xl p-6 lg:p-8 shadow-xl">
-                <div class="flex justify-between items-center mb-6 border-b dark:border-[#262626] border-gray-200 pb-4">
-                    <h1 class="text-xl font-bold dark:text-white text-black flex items-center gap-2">
-                        <i data-lucide="plus-square" class="text-brand"></i> Add New Content
+            <div class="card-bg rounded-xl p-6 lg:p-8 shadow-2xl">
+                <div class="flex justify-between items-center mb-6 border-b border-[#333] pb-4">
+                    <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="file-plus" class="text-brand"></i> Add Content
                     </h1>
-                    <button onclick="resetForm()" class="text-xs text-gray-500 hover:text-brand underline">Reset</button>
+                    <button onclick="resetForm()" class="text-xs text-gray-500 hover:text-white underline">Reset Form</button>
                 </div>
 
                 <form id="upload-form" class="space-y-5">
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Title <span class="text-red-500">*</span></label>
-                            <input type="text" id="title" class="w-full rounded-lg p-3 text-sm" placeholder="e.g. Stree 2" required>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Title <span class="text-brand">*</span></label>
+                            <input type="text" id="title" placeholder="e.g. Mirzapur S3" required>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Slug (Auto-Generated)</label>
-                            <input type="text" id="slug" class="w-full rounded-lg p-3 text-sm" placeholder="stree-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Slug (Auto)</label>
+                            <input type="text" id="slug" placeholder="mirzapur-s3">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Target File</label>
-                            <select id="targetFile" class="w-full rounded-lg p-3 text-sm">
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Target File</label>
+                            <select id="targetFile">
                                 <option value="normal">Normal.json (Movies/Series)</option>
                                 <option value="adult">Adult.json (18+)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Category</label>
-                            <input type="text" id="category" class="w-full rounded-lg p-3 text-sm" placeholder="e.g. Action, Horror">
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Category</label>
+                            <input type="text" id="category" placeholder="e.g. Action, Drama">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Thumbnail URL <span class="text-red-500">*</span></label>
-                        <input type="url" id="thumbnail" class="w-full rounded-lg p-3 text-sm" placeholder="https://image.url/poster.jpg" required>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Poster URL <span class="text-brand">*</span></label>
+                        <input type="url" id="thumbnail" placeholder="https://image..." required>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Description (Auto-SEO if empty)</label>
-                        <textarea id="description" rows="3" class="w-full rounded-lg p-3 text-sm" placeholder="Plot summary..."></textarea>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Description (HTML Supported)</label>
+                        <textarea id="description" rows="3" placeholder="Enter description (HTML tags allowed)..."></textarea>
                     </div>
 
-                    <hr class="dark:border-[#262626] border-gray-200">
+                    <hr class="border-[#333]">
 
-                    <div class="dark:bg-[#0f0f0f] bg-gray-50 border dark:border-[#262626] border-gray-200 rounded-lg p-5">
+                    <div class="bg-black border border-[#333] rounded-lg p-5">
                         <div class="mb-4">
-                            <label class="block text-sm font-bold dark:text-white text-black mb-1">Single Video (Movie)</label>
-                            <input type="url" id="video" class="w-full rounded-lg p-3 text-sm" placeholder="https://video.url/movie.mp4 or .m3u8">
+                            <label class="block text-sm font-bold text-white mb-1">Option A: Single Video</label>
+                            <input type="url" id="video" placeholder="https://video.mp4 or .m3u8">
                         </div>
 
                         <div class="relative flex py-2 items-center">
-                            <div class="flex-grow border-t dark:border-[#333] border-gray-300"></div>
-                            <span class="flex-shrink-0 mx-4 text-gray-400 text-xs uppercase font-bold">OR</span>
-                            <div class="flex-grow border-t dark:border-[#333] border-gray-300"></div>
+                            <div class="flex-grow border-t border-[#333]"></div>
+                            <span class="flex-shrink-0 mx-4 text-gray-500 text-xs uppercase font-bold">OR</span>
+                            <div class="flex-grow border-t border-[#333]"></div>
                         </div>
 
                         <div class="mt-2">
                             <div class="flex justify-between items-center mb-3">
-                                <label class="block text-sm font-bold dark:text-white text-black">Episodes (Series)</label>
+                                <label class="block text-sm font-bold text-white">Option B: Episodes</label>
                                 <button type="button" onclick="addEpisodeRow()" class="text-xs bg-brand hover:bg-red-700 text-white px-3 py-1.5 rounded flex items-center gap-1 transition">
                                     <i data-lucide="plus" class="w-3 h-3"></i> Add Row
                                 </button>
@@ -140,7 +146,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-brand hover:bg-red-700 text-white font-bold py-4 rounded-lg shadow-lg shadow-red-500/20 transition transform active:scale-[0.98] flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full bg-white hover:bg-gray-200 text-black font-bold py-4 rounded-lg shadow-lg transition transform active:scale-[0.99] flex items-center justify-center gap-2">
                         <i data-lucide="plus-circle" class="w-5 h-5"></i> Add to Queue
                     </button>
                 </form>
@@ -148,26 +154,29 @@
         </div>
 
         <div class="lg:col-span-4">
-            <div class="card-bg border rounded-xl shadow-xl sticky top-24 h-[85vh] flex flex-col">
+            <div class="card-bg rounded-xl shadow-xl sticky top-24 h-[85vh] flex flex-col">
                 
-                <div class="p-5 border-b dark:border-[#262626] border-gray-200 flex justify-between items-center">
-                    <h2 class="font-bold dark:text-white text-black flex items-center gap-2">
-                        <i data-lucide="list" class="w-5 h-5 text-brand"></i> Queue
+                <div class="p-5 border-b border-[#333] flex justify-between items-center bg-[#111] rounded-t-xl">
+                    <h2 class="font-bold text-white flex items-center gap-2">
+                        <i data-lucide="list-video" class="w-5 h-5 text-brand"></i> Queue
                         <span id="queue-count" class="bg-brand text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
                     </h2>
-                    <button onclick="clearQueue()" class="text-xs text-red-500 hover:text-red-700 font-medium">Clear All</button>
+                    <button onclick="clearQueue()" class="text-xs text-red-500 hover:text-white transition">Clear All</button>
                 </div>
 
                 <div id="queue-container" class="flex-grow overflow-y-auto p-4 space-y-3">
-                    <p class="text-center text-gray-500 text-sm mt-10 italic">Queue is empty...</p>
+                    <div class="h-full flex flex-col items-center justify-center text-gray-600 space-y-2 opacity-50">
+                        <i data-lucide="box" class="w-10 h-10"></i>
+                        <p class="text-sm">Queue is empty</p>
+                    </div>
                 </div>
 
-                <div class="p-5 border-t dark:border-[#262626] border-gray-200 bg-opacity-50 space-y-3">
-                    <p class="text-[10px] text-gray-400 text-center uppercase tracking-widest mb-1">Export JSON</p>
-                    <button onclick="downloadJSON('normal')" id="btn-dl-normal" class="w-full py-3 dark:bg-[#1a1a1a] bg-gray-100 border dark:border-[#333] border-gray-300 dark:text-gray-300 text-gray-700 hover:border-brand hover:text-brand rounded-lg transition text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50" disabled>
+                <div class="p-5 border-t border-[#333] bg-[#111] rounded-b-xl space-y-3">
+                    <p class="text-[10px] text-gray-500 text-center uppercase tracking-widest mb-1">Download Files</p>
+                    <button onclick="downloadJSON('normal')" id="btn-dl-normal" class="w-full py-3 bg-black border border-[#333] text-gray-300 hover:border-brand hover:text-white rounded-lg transition text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                         <i data-lucide="download" class="w-4 h-4"></i> Download Normal.json
                     </button>
-                    <button onclick="downloadJSON('adult')" id="btn-dl-adult" class="w-full py-3 dark:bg-[#1a1a1a] bg-gray-100 border dark:border-[#333] border-gray-300 dark:text-gray-300 text-gray-700 hover:border-purple-500 hover:text-purple-500 rounded-lg transition text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50" disabled>
+                    <button onclick="downloadJSON('adult')" id="btn-dl-adult" class="w-full py-3 bg-black border border-[#333] text-gray-300 hover:border-purple-500 hover:text-purple-400 rounded-lg transition text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                         <i data-lucide="download" class="w-4 h-4"></i> Download Adult.json
                     </button>
                 </div>
@@ -192,17 +201,17 @@
         function addEpisodeRow() {
             const count = DOM.epContainer.children.length + 1;
             const div = document.createElement('div');
-            div.className = 'grid grid-cols-12 gap-2 fade-in items-center dark:bg-[#141414] bg-white p-2 rounded border dark:border-[#333] border-gray-300 mb-2';
+            div.className = 'grid grid-cols-12 gap-2 fade-in items-center bg-[#111] p-2 rounded border border-[#333] mb-2';
             div.innerHTML = `
-                <div class="col-span-1 text-center text-gray-400 text-xs">#${count}</div>
+                <div class="col-span-1 text-center text-gray-500 text-xs font-mono">#${count}</div>
                 <div class="col-span-4">
                     <input type="text" class="ep-title w-full !bg-transparent !border-0 !p-1 text-xs" placeholder="Title (Opt)">
                 </div>
                 <div class="col-span-6">
-                    <input type="url" class="ep-url w-full !p-1.5 text-xs rounded" placeholder="https://video..." required>
+                    <input type="url" class="ep-url w-full !p-1.5 text-xs rounded !bg-black" placeholder="https://..." required>
                 </div>
                 <div class="col-span-1 flex justify-end">
-                    <button type="button" onclick="this.closest('div.grid').remove()" class="text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+                    <button type="button" onclick="this.closest('div.grid').remove()" class="text-gray-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
             `;
             DOM.epContainer.appendChild(div);
@@ -213,7 +222,6 @@
         DOM.form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Collect Data
             const title = document.getElementById('title').value.trim();
             const thumbnail = document.getElementById('thumbnail').value.trim();
             let slug = document.getElementById('slug').value.trim();
@@ -221,7 +229,6 @@
             const description = document.getElementById('description').value.trim();
             const targetFile = document.getElementById('targetFile').value;
 
-            // Auto-Slug Logic
             if (!slug) {
                 slug = title.toLowerCase().trim()
                     .replace(/[^\w\s-]/g, '')
@@ -229,7 +236,6 @@
                     .replace(/^-+|-+$/g, '');
             }
 
-            // Media Logic
             const video = document.getElementById('video').value.trim();
             const episodes = [];
             document.querySelectorAll('#episode-list .grid').forEach((row, idx) => {
@@ -238,37 +244,37 @@
                 if(u) episodes.push({ ep: idx+1, title: t || `Episode ${idx+1}`, url: u });
             });
 
-            // Validation
             if (!video && episodes.length === 0) {
                 alert("Please add a Video URL or Episodes.");
                 return;
             }
 
-            // Build Object
+            // Create Object Matching Frontend Logic
             const newItem = {
                 slug: slug,
                 title: title,
-                // Index.html uses 'series' or 'movie' to filter types
+                // Frontend logic: normal = series/movie based on eps. adult = adult.
                 type: targetFile === 'normal' ? (episodes.length > 0 ? 'series' : 'movie') : 'adult',
                 category: category || "General",
                 thumbnail: thumbnail,
-                description: description, // Frontend will handle empty desc (Auto SEO)
+                description: description,
                 date: new Date().toISOString().split('T')[0],
-                _target: targetFile // Internal flag for sorting
+                _target: targetFile
             };
 
             if (episodes.length > 0) newItem.episodes = episodes;
             else newItem.video = video;
 
-            // Add
             QUEUE.push(newItem);
             renderQueue();
             
             // Soft Reset
             const savedTarget = document.getElementById('targetFile').value;
+            const savedCat = document.getElementById('category').value;
             DOM.form.reset();
             DOM.epContainer.innerHTML = '';
             document.getElementById('targetFile').value = savedTarget;
+            document.getElementById('category').value = savedCat;
         });
 
         // --- 3. RENDER QUEUE ---
@@ -279,21 +285,30 @@
             DOM.btnAdult.disabled = !hasItems;
 
             if (!hasItems) {
-                DOM.queueList.innerHTML = `<p class="text-center text-gray-500 text-sm mt-10 italic">Queue is empty...</p>`;
+                DOM.queueList.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-gray-600 space-y-2 opacity-50">
+                        <i data-lucide="box" class="w-10 h-10"></i>
+                        <p class="text-sm">Queue is empty</p>
+                    </div>`;
+                lucide.createIcons();
                 return;
             }
 
             DOM.queueList.innerHTML = QUEUE.map((item, idx) => `
-                <div class="card-bg p-3 rounded border dark:border-[#333] border-gray-300 flex gap-3 group relative fade-in">
-                    <img src="${item.thumbnail}" class="w-10 h-14 object-cover rounded bg-black">
-                    <div class="flex-grow min-w-0">
-                        <h4 class="font-bold text-sm dark:text-white text-black truncate">${item.title}</h4>
-                        <div class="flex gap-2 mt-1">
-                            <span class="text-[10px] uppercase bg-brand text-white px-1 rounded">${item.type}</span>
+                <div class="bg-[#111] p-3 rounded border border-[#333] flex gap-3 group relative fade-in hover:border-brand transition">
+                    <div class="w-12 h-16 bg-black rounded overflow-hidden flex-shrink-0">
+                        <img src="${item.thumbnail}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-grow min-w-0 flex flex-col justify-center">
+                        <h4 class="text-white text-sm font-bold truncate">${item.title}</h4>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-[10px] uppercase bg-[#222] text-gray-400 px-1.5 py-0.5 rounded border border-[#333]">${item.type}</span>
                             <span class="text-[10px] text-gray-500">${item._target}</span>
                         </div>
                     </div>
-                    <button onclick="removeItem(${idx})" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <button onclick="removeItem(${idx})" class="absolute top-2 right-2 text-gray-600 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
                 </div>
             `).join('');
             lucide.createIcons();
@@ -305,8 +320,13 @@
 
         // --- 4. DOWNLOAD ---
         window.downloadJSON = (target) => {
+            // Filter by _target flag
             const items = QUEUE.filter(i => i._target === target).map(({_target, ...rest}) => rest);
-            if(items.length === 0) { alert(`No items for ${target}.json`); return; }
+            
+            if(items.length === 0) { 
+                alert(`No items in queue specifically for '${target}.json'.\nCheck the "Target File" dropdown setting.`); 
+                return; 
+            }
             
             const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
             const link = document.createElement("a");
@@ -316,13 +336,12 @@
             link.click();
             document.body.removeChild(link);
 
-            if(confirm(`Downloaded ${items.length} items. Clear them from queue?`)) {
+            if(confirm(`Downloaded ${items.length} items for ${target}.json.\nRemove these items from the queue?`)) {
                 QUEUE = QUEUE.filter(i => i._target !== target);
                 renderQueue();
             }
         };
 
-        // Init
         lucide.createIcons();
     </script>
 </body>
