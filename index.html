@@ -3,173 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranginx - Premium Streaming</title>
+    <title>Ranginx - Watch Movies & Series</title>
     
-    <meta name="description" content="Watch latest HD web series and movies online for free on Ranginx.">
-    <meta name="robots" content="index, follow">
+    <meta name="description" content="Watch latest HD movies and web series on Ranginx.">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
 
     <script>
-        // Force Dark Mode Configuration
+        // Force Dark Theme
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: { 
                         brand: '#e50914', 
-                        // Pure Black Backgrounds
-                        dark: { bg: '#000000', card: '#141414', border: '#333333', text: '#ffffff' }
-                    },
-                    animation: { 'fade': 'fadeIn 0.5s ease-out' },
-                    keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } } }
+                        dark: { bg: '#000000', card: '#111111', border: '#222222' }
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        /* Force Black Theme Defaults */
-        body { background-color: #000000; color: #ffffff; font-family: system-ui, sans-serif; }
+        body { background-color: #000; color: #fff; font-family: sans-serif; }
         
-        /* Glass Navbar (Black Tint) */
+        /* Glass Navbar */
         .glass-nav { 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-            border-bottom: none; 
-            transition: background 0.3s;
-        }
-        .glass-nav.scrolled {
-            background: #000000;
-            border-bottom: 1px solid #333;
+            background: rgba(0,0,0,0.8); 
+            backdrop-filter: blur(10px); 
+            border-bottom: 1px solid #222; 
         }
 
-        /* Inputs & Cards */
-        input { background-color: #141414 !important; border-color: #333 !important; color: white !important; }
-        .card-bg { background-color: #141414; border: 1px solid #333; }
+        /* Player Customization */
+        :root { --plyr-color-main: #e50914; }
         
-        /* HTML Description Formatting */
-        .html-desc h1, .html-desc h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; color: white; }
-        .html-desc p { margin-bottom: 0.8rem; opacity: 0.8; line-height: 1.6; }
-        .html-desc ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
-        .html-desc strong { color: #e50914; }
-
-        /* Hero Section Gradient */
-        .hero-gradient {
-            background: linear-gradient(to top, #000000 10%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0) 100%);
-        }
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        
+        /* Loader */
+        .loader { border: 3px solid #333; border-top: 3px solid #e50914; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-<nav id="navbar" class="fixed top-0 w-full h-16 glass-nav z-[60] flex items-center justify-between px-4 lg:px-8">
-    <div class="flex items-center gap-6">
-        <a href="/" class="spa-link text-3xl font-bold tracking-tighter text-brand uppercase">Ranginx</a>
-        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
-            <a href="/" class="spa-link hover:text-white transition">Home</a>
-            <a href="/" onclick="filterType('movie')" class="cursor-pointer hover:text-white transition">Movies</a>
-            <a href="/" onclick="filterType('series')" class="cursor-pointer hover:text-white transition">Web Series</a>
-        </div>
+<nav class="fixed top-0 w-full h-16 glass-nav z-50 flex items-center justify-between px-4 lg:px-8">
+    <a href="/" class="spa-link text-2xl font-bold text-brand tracking-tighter">Ranginx</a>
+    <div class="hidden md:flex gap-6 text-sm text-gray-400 font-medium">
+        <a href="/" class="spa-link hover:text-white transition">Home</a>
+        <a href="/" onclick="filterContent('movie')" class="hover:text-white transition cursor-pointer">Movies</a>
+        <a href="/" onclick="filterContent('series')" class="hover:text-white transition cursor-pointer">Series</a>
     </div>
-    
-    <div class="flex items-center gap-4">
-        <div class="relative hidden md:block w-64">
-            <input type="text" id="search-input" placeholder="Search..." class="w-full pl-10 pr-4 py-1.5 rounded-full text-sm outline-none focus:ring-1 focus:ring-brand">
-            <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-2"></i>
-        </div>
-        <button class="md:hidden text-white" onclick="document.getElementById('mobile-search').classList.toggle('hidden')">
-            <i data-lucide="search" class="w-6 h-6"></i>
-        </button>
+    <div class="relative hidden md:block w-64">
+        <input type="text" id="search-input" placeholder="Search..." class="w-full bg-[#111] border border-[#222] pl-10 pr-4 py-1.5 rounded-full text-sm focus:border-brand outline-none text-white">
+        <i data-lucide="search" class="w-4 h-4 text-gray-500 absolute left-3.5 top-2"></i>
     </div>
 </nav>
 
-<div id="mobile-search" class="fixed top-16 left-0 w-full bg-black p-4 hidden z-50 border-b border-[#333]">
-    <input type="text" id="mobile-search-input" placeholder="Search titles..." class="w-full p-3 rounded outline-none border border-[#333] bg-[#141414] text-white">
-</div>
-
-<main id="app" class="min-h-screen pb-12"></main>
-
-<footer class="border-t border-[#222] bg-[#050505] pt-12 pb-8 mt-12">
-    <div class="max-w-[1600px] mx-auto px-4 text-center">
-        <h3 class="text-brand font-bold text-2xl mb-4">Ranginx</h3>
-        <div class="flex justify-center gap-6 mb-6 text-sm text-gray-500">
-            <button onclick="openModal('dmca')" class="hover:text-white transition">DMCA</button>
-            <button onclick="openModal('privacy')" class="hover:text-white transition">Privacy</button>
-            <button onclick="openModal('terms')" class="hover:text-white transition">Terms</button>
-        </div>
-        <p class="text-[11px] text-[#444]">&copy; 2026 Ranginx. All rights reserved.</p>
-    </div>
-</footer>
-
-<div id="legal-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="relative bg-[#141414] border border-[#333] w-full max-w-2xl max-h-[80vh] rounded-xl shadow-2xl flex flex-col overflow-hidden animate-fade">
-        <div class="flex justify-between items-center p-5 border-b border-[#333]">
-            <h2 id="modal-title" class="text-xl font-bold text-white">Legal</h2>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
-        </div>
-        <div id="modal-body" class="p-8 overflow-y-auto html-desc text-gray-300"></div>
-    </div>
-</div>
+<main id="app" class="pt-20 min-h-screen pb-12 px-4 md:px-8 max-w-[1600px] mx-auto"></main>
 
 <script>
-    const STATE = { data: [], playerInstance: null, hls: null };
-
-    // --- SCROLL EFFECT ---
-    window.addEventListener('scroll', () => {
-        const nav = document.getElementById('navbar');
-        if(window.scrollY > 50) nav.classList.add('scrolled');
-        else nav.classList.remove('scrolled');
-    });
-
-    // --- LEGAL TEXT ---
-    const LEGAL_TEXT = {
-        dmca: `<h2>DMCA Notice</h2><p>Ranginx is a search engine. We do not host content on our servers. All content is provided by non-affiliated third parties. If you have a copyright concern, please contact the host directly.</p>`,
-        privacy: `<h2>Privacy Policy</h2><p>We respect your privacy. No personal data is collected on this site. Cookies are used for site performance only.</p>`,
-        terms: `<h2>Terms & Conditions</h2><p>By using Ranginx, you agree to watch content for personal entertainment use only.</p>`
-    };
+    const STATE = { data: [], player: null, hls: null };
 
     // --- INIT ---
     document.addEventListener('DOMContentLoaded', async () => {
-        // SPA Links
+        // SPA Link Handler
         document.body.addEventListener('click', e => {
             const link = e.target.closest('a.spa-link');
             if (link) { e.preventDefault(); history.pushState(null, '', link.href); router(); }
         });
 
         // Search
-        const handleSearch = (e) => filterContent(e.target.value);
-        document.getElementById('search-input').addEventListener('keyup', handleSearch);
-        document.getElementById('mobile-search-input').addEventListener('keyup', handleSearch);
+        document.getElementById('search-input').addEventListener('keyup', (e) => {
+            if(!e.target.value) renderHome(STATE.data);
+            else renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(e.target.value.toLowerCase())));
+        });
 
-        if(window.lucide) lucide.createIcons();
+        lucide.createIcons();
         await loadData();
     });
 
     window.addEventListener('popstate', router);
 
+    // --- DATA LOADER ---
     async function loadData() {
+        document.getElementById('app').innerHTML = `<div class="h-[80vh] flex justify-center items-center"><div class="loader"></div></div>`;
         try {
             const res = await fetch('data/normal.json');
-            if (!res.ok) throw new Error();
+            if (!res.ok) throw new Error("JSON not found");
             const json = await res.json();
             STATE.data = json.reverse();
             router();
-        } catch (e) { 
-            document.getElementById('app').innerHTML = `
-            <div class="flex flex-col items-center justify-center h-screen text-center text-gray-500">
-                <i data-lucide="server-off" class="w-16 h-16 mb-4"></i>
-                <h2 class="text-xl font-bold text-white">Content Unavailable</h2>
-                <p>Ensure /data/normal.json exists</p>
-            </div>`;
-            lucide.createIcons();
+        } catch (e) {
+            document.getElementById('app').innerHTML = `<div class="text-center mt-20 text-gray-500">Error loading content. Ensure /data/normal.json exists.</div>`;
         }
     }
 
+    // --- ROUTER ---
     function router() {
         window.scrollTo(0, 0);
         destroyPlayer();
@@ -178,173 +115,110 @@
 
         if (path === '/' || path === '/index.html' || path === '') {
             renderHome(STATE.data);
-            updateSEO('Ranginx - Home', 'Stream movies and series.');
         } else {
             const item = STATE.data.find(i => i.slug === slug);
             if (item) renderWatch(item);
-            else render404();
+            else renderHome(STATE.data); // Fallback to home instead of 404
         }
     }
 
-    function updateSEO(title, desc) {
-        document.title = title;
-        let m = document.querySelector('meta[name="description"]');
-        if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
-        m.content = desc.replace(/<[^>]*>?/gm, ''); // Strip HTML for SEO tag
-    }
-
-    // --- RENDER HOME (NETFLIX STYLE HERO) ---
+    // --- RENDER HOME ---
     function renderHome(list) {
-        let html = ``;
-
-        // 1. HERO SECTION (Featured)
-        if (list[0]) {
-            // Strip HTML for Hero preview to keep layout clean, or use line-clamp
-            // We use a temporary div to strip tags if needed, but here we render raw with line-clamp
-            
+        let html = '';
+        
+        // Featured
+        if(list[0] && !document.getElementById('search-input').value) {
             html += `
-            <div class="relative w-full h-[85vh] group">
-                <div class="absolute inset-0 bg-cover bg-center transition duration-1000 group-hover:scale-105" 
-                     style="background-image: url('${list[0].thumbnail}');">
-                </div>
-                
-                <div class="absolute inset-0 hero-gradient"></div>
-
-                <div class="absolute bottom-0 left-0 w-full p-6 md:p-16 flex flex-col justify-end h-full">
-                    <div class="max-w-2xl animate-fade">
-                        <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-wider mb-4 inline-block shadow-lg">
-                            New Release
-                        </span>
-                        
-                        <h1 class="text-4xl md:text-7xl font-bold text-white mb-4 leading-tight drop-shadow-2xl">
-                            ${list[0].title}
-                        </h1>
-
-                        <div class="text-gray-300 text-sm md:text-lg mb-8 line-clamp-3 leading-relaxed drop-shadow-md html-desc">
-                            ${list[0].description}
-                        </div>
-
-                        <div class="flex gap-4">
-                            <a href="/${list[0].slug}" class="spa-link bg-white text-black px-8 py-3.5 rounded font-bold hover:bg-gray-200 transition flex items-center gap-2">
-                                <i data-lucide="play" class="w-5 h-5 fill-black"></i> Play Now
-                            </a>
-                            <a href="/${list[0].slug}" class="spa-link bg-[#333]/80 backdrop-blur text-white px-8 py-3.5 rounded font-bold hover:bg-[#444] transition flex items-center gap-2">
-                                <i data-lucide="info" class="w-5 h-5"></i> More Info
-                            </a>
-                        </div>
-                    </div>
+            <div class="relative w-full aspect-video md:aspect-[21/9] rounded-xl overflow-hidden mb-10 group border border-[#222]">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${list[0].thumbnail}');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-6 md:p-12 w-full md:w-2/3">
+                    <h1 class="text-3xl md:text-6xl font-bold text-white mb-4 drop-shadow-xl">${list[0].title}</h1>
+                    <p class="text-gray-300 line-clamp-2 mb-6 text-sm md:text-lg max-w-xl">${list[0].description || ''}</p>
+                    <a href="/${list[0].slug}" class="spa-link bg-brand text-white px-8 py-3 rounded font-bold hover:bg-red-700 transition inline-flex items-center gap-2">
+                        <i data-lucide="play" class="w-5 h-5 fill-current"></i> Play Now
+                    </a>
                 </div>
             </div>`;
         }
 
-        // 2. GRID SECTION
-        html += `
-        <div class="px-4 lg:px-12 -mt-20 relative z-10">
-            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                <i data-lucide="trending-up" class="text-brand"></i> Trending Now
-            </h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 gap-y-10">`;
-
-        list.slice(1).forEach(item => {
+        // Grid
+        html += `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">`;
+        list.forEach(item => {
             html += `
-                <a href="/${item.slug}" class="spa-link group block">
-                    <div class="aspect-[2/3] card-bg rounded-lg overflow-hidden mb-3 relative border border-transparent group-hover:border-[#444] transition">
-                        <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-90 group-hover:opacity-100">
-                        
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <div class="bg-brand p-3 rounded-full shadow-lg transform scale-50 group-hover:scale-100 transition">
-                                <i data-lucide="play" class="w-6 h-6 fill-white text-white"></i>
-                            </div>
-                        </div>
-                        
-                        <span class="absolute top-2 right-2 bg-brand text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                            ${item.type === 'series' ? 'TV' : 'HD'}
-                        </span>
+            <a href="/${item.slug}" class="spa-link group">
+                <div class="aspect-[2/3] rounded-lg overflow-hidden mb-2 relative border border-[#222] bg-[#111]">
+                    <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <div class="bg-brand/90 p-3 rounded-full shadow-lg"><i data-lucide="play" class="w-6 h-6 fill-white text-white"></i></div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.title}</h3>
-                        <div class="flex justify-between items-center mt-1 text-[11px] text-gray-500">
-                            <span>${item.date || '2025'}</span>
-                            <span class="border border-[#333] px-1 rounded text-gray-400">${item.category || 'Mov'}</span>
-                        </div>
-                    </div>
-                </a>`;
+                </div>
+                <h3 class="font-medium text-sm text-gray-200 line-clamp-1 group-hover:text-brand">${item.title}</h3>
+                <div class="flex justify-between text-[11px] text-gray-500 mt-1">
+                    <span>${item.date || '2025'}</span>
+                    <span class="uppercase border border-[#333] px-1 rounded">${item.category || 'HD'}</span>
+                </div>
+            </a>`;
         });
-
-        html += `</div></div>`;
+        html += `</div>`;
+        
         document.getElementById('app').innerHTML = html;
         lucide.createIcons();
     }
 
-    // --- RENDER WATCH (WITH HTML DESCRIPTION SUPPORT) ---
+    // --- RENDER WATCH ---
     function renderWatch(item) {
-        // Auto SEO (Strip tags for meta)
-        const stripDesc = item.description ? item.description.replace(/<[^>]*>?/gm, '') : `Watch ${item.title}`;
-        updateSEO(`Watch ${item.title}`, stripDesc);
-
         const isSeries = item.episodes && item.episodes.length > 0;
         const src = isSeries ? item.episodes[0].url : item.video;
         const title = isSeries ? `${item.title} - Episode 1` : item.title;
 
+        // Auto SEO
+        document.title = `Watch ${item.title}`;
+
         let html = `
-        <div class="pt-24 px-4 lg:px-12 max-w-[1800px] mx-auto animate-fade">
-            <div class="text-sm text-gray-500 mb-6 flex items-center gap-2">
-                <a href="/" class="spa-link hover:text-white">Home</a> 
-                <i data-lucide="chevron-right" class="w-4 h-4"></i> 
-                <span class="text-white font-medium">${item.title}</span>
-            </div>
-
-            <div class="flex flex-col lg:flex-row gap-10">
+        <div class="animate-fade">
+            <div class="flex flex-col lg:flex-row gap-8">
                 <div class="w-full lg:w-[75%]">
-                    <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl border border-[#222]">
-                        <div class="aspect-video w-full">
-                            <video id="plyr-video" controls crossorigin playsinline poster="${item.thumbnail}"></video>
-                        </div>
+                    <div class="aspect-video w-full bg-black rounded-xl overflow-hidden border border-[#222] shadow-2xl relative">
+                        <video id="player" controls crossorigin playsinline poster="${item.thumbnail}" class="w-full h-full"></video>
                     </div>
-
-                    <div class="mt-6">
-                        <h1 id="player-title" class="text-3xl md:text-4xl font-bold text-white mb-3">${title}</h1>
-                        <div class="flex gap-3 text-xs text-gray-400 mb-6">
-                            <span class="border border-[#333] px-2 py-1 rounded bg-[#111] text-white">HD</span>
-                            <span>${item.date || '2025'}</span>
+                    
+                    <div class="mt-4">
+                        <h1 id="vid-title" class="text-2xl md:text-3xl font-bold text-white mb-2">${title}</h1>
+                        <div class="flex gap-3 text-xs text-gray-400 mb-4">
+                            <span class="bg-[#222] px-2 py-0.5 rounded text-white border border-[#333]">HD</span>
                             <span>${item.category || 'General'}</span>
                         </div>
-
-                        <div class="bg-[#111] p-6 rounded-xl border border-[#222]">
-                            <h3 class="text-white font-bold mb-4 flex items-center gap-2 border-b border-[#333] pb-2">
-                                <i data-lucide="info" class="text-brand w-4 h-4"></i> Overview
-                            </h3>
-                            <div class="html-desc text-gray-400 text-sm leading-relaxed">
-                                ${item.description || 'No description available.'}
-                            </div>
+                        <div class="bg-[#111] p-6 rounded-xl border border-[#222] text-gray-300 text-sm leading-relaxed">
+                            ${item.description || 'No description available.'}
                         </div>
-
-                        ${isSeries ? `
-                        <div class="mt-8">
-                            <h3 class="text-white font-bold mb-4 text-xl">Episodes</h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                                ${item.episodes.map((ep, idx) => `
-                                    <button onclick="changeSource('${ep.url}', '${item.title} - Ep ${ep.ep}', this)" 
-                                        class="ep-btn ${idx===0?'bg-brand text-white border-brand':'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} 
-                                        border p-3 rounded font-medium text-sm transition text-center truncate">
-                                        Episode ${ep.ep}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>` : ''}
                     </div>
+
+                    ${isSeries ? `
+                    <div class="mt-8">
+                        <h3 class="text-lg font-bold text-white mb-4">Episodes</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                            ${item.episodes.map((ep, idx) => `
+                                <button onclick="playSource('${ep.url}', '${item.title} - Ep ${ep.ep}', this)" 
+                                    class="ep-btn ${idx===0 ? 'bg-brand text-white border-brand' : 'bg-[#111] text-gray-400 border-[#222] hover:bg-[#222]'} 
+                                    border p-3 rounded text-sm transition truncate">
+                                    Ep ${ep.ep}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
                 </div>
 
                 <div class="w-full lg:w-[25%]">
-                    <h3 class="text-white font-bold mb-4 text-lg border-l-4 border-brand pl-3">You May Also Like</h3>
-                    <div class="flex flex-col gap-4">
+                    <h3 class="text-lg font-bold text-white mb-4 pl-3 border-l-4 border-brand">More Like This</h3>
+                    <div class="flex flex-col gap-3">
                         ${STATE.data.filter(i => i.slug !== item.slug).slice(0, 6).map(s => `
-                        <a href="/${s.slug}" class="spa-link flex gap-3 group hover:bg-[#111] p-2 rounded transition">
-                            <div class="w-24 aspect-[2/3] bg-[#222] rounded overflow-hidden flex-shrink-0">
-                                <img src="${s.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition">
+                        <a href="/${s.slug}" class="spa-link flex gap-3 p-2 rounded hover:bg-[#111] transition group">
+                            <div class="w-20 aspect-[2/3] bg-[#222] rounded overflow-hidden flex-shrink-0">
+                                <img src="${s.thumbnail}" class="w-full h-full object-cover">
                             </div>
                             <div class="flex flex-col justify-center">
-                                <h4 class="text-gray-200 font-bold text-sm line-clamp-2 group-hover:text-brand">${s.title}</h4>
+                                <h4 class="text-sm font-bold text-gray-200 line-clamp-2 group-hover:text-brand">${s.title}</h4>
                                 <span class="text-xs text-gray-500 mt-1">${s.category || 'Movie'}</span>
                             </div>
                         </a>`).join('')}
@@ -358,70 +232,76 @@
         lucide.createIcons();
     }
 
-    function render404() {
-        document.getElementById('app').innerHTML = `<div class="h-screen flex flex-col justify-center items-center"><h1 class="text-6xl font-bold text-brand">404</h1><p class="text-gray-400 mt-2">Page not found</p><a href="/" class="spa-link mt-4 text-white underline">Go Home</a></div>`;
-    }
-
-    // --- PLAYER ---
+    // --- PLAYER LOGIC ---
     function destroyPlayer() {
-        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
-        if(STATE.playerInstance) { STATE.playerInstance.destroy(); STATE.playerInstance = null; }
+        if (STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+        if (STATE.player) { STATE.player.destroy(); STATE.player = null; }
     }
 
-    function initPlayer(sourceUrl) {
-        destroyPlayer();
-        const video = document.getElementById('plyr-video');
+    function initPlayer(source) {
+        const video = document.getElementById('player');
         if(!video) return;
 
-        // Iframe Support
-        if (!sourceUrl.includes('.mp4') && !sourceUrl.includes('.m3u8')) {
-            const container = video.parentElement;
-            container.innerHTML = `<iframe src="${sourceUrl}" class="w-full h-full border-0" allowfullscreen></iframe>`;
-            return;
+        const defaultOptions = {
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
+            settings: ['quality', 'speed']
+        };
+
+        // Check if Iframe (YouTube/Embed)
+        if (!source.includes('.mp4') && !source.includes('.m3u8') && source.includes('http')) {
+             const parent = video.parentElement;
+             parent.innerHTML = `<iframe src="${source}" class="w-full h-full border-0" allowfullscreen></iframe>`;
+             return;
         }
 
-        // HLS or MP4
-        if (Hls.isSupported() && sourceUrl.includes('.m3u8')) {
+        // Check HLS
+        if (Hls.isSupported() && source.includes('.m3u8')) {
             const hls = new Hls();
-            hls.loadSource(sourceUrl);
+            hls.loadSource(source);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                STATE.playerInstance = new Plyr(video, { 
-                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
-                    quality: { default: 720, options: [1080, 720, 480], forced: true, onChange: (q) => hls.levels.forEach((l, i) => { if(l.height === q) hls.currentLevel = i }) }
+                STATE.player = new Plyr(video, {
+                    ...defaultOptions,
+                    quality: { default: 720, options: [1080, 720, 480], forced: true, onChange: (q) => updateQuality(q) }
                 });
             });
             STATE.hls = hls;
+            
+            function updateQuality(newQuality) {
+                STATE.hls.levels.forEach((level, levelIndex) => {
+                    if (level.height === newQuality) STATE.hls.currentLevel = levelIndex;
+                });
+            }
         } else {
-            video.src = sourceUrl;
-            STATE.playerInstance = new Plyr(video);
+            // Standard MP4
+            video.src = source;
+            STATE.player = new Plyr(video, defaultOptions);
         }
     }
 
-    window.changeSource = (url, title, btn) => {
-        document.getElementById('player-title').innerText = title;
+    window.playSource = (url, title, btn) => {
+        document.getElementById('vid-title').innerText = title;
         document.querySelectorAll('.ep-btn').forEach(b => {
-             b.classList.remove('bg-brand','text-white','border-brand');
-             b.classList.add('bg-[#141414]','text-gray-400','border-[#333]');
+            b.className = 'ep-btn bg-[#111] text-gray-400 border border-[#222] hover:bg-[#222] p-3 rounded text-sm transition truncate';
         });
-        btn.classList.remove('bg-[#141414]','text-gray-400','border-[#333]');
-        btn.classList.add('bg-brand','text-white','border-brand');
+        btn.className = 'ep-btn bg-brand text-white border border-brand p-3 rounded text-sm transition truncate';
+        
+        // Soft Destroy & Re-init
+        destroyPlayer();
+        // Reset Video Element if it was replaced by iframe
+        const container = document.querySelector('.aspect-video');
+        if(!container.querySelector('video')) {
+            container.innerHTML = `<video id="player" controls crossorigin playsinline class="w-full h-full"></video>`;
+        }
+        
         initPlayer(url);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }
 
-    window.openModal = (t) => {
-        document.getElementById('modal-title').innerText = t.toUpperCase();
-        document.getElementById('modal-body').innerHTML = LEGAL_TEXT[t];
-        document.getElementById('legal-modal').classList.remove('hidden');
-        document.getElementById('legal-modal').classList.add('flex');
+    window.filterContent = (type) => {
+        if(!type) renderHome(STATE.data);
+        else renderHome(STATE.data.filter(i => i.type && i.type.toLowerCase().includes(type.toLowerCase())));
     }
-    window.closeModal = () => {
-        document.getElementById('legal-modal').classList.add('hidden');
-        document.getElementById('legal-modal').classList.remove('flex');
-    }
-    window.filterType = (t) => renderHome(STATE.data.filter(i => i.type && i.type.includes(t)));
-    window.filterContent = (v) => renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(v.toLowerCase())));
 </script>
 </body>
 </html>
