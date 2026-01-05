@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer"> <title>Ranginx – Watch 18+ Web Series & Movies Online</title>
+    <meta name="referrer" content="no-referrer">
+    <title>Ranginx – Watch 18+ Web Series & Movies Online</title>
     
     <meta name="description" content="Watch latest HD web series and movies online. Free streaming on Ranginx.">
     <meta name="robots" content="index, follow">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ranginx - Premium Streaming">
-    <meta property="og:image" content="https://ranginx.fun/og-image.jpg">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -34,23 +32,19 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
-        
         body { background-color: #0a0a0a; color: #e5e5e5; overflow-x: hidden; font-family: 'Outfit', sans-serif; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
         
         .glass-nav { background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #262626; }
-        
-        /* Hero Overlay Gradients */
         .hero-overlay { background: linear-gradient(to right, #0a0a0a 15%, rgba(10,10,10,0.8) 50%, rgba(10,10,10,0.2) 100%); }
         .hero-overlay-mobile { background: linear-gradient(to top, #0a0a0a 10%, rgba(10,10,10,0.6) 60%, transparent 100%); }
-        
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
-        /* Player specific */
+        /* Cinema Mode */
         .cinema-mode { position: fixed; inset: 0; background: black; z-index: 100; padding: 0; display: flex; align-items: center; justify-content: center; }
-        .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section, .cinema-mode #player-ad-top, .cinema-mode #player-ad-bot { display: none !important; }
+        .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section { display: none !important; }
         .cinema-mode .player-container { width: 100% !important; max-width: 100% !important; height: 100vh; }
         .cinema-mode #player-wrapper { height: 100vh !important; }
     </style>
@@ -59,7 +53,7 @@
 
 <nav class="fixed top-0 w-full h-16 glass-nav z-[60] flex items-center justify-between px-4 lg:px-8 transition-all duration-300">
     <div class="flex items-center gap-6">
-        <button id="menu-btn" class="md:hidden p-2 text-gray-300"><i data-lucide="menu"></i></button>
+        <button id="menu-btn" class="md:hidden p-2 text-gray-300" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
         <a href="/" class="text-2xl font-bold tracking-tighter text-white">
             <span class="text-brand">Rang</span>inx
         </a>
@@ -110,41 +104,31 @@
     </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, updateDoc, increment, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    // Firebase Init
-    const db = getFirestore(initializeApp({
-        apiKey: "AIzaSyCrQBTH05r8pM1zckQX1X_5hNjfGdpU4sM",
-        authDomain: "ebook-c25a9.firebaseapp.com",
-        projectId: "ebook-c25a9",
-        storageBucket: "ebook-c25a9.firebasestorage.app",
-        messagingSenderId: "497431501409",
-        appId: "1:497431501409:web:0e03fb6744c24e119c2820"
-    }));
-
+<script>
     let allContent = [];
     const STATE = { player: null, hls: null };
 
-    // --- MAIN INIT ---
+    // --- MAIN INIT (JSON LOADER) ---
     async function init() {
-        document.getElementById('app').innerHTML = `<div class="h-screen flex justify-center items-center text-brand">Loading content...</div>`;
+        document.getElementById('app').innerHTML = `<div class="h-screen flex justify-center items-center text-brand animate-pulse">Loading Content...</div>`;
         
         try {
-            // Load Movies & Series
-            const [m, s] = await Promise.all([
-                getDocs(query(collection(db, 'movies'), where('isPublic', '==', true))),
-                getDocs(query(collection(db, 'series'), where('isPublic', '==', true)))
-            ]);
+            // Load from JSON file instead of Firebase
+            const res = await fetch('data/normal.json');
+            if (!res.ok) throw new Error("Could not load data/normal.json");
+            const json = await res.json();
             
-            allContent = [
-                ...m.docs.map(d => ({id:d.id, ...d.data(), type:'movie'})), 
-                ...s.docs.map(d => ({id:d.id, ...d.data(), type:'series'}))
-            ];
+            // Assign directly to global variable
+            allContent = json;
             
             handleLocation(); // Start Router
-        } catch(e) { console.error(e); }
+        } catch(e) { 
+            console.error(e);
+            document.getElementById('app').innerHTML = `<div class="h-screen flex flex-col justify-center items-center text-red-500">
+                <h1 class="text-2xl font-bold mb-2">Error Loading Data</h1>
+                <p class="text-sm text-gray-400">Please ensure "data/normal.json" exists.</p>
+            </div>`;
+        }
     }
 
     // --- ROUTER ENGINE ---
@@ -167,7 +151,8 @@
 
         // 2. Content Matching
         const slug = decodeURIComponent(parts[0]);
-        const item = allContent.find(i => createSlug(i.name) === slug);
+        // Note: JSON keys usually have 'slug', 'title' not 'name'. Adjusting finding logic.
+        const item = allContent.find(i => (i.slug || createSlug(i.title)).toLowerCase() === slug.toLowerCase());
 
         if (!item) { render404(); return; }
 
@@ -180,7 +165,7 @@
                 const epNum = parseInt(subPage.replace('episode-', ''));
                 renderPlayer(item, epNum);
             } else {
-                renderDetailPage(item); // Show "Screenshot 367" view
+                renderDetailPage(item); // Screenshot 367 view
             }
         } else {
             // Movie
@@ -193,6 +178,7 @@
     function renderHome(filterType = null) {
         const movies = allContent.filter(i => i.type === 'movie');
         const series = allContent.filter(i => i.type === 'series');
+        // Featured logic: Pick first or marked featured
         const featured = allContent.find(i => i.isFeatured) || allContent[0];
 
         let html = `<div class="animate-fade pb-10">`;
@@ -201,14 +187,14 @@
         if (!filterType && featured) {
             html += `
             <div class="relative w-full h-[60vh] md:h-[75vh] overflow-hidden group">
-                <div class="absolute inset-0 bg-cover bg-center transition duration-1000 group-hover:scale-105" style="background-image: url('${featured.imageUrl}');"></div>
+                <div class="absolute inset-0 bg-cover bg-center transition duration-1000 group-hover:scale-105" style="background-image: url('${featured.thumbnail}');"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 md:p-12 w-full md:w-2/3 pb-20">
                     <span class="bg-brand text-white text-[10px] font-bold px-2 py-1 rounded uppercase mb-3 inline-block">Featured</span>
-                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-xl">${featured.name}</h1>
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-xl">${featured.title}</h1>
                     <p class="text-gray-300 text-sm md:text-lg mb-6 line-clamp-3 max-w-lg">${featured.description || ''}</p>
-                    <a href="/${createSlug(featured.name)}" onclick="route(event)" class="bg-white text-black px-8 py-3 rounded-lg font-bold hover:bg-gray-200 transition inline-flex items-center gap-2"><i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now</a>
+                    <a href="/${featured.slug}" onclick="route(event)" class="bg-white text-black px-8 py-3 rounded-lg font-bold hover:bg-gray-200 transition inline-flex items-center gap-2"><i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now</a>
                 </div>
             </div>`;
         }
@@ -228,17 +214,18 @@
         html += `</div></div>`;
         document.getElementById('app').innerHTML = html;
         lucide.createIcons();
+        updateSEO("Ranginx - Watch Movies & Web Series", "Stream HD content online.");
     }
 
     // --- VIEW: DETAIL PAGE (Screenshot 367) ---
     function renderDetailPage(item) {
         const isSeries = item.type === 'series';
-        document.title = `${item.name} - Ranginx`;
+        updateSEO(`${item.title} - Ranginx`, item.description);
 
         let html = `
         <div class="animate-fade">
             <div class="relative w-full h-[50vh] md:h-[70vh]">
-                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${item.imageUrl}');"></div>
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${item.thumbnail}');"></div>
                 <div class="absolute inset-0 hero-overlay hidden md:block"></div>
                 <div class="absolute inset-0 hero-overlay-mobile md:hidden"></div>
                 
@@ -248,14 +235,14 @@
                             <span class="bg-brand text-white text-xs font-bold px-2 py-1 rounded uppercase">${isSeries ? 'Web Series' : 'Movie'}</span>
                             <span class="text-gray-300 text-sm font-medium">Ranginx Original</span>
                         </div>
-                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">${item.name}</h1>
+                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">${item.title}</h1>
                         <p class="text-gray-300 text-sm md:text-base mb-8 max-w-xl">${item.description || 'Watch online in HD.'}</p>
                         
                         ${isSeries ? `
-                        <a href="/${createSlug(item.name)}/episode-1" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg inline-flex items-center gap-2 transition shadow-lg shadow-red-900/40">
+                        <a href="/${item.slug}/episode-1" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg inline-flex items-center gap-2 transition shadow-lg shadow-red-900/40">
                             <i data-lucide="play-circle" class="w-6 h-6"></i> Start Watching Episode 1
                         </a>` : `
-                        <a href="/${createSlug(item.name)}/watch" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg inline-flex items-center gap-2 transition shadow-lg shadow-red-900/40">
+                        <a href="/${item.slug}/watch" onclick="route(event)" class="bg-brand hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg inline-flex items-center gap-2 transition shadow-lg shadow-red-900/40">
                             <i data-lucide="play" class="w-6 h-6"></i> Play Movie
                         </a>`}
                     </div>
@@ -270,17 +257,17 @@
                     </h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         ${item.episodes.map((ep, idx) => `
-                        <a href="/${createSlug(item.name)}/episode-${idx+1}" onclick="route(event)" class="group bg-[#141414] border border-[#262626] rounded-xl overflow-hidden hover:border-brand transition flex md:block">
+                        <a href="/${item.slug}/episode-${ep.ep || idx+1}" onclick="route(event)" class="group bg-[#141414] border border-[#262626] rounded-xl overflow-hidden hover:border-brand transition flex md:block">
                             <div class="w-32 md:w-full md:aspect-video relative bg-black flex-shrink-0">
-                                <img src="${item.imageUrl}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition">
+                                <img src="${item.thumbnail}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition">
                                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                                     <div class="bg-brand p-2 rounded-full"><i data-lucide="play" class="w-4 h-4 text-white fill-white"></i></div>
                                 </div>
-                                <span class="absolute bottom-2 left-2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded">Ep ${idx+1}</span>
+                                <span class="absolute bottom-2 left-2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded">Ep ${ep.ep || idx+1}</span>
                             </div>
                             <div class="p-4 flex flex-col justify-center">
-                                <h4 class="text-white font-bold text-sm mb-1 group-hover:text-brand truncate">Episode ${idx+1}</h4>
-                                <p class="text-gray-500 text-xs line-clamp-1">${ep.title || `Episode ${idx+1}`}</p>
+                                <h4 class="text-white font-bold text-sm mb-1 group-hover:text-brand truncate">Episode ${ep.ep || idx+1}</h4>
+                                <p class="text-gray-500 text-xs line-clamp-1">${ep.title || `Episode ${ep.ep || idx+1}`}</p>
                             </div>
                         </a>`).join('')}
                     </div>
@@ -289,8 +276,7 @@
                 <div class="bg-[#141414] border border-[#262626] rounded-xl p-6 md:p-8">
                     <h3 class="text-white font-bold text-xl mb-4">Storyline</h3>
                     <div class="text-gray-400 text-sm leading-relaxed space-y-4">
-                        <p>${item.description || item.name + ' is available to stream.'}</p>
-                        ${item.seoContent || ''}
+                        <p>${item.description || item.title + ' is available to stream.'}</p>
                     </div>
                 </div>
             </div>
@@ -302,30 +288,33 @@
 
     // --- VIEW: PLAYER PAGE ---
     function renderPlayer(item, epNum) {
-        const slug = createSlug(item.name);
+        const slug = item.slug;
         const isSeries = item.type === 'series';
         
-        let activeEp = null;
         let videoSrc = "";
-        let pageTitle = item.name;
+        let pageTitle = item.title;
 
         if (isSeries) {
-            if(item.episodes && item.episodes[epNum-1]) {
-                activeEp = item.episodes[epNum-1];
-                videoSrc = activeEp.url;
-                pageTitle = `${item.name} - Episode ${epNum}`;
+            // Find episode by number
+            let epData = item.episodes.find(e => e.ep == epNum);
+            // Fallback if ep field is missing, use index
+            if(!epData) epData = item.episodes[epNum-1];
+            
+            if(epData) {
+                videoSrc = epData.url;
+                pageTitle = `${item.title} - Episode ${epNum}`;
             } else return render404();
         } else {
-            videoSrc = item.movieUrl || ""; // Assuming movieUrl field exists for movies
+            videoSrc = item.video || ""; // Assuming JSON uses 'video' for movie URL
         }
 
-        document.title = pageTitle;
+        updateSEO(pageTitle, item.description);
 
         let html = `
         <div class="max-w-[1800px] mx-auto lg:px-6 py-6 animate-fade">
             <div class="px-4 lg:px-0 text-sm text-gray-400 mb-4 flex items-center gap-2">
                 <a href="/" onclick="route(event)" class="hover:text-white">Home</a> / 
-                <a href="/${slug}" onclick="route(event)" class="hover:text-white">${item.name}</a> / 
+                <a href="/${slug}" onclick="route(event)" class="hover:text-white">${item.title}</a> / 
                 <span class="text-brand font-bold">${isSeries ? `Episode ${epNum}` : 'Watch'}</span>
             </div>
 
@@ -355,9 +344,9 @@
                             <h3 class="text-white font-semibold flex items-center gap-2 mb-4"><i data-lucide="layers" class="w-5 h-5 text-brand"></i> Episodes</h3>
                             <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
                                 ${item.episodes.map((ep, idx) => `
-                                <a href="/${slug}/episode-${idx+1}" onclick="route(event)" 
-                                   class="flex items-center justify-center h-10 rounded border text-sm font-medium transition ${idx+1 === epNum ? 'bg-brand text-white border-brand' : 'bg-[#141414] text-gray-400 border-[#262626] hover:bg-[#222] hover:text-white'}">
-                                   ${idx + 1}
+                                <a href="/${slug}/episode-${ep.ep || idx+1}" onclick="route(event)" 
+                                   class="flex items-center justify-center h-10 rounded border text-sm font-medium transition ${(ep.ep || idx+1) == epNum ? 'bg-brand text-white border-brand' : 'bg-[#141414] text-gray-400 border-[#262626] hover:bg-[#222] hover:text-white'}">
+                                   ${ep.ep || idx + 1}
                                 </a>`).join('')}
                             </div>
                         </div>` : ''}
@@ -367,13 +356,13 @@
                 <div class="w-full lg:w-[25%] px-4 lg:px-0">
                     <h3 class="font-bold text-white text-lg mb-4 pl-2 border-l-4 border-brand">You may also like</h3>
                     <div class="flex flex-col gap-4">
-                        ${allContent.filter(i => i.id !== item.id).slice(0, 8).map(s => `
-                        <a href="/${createSlug(s.name)}" onclick="route(event)" class="flex gap-3 group bg-[#141414] hover:bg-[#1a1a1a] p-2 rounded-lg transition border border-transparent hover:border-[#333]">
+                        ${allContent.filter(i => i.slug !== item.slug).slice(0, 8).map(s => `
+                        <a href="/${s.slug}" onclick="route(event)" class="flex gap-3 group bg-[#141414] hover:bg-[#1a1a1a] p-2 rounded-lg transition border border-transparent hover:border-[#333]">
                             <div class="w-24 aspect-video bg-[#222] rounded overflow-hidden flex-shrink-0 relative">
-                                <img src="${s.imageUrl}" class="w-full h-full object-cover">
+                                <img src="${s.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition">
                             </div>
                             <div class="py-1 min-w-0 flex flex-col justify-center">
-                                <h4 class="text-sm font-semibold text-gray-200 line-clamp-2 group-hover:text-brand transition">${s.name}</h4>
+                                <h4 class="text-sm font-semibold text-gray-200 line-clamp-2 group-hover:text-brand transition">${s.title}</h4>
                                 <span class="text-[10px] text-gray-500 mt-1">${s.type === 'series' ? 'Web Series' : 'Movie'}</span>
                             </div>
                         </a>`).join('')}
@@ -384,7 +373,7 @@
 
         document.getElementById('app').innerHTML = html;
         lucide.createIcons();
-        initPlayer(videoSrc, item.imageUrl);
+        initPlayer(videoSrc, item.thumbnail);
     }
 
     function render404() {
@@ -400,7 +389,7 @@
     function initPlayer(src, poster) {
         destroyPlayer();
         const wrapper = document.getElementById('player-wrapper');
-        wrapper.innerHTML = ''; // Clear
+        wrapper.innerHTML = ''; 
 
         // Iframe Fallback
         if (!src.includes('.mp4') && !src.includes('.m3u8')) {
@@ -435,15 +424,15 @@
     // --- UTILS ---
     function generateCards(items) {
         return items.slice(0, 12).map(item => `
-            <a href="/${createSlug(item.name)}" onclick="route(event)" class="group block">
+            <a href="/${item.slug}" onclick="route(event)" class="group block">
                 <div class="relative aspect-video rounded-lg overflow-hidden mb-2 bg-[#141414] border border-[#222]">
-                    <img src="${item.imageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+                    <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                         <div class="bg-brand p-2 rounded-full shadow-lg"><i data-lucide="play" class="w-5 h-5 fill-white text-white"></i></div>
                     </div>
                     <span class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-[9px] font-bold px-1.5 py-0.5 rounded border border-white/10 uppercase">${item.type==='series'?'TV':'MOV'}</span>
                 </div>
-                <h3 class="font-bold text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.name}</h3>
+                <h3 class="font-bold text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.title}</h3>
                 <div class="flex justify-between items-center mt-1 text-[10px] text-gray-500"><span>2025</span><span class="border border-[#333] px-1 rounded">HD</span></div>
             </a>
         `).join('');
@@ -454,7 +443,7 @@
     // Search
     window.handleSearch = (val) => {
         if(!val) { renderHome(); return; }
-        const filtered = allContent.filter(i => i.name.toLowerCase().includes(val.toLowerCase()));
+        const filtered = allContent.filter(i => i.title.toLowerCase().includes(val.toLowerCase()));
         let html = `<div class="px-4 py-8 max-w-[1600px] mx-auto"><h2 class="text-xl font-bold text-white mb-6">Search Results</h2><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${generateCards(filtered)}</div></div>`;
         document.getElementById('app').innerHTML = html;
         lucide.createIcons();
@@ -462,15 +451,23 @@
     document.getElementById('desktop-search').addEventListener('keyup', (e) => handleSearch(e.target.value));
     document.getElementById('mobile-search-input').addEventListener('keyup', (e) => handleSearch(e.target.value));
 
+    // SEO Helper
+    function updateSEO(title, desc) {
+        document.title = title;
+        let m = document.querySelector('meta[name="description"]');
+        if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
+        m.content = desc ? desc.replace(/<[^>]*>?/gm, '') : '';
+    }
+
     // Modals & Sidebar
+    const LEGAL_TEXT = { dmca: "<h3>DMCA Notice</h3><p>We do not host files. Content is provided by non-affiliated third parties.</p>", privacy: "<h3>Privacy Policy</h3><p>We do not collect personal data.</p>" };
     window.openModal = (t) => {
         document.getElementById('legal-modal').classList.remove('hidden');
         document.getElementById('legal-modal').classList.add('flex');
-        document.getElementById('modal-body').innerHTML = t === 'dmca' ? `<p>DMCA Content...</p>` : `<p>Privacy Content...</p>`;
+        document.getElementById('modal-body').innerHTML = LEGAL_TEXT[t];
     };
     window.closeModal = () => { document.getElementById('legal-modal').classList.add('hidden'); document.getElementById('legal-modal').classList.remove('flex'); };
     window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('overlay').classList.toggle('hidden'); };
-    document.getElementById('menu-btn').onclick = toggleSidebar;
 
     init();
 </script>
