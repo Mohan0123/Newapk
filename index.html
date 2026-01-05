@@ -6,10 +6,10 @@
     <meta name="referrer" content="no-referrer"> <title>Ranginx - Premium Streaming</title>
     
     <meta name="description" content="Watch latest HD web series and movies online for free on Ranginx.">
+    <meta name="robots" content="index, follow">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -29,7 +29,7 @@
 
     <style>
         body { background-color: #000000; color: #ffffff; font-family: sans-serif; overflow-x: hidden; }
-        .glass-nav { background: rgba(0,0,0,0.95); border-bottom: 1px solid #222; }
+        .glass-nav { background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #222; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #e50914; border-radius: 4px; }
@@ -55,10 +55,24 @@
             <input type="text" id="search-input" placeholder="Search..." class="w-full pl-10 pr-4 py-1.5 rounded-full text-sm outline-none bg-[#141414] border border-[#333] focus:border-brand text-white">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-2"></i>
         </div>
+        <button class="md:hidden text-white" onclick="document.getElementById('mobile-search').classList.toggle('hidden')">
+            <i data-lucide="search" class="w-6 h-6"></i>
+        </button>
     </div>
 </nav>
 
+<div id="mobile-search" class="fixed top-16 left-0 w-full bg-black p-4 hidden z-[90] border-b border-[#333]">
+    <input type="text" id="mobile-search-input" placeholder="Search..." class="w-full p-3 rounded outline-none border border-[#333] bg-[#141414] text-white">
+</div>
+
 <main id="app" class="min-h-screen pt-20 pb-12"></main>
+
+<footer class="border-t border-[#222] bg-[#050505] pt-12 pb-8 mt-auto">
+    <div class="max-w-[1600px] mx-auto px-4 text-center">
+        <h3 class="text-brand font-bold text-2xl mb-4">Ranginx</h3>
+        <p class="text-[11px] text-[#444]">&copy; 2026 Ranginx. All rights reserved.</p>
+    </div>
+</footer>
 
 <script>
     const STATE = { data: [], player: null, hls: null };
@@ -72,7 +86,9 @@
                 router(); 
             }
         });
-        document.getElementById('search-input').addEventListener('keyup', (e) => filterContent(e.target.value));
+        const handleSearch = (e) => filterContent(e.target.value);
+        document.getElementById('search-input').addEventListener('keyup', handleSearch);
+        document.getElementById('mobile-search-input').addEventListener('keyup', handleSearch);
         lucide.createIcons();
         await loadData();
     });
@@ -87,7 +103,7 @@
             STATE.data = json.reverse();
             router();
         } catch (e) { 
-            document.getElementById('app').innerHTML = `<div class="h-screen flex justify-center items-center text-red-500">Error: /data/normal.json missing</div>`;
+            document.getElementById('app').innerHTML = `<div class="h-screen flex justify-center items-center text-red-500">Error: /data/normal.json not found</div>`;
         }
     }
 
@@ -96,20 +112,27 @@
         destroyPlayer();
         const path = window.location.pathname.replace(/\/$/, '');
         const slug = path.substring(1);
+        document.getElementById('mobile-search').classList.add('hidden');
 
         if (path === '' || path === '/index.html') {
             renderHome(STATE.data);
+            updateSEO('Ranginx - Home', 'Watch movies.');
         } else {
             const item = STATE.data.find(i => i.slug.toLowerCase() === slug.toLowerCase());
             if (item) renderWatch(item);
-            else renderHome(STATE.data);
+            else render404();
         }
     }
 
-    // --- HOME ---
+    function updateSEO(title, desc) {
+        document.title = title;
+        let m = document.querySelector('meta[name="description"]');
+        if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
+        m.content = desc.replace(/<[^>]*>?/gm, '');
+    }
+
     function renderHome(list) {
         let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade">`;
-        
         if (list[0] && !document.getElementById('search-input').value) {
             html += `
             <div class="relative w-full aspect-video md:h-[70vh] rounded-xl overflow-hidden mb-8 group border border-[#222] hidden md:block">
@@ -124,10 +147,9 @@
                 </div>
             </div>`;
         }
-
         html += `<h2 class="text-lg md:text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Uploads</h2>
                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6">`;
-
+        
         const items = (list[0] && !document.getElementById('search-input').value) ? list.slice(1) : list;
         items.forEach(item => {
             html += `
@@ -137,12 +159,13 @@
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                             <div class="bg-brand p-2 rounded-full shadow-lg"><i data-lucide="play" class="w-4 h-4 fill-white text-white"></i></div>
                         </div>
-                        <span class="absolute top-1 right-1 bg-brand text-white text-[8px] font-bold px-1.5 py-0.5 rounded">
-                            ${item.type === 'series' ? 'TV' : 'HD'}
-                        </span>
+                        <span class="absolute top-1 right-1 bg-brand text-white text-[8px] font-bold px-1.5 py-0.5 rounded">${item.type === 'series' ? 'TV' : 'HD'}</span>
                     </div>
                     <div class="px-1">
                         <h3 class="font-bold text-xs md:text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.title}</h3>
+                        <div class="flex justify-between items-center mt-1 text-[10px] text-gray-500">
+                            <span class="border border-[#333] px-1 rounded">${item.category || 'HD'}</span>
+                        </div>
                     </div>
                 </a>`;
         });
@@ -151,18 +174,18 @@
         lucide.createIcons();
     }
 
-    // --- WATCH ---
     function renderWatch(item) {
+        const desc = item.description || `<p>Watch <strong>${item.title}</strong> full HD online.</p>`;
+        updateSEO(`Watch ${item.title}`, desc);
+
         const isSeries = item.episodes && item.episodes.length > 0;
         const urlParams = new URLSearchParams(window.location.search);
         const epParam = urlParams.get('ep');
-        
         let activeEp = isSeries ? item.episodes[0] : null;
         if(isSeries && epParam) {
             const found = item.episodes.find(e => e.ep == epParam);
             if(found) activeEp = found;
         }
-
         const src = activeEp ? activeEp.url : item.video;
         const title = activeEp ? `${item.title} - Episode ${activeEp.ep}` : item.title;
         const suggestions = STATE.data.filter(i => i.slug !== item.slug).slice(0, 8);
@@ -172,75 +195,42 @@
             <div class="text-xs text-gray-500 mb-4 flex items-center gap-2">
                 <a href="/" class="spa-link hover:text-white">Home</a> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span class="text-white">${item.title}</span>
             </div>
-
             <div class="flex flex-col lg:flex-row gap-8">
                 <div class="w-full lg:w-[75%] player-container">
                     <div class="bg-black rounded-xl overflow-hidden border border-[#222] shadow-2xl relative aspect-video">
-                        <div id="player-wrapper" class="w-full h-full flex items-center justify-center bg-black">
-                            <p class="text-gray-500 text-xs">Loading Player...</p>
-                        </div>
+                        <div id="player-wrapper" class="w-full h-full"></div>
                     </div>
-
-                    <div class="mt-2 bg-red-900/20 border border-red-900/50 p-3 rounded flex justify-between items-center">
-                        <span class="text-red-400 text-xs">⚠️ Video not playing?</span>
-                        <a id="direct-btn" href="${src}" target="_blank" class="bg-brand text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-red-700">
-                            Watch Directly
-                        </a>
-                    </div>
-
                     <div class="mt-4 details-section">
                         <div class="flex justify-between items-start mb-2">
                             <h1 id="player-title" class="text-xl md:text-3xl font-bold text-white leading-tight">${title}</h1>
-                            <button onclick="toggleCinemaMode()" class="flex items-center gap-2 text-xs bg-[#222] text-white px-3 py-1.5 rounded hover:bg-brand transition">
-                                <i data-lucide="monitor" class="w-3 h-3"></i> Mode
-                            </button>
+                            <button onclick="toggleCinemaMode()" class="flex items-center gap-2 text-xs bg-[#222] text-white px-3 py-1.5 rounded hover:bg-brand transition"><i data-lucide="monitor" class="w-3 h-3"></i> Mode</button>
                         </div>
-                        
+                        <a id="fallback-btn" href="${src}" target="_blank" class="hidden mb-4 bg-[#222] text-brand text-xs px-3 py-2 rounded border border-[#333] hover:bg-[#333]">Video not playing? Click to watch directly</a>
                         <div class="bg-[#141414] p-4 rounded-xl border border-[#222] mb-6">
-                            <div class="text-gray-400 text-sm leading-relaxed">${item.description || 'No description.'}</div>
+                            <div class="html-desc text-gray-400 text-sm leading-relaxed">${desc}</div>
                         </div>
-
                         ${isSeries ? `
-                        <div class="mb-10">
-                            <h3 class="text-white font-bold mb-3 text-lg">Episodes</h3>
-                            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                                ${item.episodes.map((ep, idx) => {
-                                    const isActive = activeEp.ep === ep.ep;
-                                    return `
-                                    <button onclick="playVideo('${ep.url}', '${item.title} - Episode ${ep.ep}', '${item.thumbnail}', this, ${ep.ep})" 
-                                        class="ep-btn ${isActive ? 'bg-brand text-white border-brand' : 'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} 
-                                        border p-2 rounded text-xs font-medium transition text-center truncate">
-                                        Ep ${ep.ep}
-                                    </button>`;
-                                }).join('')}
-                            </div>
-                        </div>` : ''}
+                        <div class="mb-10"><h3 class="text-white font-bold mb-3 text-lg">Episodes</h3><div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                            ${item.episodes.map((ep) => {
+                                const isActive = activeEp.ep === ep.ep;
+                                return `<button onclick="playVideo('${ep.url}', '${item.title} - Episode ${ep.ep}', '${item.thumbnail}', this, ${ep.ep})" class="ep-btn ${isActive?'bg-brand text-white border-brand':'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} border p-2 rounded text-xs font-medium transition text-center truncate">Ep ${ep.ep}</button>`;
+                            }).join('')}
+                        </div></div>` : ''}
                     </div>
                 </div>
-
                 <div class="w-full lg:w-[25%] sidebar-recs">
                     <h3 class="text-white font-bold mb-4 text-sm border-l-4 border-brand pl-3">More Like This</h3>
                     <div class="flex flex-col gap-3">
-                        ${suggestions.map(s => `
-                        <a href="/${s.slug}" class="spa-link flex gap-3 p-2 rounded hover:bg-[#141414] transition border border-transparent hover:border-[#222]">
-                            <div class="w-24 aspect-video bg-[#222] rounded overflow-hidden flex-shrink-0">
-                                <img src="${s.thumbnail}" class="w-full h-full object-cover">
-                            </div>
-                            <div class="flex flex-col justify-center min-w-0">
-                                <h4 class="text-gray-200 font-bold text-xs line-clamp-2 group-hover:text-brand">${s.title}</h4>
-                            </div>
-                        </a>`).join('')}
+                        ${suggestions.map(s => `<a href="/${s.slug}" class="spa-link flex gap-3 p-2 rounded hover:bg-[#141414] transition border border-transparent hover:border-[#222]"><div class="w-24 aspect-video bg-[#222] rounded overflow-hidden flex-shrink-0"><img src="${s.thumbnail}" class="w-full h-full object-cover"></div><div class="flex flex-col justify-center min-w-0"><h4 class="text-gray-200 font-bold text-xs line-clamp-2 group-hover:text-brand">${s.title}</h4></div></a>`).join('')}
                     </div>
                 </div>
             </div>
         </div>`;
-
         document.getElementById('app').innerHTML = html;
         playVideo(src, title, item.thumbnail, null, activeEp ? activeEp.ep : null);
         lucide.createIcons();
     }
 
-    // --- PLAYER ENGINE (With CORS Handling) ---
     function destroyPlayer() {
         if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
         if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
@@ -254,9 +244,8 @@
             history.pushState({}, '', newUrl);
         }
         
-        // Update direct link button
-        const directBtn = document.getElementById('direct-btn');
-        if(directBtn) directBtn.href = url;
+        const fallback = document.getElementById('fallback-btn');
+        if(fallback) { fallback.href = url; fallback.classList.remove('hidden'); }
 
         if(btn) {
             document.querySelectorAll('.ep-btn').forEach(b => b.className = 'ep-btn bg-[#141414] text-gray-400 border border-[#333] hover:bg-[#222] border p-2 rounded text-xs font-medium transition text-center truncate');
@@ -267,35 +256,45 @@
         const wrapper = document.getElementById('player-wrapper');
         wrapper.innerHTML = '';
 
-        // --- BYPASS STRATEGY: IFRAME FORCE FOR BLOCKED DOMAINS ---
-        // Agar link 'maalcdn' ya 'bmaal' hai (jinse error aa raha hai), to hum seedha iframe try karenge
-        // Kyunki video tag CORS block karega.
-        const isBlockedDomain = url.includes('maalcdn.com') || url.includes('bmaal.com');
+        const isHls = url.includes('.m3u8');
         
-        // Strategy: Use <video> only if we think it works, else <iframe>
-        // HLS (.m3u8) needs video tag usually, but if blocked, iframe is safer if supported.
-        // MP4 blocked by CORS MUST use iframe or proxy. Since we have no proxy, use Iframe.
-        
-        // Create Iframe as primary fallback for CORS issues
-        const iframe = document.createElement('iframe');
-        iframe.src = url;
-        iframe.className = "w-full h-full border-0";
-        iframe.allow = "autoplay; fullscreen; picture-in-picture";
-        iframe.setAttribute('allowfullscreen', '');
-        
-        wrapper.appendChild(iframe);
+        // --- KEY FIX: OPAQUE VIDEO TAG (No Crossorigin) ---
+        // MP4s will play opaquely (no download)
+        const video = document.createElement('video');
+        video.className = "w-full h-full";
+        video.controls = true;
+        video.poster = poster || '';
+        video.setAttribute('playsinline', '');
+        // NO crossorigin attribute to allow opaque playback of blocked resources
+        wrapper.appendChild(video);
+
+        const options = { 
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
+            autoplay: true,
+            muted: false
+        };
+
+        if (isHls && Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                STATE.player = new Plyr(video, options);
+            });
+            STATE.hls = hls;
+        } else {
+            video.src = url;
+            STATE.player = new Plyr(video, options);
+        }
     }
 
     window.toggleCinemaMode = () => {
         document.body.classList.toggle('cinema-mode');
         if(document.body.classList.contains('cinema-mode')) document.querySelector('.player-container').scrollIntoView();
     };
-
+    
     window.filterType = (t) => renderHome(STATE.data.filter(i => i.type && i.type.toLowerCase().includes(t)));
-    window.filterContent = (v) => {
-        if(!v) return renderHome(STATE.data);
-        renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(v.toLowerCase())));
-    };
+    window.filterContent = (v) => { if(!v) return renderHome(STATE.data); renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(v.toLowerCase()))); };
 </script>
 </body>
 </html>
