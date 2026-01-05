@@ -15,7 +15,6 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
@@ -86,13 +85,12 @@
             <button onclick="openModal('privacy')" class="hover:text-brand transition">Privacy Policy</button>
             <button onclick="openModal('terms')" class="hover:text-brand transition">Terms & Conditions</button>
         </div>
-        <p class="text-[11px] text-[#444]">&copy; 2026 Ranginx. All rights reserved. <br>Disclaimer: This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+        <p class="text-[11px] text-[#444]">&copy; 2026 Ranginx. All rights reserved. <br>Disclaimer: This site does not store any files on its server.</p>
     </div>
 </footer>
 
 <div id="legal-modal" class="fixed inset-0 z-[100] hidden items-center justify-center animate-fade">
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
-    
     <div class="relative bg-[#141414] border border-[#262626] w-full max-w-2xl max-h-[80vh] rounded-xl shadow-2xl flex flex-col animate-pop mx-4">
         <div class="flex justify-between items-center p-5 border-b border-[#262626]">
             <h2 id="modal-title" class="text-xl font-bold text-white">Legal</h2>
@@ -100,9 +98,7 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
-        
-        <div id="modal-body" class="p-6 overflow-y-auto legal-content">
-            </div>
+        <div id="modal-body" class="p-6 overflow-y-auto legal-content"></div>
     </div>
 </div>
 
@@ -113,44 +109,18 @@
         playerInstance: null
     };
 
-    // --- LEGAL CONTENT TEXT ---
+    // --- LEGAL TEXT ---
     const LEGAL_TEXT = {
-        dmca: `
-            <h2>DMCA Copyright Infringement Notification</h2>
-            <p>Ranginx respects the intellectual property rights of others. Ranginx operates as a search engine and does not host, upload, or store any video files on its servers. All content is provided by non-affiliated third parties.</p>
-            <p>If you believe that your copyrighted work has been copied in a way that constitutes copyright infringement and is accessible on this site, please notify our copyright agent.</p>
-            <h2>Counter-Notice</h2>
-            <p>If you believe that your content was removed by mistake, you may file a counter-notice containing your identification and a statement under penalty of perjury.</p>
-        `,
-        privacy: `
-            <h2>Privacy Policy</h2>
-            <p>At Ranginx, accessible from ranginx.fun, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Ranginx and how we use it.</p>
-            <h2>Log Files</h2>
-            <p>Ranginx follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected by log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp.</p>
-            <h2>Cookies</h2>
-            <p>Like any other website, Ranginx uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited.</p>
-        `,
-        terms: `
-            <h2>Terms and Conditions</h2>
-            <p>Welcome to Ranginx! These terms and conditions outline the rules and regulations for the use of Ranginx's Website.</p>
-            <h2>Cookies</h2>
-            <p>We employ the use of cookies. By accessing Ranginx, you agreed to use cookies in agreement with the Ranginx's Privacy Policy.</p>
-            <h2>License</h2>
-            <p>Unless otherwise stated, Ranginx and/or its licensors own the intellectual property rights for all material on Ranginx. All intellectual property rights are reserved.</p>
-            <h2>Disclaimer</h2>
-            <p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website.</p>
-        `
+        dmca: `<h2>DMCA Notice</h2><p>Ranginx is a search engine. We do not host content.</p>`,
+        privacy: `<h2>Privacy Policy</h2><p>We respect your privacy. No personal data is collected.</p>`,
+        terms: `<h2>Terms</h2><p>By using Ranginx, you agree to watch content for personal use only.</p>`
     };
 
     // --- 1. INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', async () => {
         document.body.addEventListener('click', e => {
             const link = e.target.closest('a.spa-link');
-            if (link) {
-                e.preventDefault();
-                history.pushState(null, '', link.href);
-                router();
-            }
+            if (link) { e.preventDefault(); history.pushState(null, '', link.href); router(); }
         });
 
         const handleSearch = (e) => filterContent(e.target.value);
@@ -199,18 +169,25 @@
         }
     }
 
-    // SEO Helper
+    // --- DYNAMIC SEO UPDATER ---
     function updateSEO(title, desc) {
         document.title = title;
-        const metaDesc = document.querySelector('meta[name="description"]');
-        if(metaDesc) metaDesc.setAttribute('content', desc);
         
-        // Update OG Tags
+        // Update Meta Description
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+            metaDesc = document.createElement('meta');
+            metaDesc.setAttribute('name', 'description');
+            document.head.appendChild(metaDesc);
+        }
+        metaDesc.setAttribute('content', desc);
+        
+        // Update Open Graph Tags
         const ogTitle = document.querySelector('meta[property="og:title"]');
-        if(ogTitle) ogTitle.setAttribute('content', title);
+        if (ogTitle) ogTitle.setAttribute('content', title);
         
         const ogDesc = document.querySelector('meta[property="og:description"]');
-        if(ogDesc) ogDesc.setAttribute('content', desc);
+        if (ogDesc) ogDesc.setAttribute('content', desc);
     }
 
     // --- 4. RENDER FUNCTIONS ---
@@ -267,9 +244,12 @@
     }
 
     function renderWatch(item) {
-        // SEO UPDATE for specific movie/series
-        const descText = item.description || `Watch ${item.title} online for free in HD on Ranginx.`;
-        updateSEO(`Watch ${item.title} - Ranginx`, descText);
+        // --- AUTO DESCRIPTION GENERATION ---
+        const fallbackDesc = `Watch ${item.title} full HD online on Ranginx. Enjoy the best ${item.category || 'entertainment'} content for free without registration.`;
+        const finalDesc = (item.description && item.description.trim() !== "") ? item.description : fallbackDesc;
+        
+        // Update SEO Tags
+        updateSEO(`Watch ${item.title} - Ranginx`, finalDesc);
 
         const isSeries = item.episodes && item.episodes.length > 0;
         const initialSrc = isSeries ? item.episodes[0].url : item.video;
@@ -284,7 +264,7 @@
 
             <div class="flex flex-col lg:flex-row gap-8">
                 <div class="w-full lg:w-[75%] player-container transition-all duration-300">
-                    <div class="relative rounded-xl overflow-hidden border border-[#262626] player-glow bg-black">
+                    <div class="relative rounded-xl overflow-hidden border border-[#262626] bg-black">
                         <div id="player-wrapper" class="aspect-video w-full bg-black">
                             ${getVideoHTML(initialSrc, item.thumbnail)}
                         </div>
@@ -304,7 +284,7 @@
 
                     <div class="bg-[#111] p-6 rounded-xl border border-[#262626] mb-8">
                         <h3 class="text-white font-bold mb-2 flex items-center gap-2"><i data-lucide="info" class="text-brand w-4 h-4"></i> Storyline</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed">${item.description || 'No description available.'}</p>
+                        <p class="text-gray-400 text-sm leading-relaxed">${finalDesc}</p>
                     </div>
 
                     ${isSeries ? `
@@ -349,29 +329,18 @@
         document.getElementById('app').innerHTML = `<div class="min-h-[60vh] flex flex-col items-center justify-center text-center px-4"><h1 class="text-6xl font-bold text-brand mb-4">404</h1><p class="text-xl text-gray-300 mb-8">Page Not Found.</p><a href="/" class="spa-link bg-white text-black px-6 py-2 rounded font-bold">Home</a></div>`;
     }
 
-    // --- 5. UTILS & MODALS ---
-    
-    // Modal Logic
+    // --- 5. PLAYER & UTILS ---
     window.openModal = (type) => {
-        const modal = document.getElementById('legal-modal');
-        const title = document.getElementById('modal-title');
-        const body = document.getElementById('modal-body');
-        
-        let content = LEGAL_TEXT[type] || "<p>Content not found.</p>";
-        let header = type === 'dmca' ? "DMCA" : type === 'privacy' ? "Privacy Policy" : "Terms & Conditions";
-
-        title.innerText = header;
-        body.innerHTML = content;
-        
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden'; // Stop background scrolling
+        const m = document.getElementById('legal-modal');
+        document.getElementById('modal-title').innerText = type.toUpperCase();
+        document.getElementById('modal-body').innerHTML = LEGAL_TEXT[type];
+        m.classList.remove('hidden'); m.classList.add('flex');
+        document.body.style.overflow = 'hidden';
     }
 
     window.closeModal = () => {
-        const modal = document.getElementById('legal-modal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        document.getElementById('legal-modal').classList.add('hidden');
+        document.getElementById('legal-modal').classList.remove('flex');
         document.body.style.overflow = '';
     }
 
@@ -414,16 +383,10 @@
         if(document.body.classList.contains('cinema-mode')) document.querySelector('.player-container').scrollIntoView();
     };
     
-    window.filterType = (type) => {
-        const filtered = STATE.data.filter(i => i.type && i.type.toLowerCase().includes(type));
-        renderHome(filtered);
-    };
-    
+    window.filterType = (type) => renderHome(STATE.data.filter(i => i.type && i.type.toLowerCase().includes(type)));
     window.filterContent = (val) => {
         if(!val) return renderHome(STATE.data);
-        const filtered = STATE.data.filter(i => i.title.toLowerCase().includes(val.toLowerCase()));
-        if(window.location.pathname !== '/') history.pushState(null, '', '/');
-        renderHome(filtered);
+        renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(val.toLowerCase())));
     };
 </script>
 
