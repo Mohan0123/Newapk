@@ -15,22 +15,17 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <script>
-        // Force Black Theme Config
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { 
-                        brand: '#e50914', 
-                        dark: { bg: '#000000', card: '#141414', border: '#333333', text: '#ffffff' }
-                    },
-                    animation: { 'fade': 'fadeIn 0.5s ease-out' },
+                    colors: { brand: '#e50914', dark: { bg: '#000000', card: '#141414', border: '#222' } },
+                    animation: { 'fade': 'fadeIn 0.4s ease-out' },
                     keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } } }
                 }
             }
@@ -38,48 +33,35 @@
     </script>
 
     <style>
-        /* Pure Black Theme Defaults */
         body { background-color: #000000; color: #ffffff; font-family: system-ui, sans-serif; overflow-x: hidden; }
         
         /* Glass Navbar */
-        .glass-nav { 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-            transition: background 0.3s;
-        }
+        .glass-nav { background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%); transition: background 0.3s; }
         .glass-nav.scrolled { background: #000000; border-bottom: 1px solid #222; }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #e50914; }
 
-        /* Player & Cards */
-        input { background-color: #141414 !important; border-color: #333 !important; color: white !important; }
-        .card-bg { background-color: #141414; border: 1px solid #222; }
-        .player-glow { box-shadow: 0 0 40px rgba(229, 9, 20, 0.15); }
-
-        /* HTML Description Formatting */
-        .html-desc h1, .html-desc h2 { font-size: 1.2rem; font-weight: bold; margin: 1rem 0 0.5rem; color: white; }
-        .html-desc p { margin-bottom: 0.8rem; opacity: 0.8; line-height: 1.6; }
+        /* HTML Description Styling */
+        .html-desc h1, .html-desc h2 { font-size: 1.1rem; font-weight: bold; margin: 10px 0 5px; color: #fff; }
+        .html-desc p { margin-bottom: 8px; opacity: 0.8; line-height: 1.5; font-size: 0.9rem; }
         .html-desc strong { color: #e50914; }
-        .html-desc ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .html-desc ul { list-style: disc; margin-left: 20px; }
 
         /* Cinema Mode */
         .cinema-mode { position: fixed; inset: 0; background: black; z-index: 100; padding: 0; display: flex; align-items: center; justify-content: center; }
         .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section { display: none !important; }
-        .cinema-mode .player-container { width: 100% !important; max-width: 1400px !important; }
-        
-        /* Legal Modal */
-        .legal-content h2 { color: white; font-size: 1.2rem; margin-top: 1rem; }
-        .legal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 1rem; }
+        .cinema-mode .player-container { width: 100% !important; max-width: 100% !important; height: 100vh; }
+        .cinema-mode #player-wrapper { height: 100vh !important; border: none; border-radius: 0; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
 <nav id="navbar" class="fixed top-0 w-full h-16 glass-nav z-[60] flex items-center justify-between px-4 lg:px-8">
     <div class="flex items-center gap-6">
-        <a href="/" class="spa-link text-3xl font-bold tracking-tighter text-brand uppercase">Ranginx</a>
+        <a href="/" class="spa-link text-2xl font-bold tracking-tighter text-brand uppercase">Ranginx</a>
         <div class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
             <a href="/" class="spa-link hover:text-white transition">Home</a>
             <a href="/" onclick="filterType('movie')" class="cursor-pointer hover:text-white transition">Movies</a>
@@ -89,7 +71,7 @@
     
     <div class="flex items-center gap-4">
         <div class="relative hidden md:block w-64">
-            <input type="text" id="search-input" placeholder="Search..." class="w-full pl-10 pr-4 py-1.5 rounded-full text-sm outline-none focus:ring-1 focus:ring-brand">
+            <input type="text" id="search-input" placeholder="Search..." class="w-full bg-[#141414] border border-[#333] pl-10 pr-4 py-1.5 rounded-full text-sm outline-none focus:border-brand text-white">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-2"></i>
         </div>
         <button class="md:hidden text-white" onclick="document.getElementById('mobile-search').classList.toggle('hidden')">
@@ -106,13 +88,13 @@
 
 <footer class="border-t border-[#222] bg-[#050505] pt-12 pb-8 mt-12">
     <div class="max-w-[1600px] mx-auto px-4 text-center">
-        <h3 class="text-brand font-bold text-2xl mb-4">Ranginx</h3>
-        <div class="flex justify-center gap-6 mb-6 text-sm text-gray-500">
-            <button onclick="openModal('dmca')" class="hover:text-white transition">DMCA</button>
-            <button onclick="openModal('privacy')" class="hover:text-white transition">Privacy</button>
-            <button onclick="openModal('terms')" class="hover:text-white transition">Terms</button>
+        <h3 class="text-brand font-bold text-xl mb-4">Ranginx</h3>
+        <div class="flex justify-center gap-6 mb-6 text-xs text-gray-500">
+            <button onclick="openModal('dmca')" class="hover:text-white">DMCA</button>
+            <button onclick="openModal('privacy')" class="hover:text-white">Privacy</button>
+            <button onclick="openModal('terms')" class="hover:text-white">Terms</button>
         </div>
-        <p class="text-[11px] text-[#444]">&copy; 2026 Ranginx. All rights reserved.</p>
+        <p class="text-[10px] text-[#444]">&copy; 2026 Ranginx. All rights reserved.</p>
     </div>
 </footer>
 
@@ -120,15 +102,15 @@
     <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeModal()"></div>
     <div class="relative bg-[#141414] border border-[#333] w-full max-w-2xl max-h-[80vh] rounded-xl shadow-2xl flex flex-col overflow-hidden animate-fade">
         <div class="flex justify-between items-center p-5 border-b border-[#333]">
-            <h2 id="modal-title" class="text-xl font-bold text-white">Legal</h2>
+            <h2 id="modal-title" class="text-lg font-bold text-white">Legal</h2>
             <button onclick="closeModal()" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
         </div>
-        <div id="modal-body" class="p-8 overflow-y-auto html-desc text-gray-300"></div>
+        <div id="modal-body" class="p-8 overflow-y-auto html-desc text-gray-300 text-sm"></div>
     </div>
 </div>
 
 <script>
-    const STATE = { data: [], playerInstance: null, hls: null };
+    const STATE = { data: [], player: null, hls: null };
 
     // --- LEGAL TEXT ---
     const LEGAL_TEXT = {
@@ -139,7 +121,6 @@
 
     // --- INIT ---
     document.addEventListener('DOMContentLoaded', async () => {
-        // Handle Clicks globally for SPA
         document.body.addEventListener('click', e => {
             const link = e.target.closest('a.spa-link');
             if (link) { 
@@ -149,12 +130,10 @@
             }
         });
 
-        // Search
         const handleSearch = (e) => filterContent(e.target.value);
         document.getElementById('search-input').addEventListener('keyup', handleSearch);
         document.getElementById('mobile-search-input').addEventListener('keyup', handleSearch);
 
-        // Navbar Scroll
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if(window.scrollY > 50) nav.classList.add('scrolled');
@@ -187,12 +166,14 @@
 
     function router() {
         window.scrollTo(0, 0);
-        destroyPlayer();
         document.body.classList.remove('cinema-mode');
         
-        // Remove trailing slash for matching
+        // Destroy player safely on route change
+        if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
+        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+
         const path = window.location.pathname.replace(/\/$/, '');
-        const slug = path.substring(1); // Remove leading slash
+        const slug = path.substring(1); 
 
         document.getElementById('mobile-search').classList.add('hidden');
 
@@ -200,52 +181,43 @@
             renderHome(STATE.data);
             updateSEO('Ranginx - Watch Movies & Web Series', 'Stream latest HD movies and web series online.');
         } else {
-            // Find item by slug (case insensitive)
             const item = STATE.data.find(i => i.slug.toLowerCase() === slug.toLowerCase());
             if (item) renderWatch(item);
             else render404();
         }
     }
 
-    // --- SEO UPDATER ---
     function updateSEO(title, desc) {
         document.title = title;
-        // Strip HTML for meta tag
         const cleanDesc = desc.replace(/<[^>]*>?/gm, '');
-        
         let m = document.querySelector('meta[name="description"]');
         if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
         m.content = cleanDesc;
-
+        
         let ogT = document.querySelector('meta[property="og:title"]'); if(ogT) ogT.content = title;
         let ogD = document.querySelector('meta[property="og:description"]'); if(ogD) ogD.content = cleanDesc;
     }
 
-    // --- HOME VIEW (NETFLIX STYLE) ---
+    // --- RENDER HOME (Fixed Grid for Mobile) ---
     function renderHome(list) {
         let html = ``;
 
-        // 1. HERO BANNER (First Item)
+        // 1. Hero Banner
         if (list[0]) {
-            // Safe clean desc for hero text
             const heroDesc = list[0].description ? list[0].description.replace(/<[^>]*>?/gm, '') : 'Watch now in HD.';
-            
             html += `
-            <div class="relative w-full h-[85vh] group mb-[-100px]">
-                <div class="absolute inset-0 bg-cover bg-center transition duration-1000 group-hover:scale-105" 
-                     style="background-image: url('${list[0].thumbnail}');">
-                </div>
+            <div class="relative w-full h-[70vh] md:h-[85vh] group mb-[-80px] md:mb-[-100px]">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${list[0].thumbnail}');"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-[#000] via-black/40 to-transparent"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-[#000] via-black/40 to-transparent"></div>
-
-                <div class="absolute bottom-0 left-0 w-full p-6 md:p-16 flex flex-col justify-end h-full pb-32">
+                <div class="absolute bottom-0 left-0 w-full p-4 md:p-16 flex flex-col justify-end h-full pb-24 md:pb-32">
                     <div class="max-w-2xl animate-fade">
-                        <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-wider mb-4 inline-block shadow-lg">New Release</span>
-                        <h1 class="text-4xl md:text-7xl font-bold text-white mb-4 leading-tight drop-shadow-2xl">${list[0].title}</h1>
-                        <p class="text-gray-300 text-sm md:text-lg mb-8 line-clamp-3 leading-relaxed drop-shadow-md max-w-xl">${heroDesc}</p>
+                        <span class="bg-brand text-white text-[9px] md:text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider mb-2 md:mb-4 inline-block shadow-lg">New Release</span>
+                        <h1 class="text-3xl md:text-7xl font-bold text-white mb-2 md:mb-4 leading-tight drop-shadow-2xl line-clamp-2">${list[0].title}</h1>
+                        <p class="text-gray-300 text-xs md:text-lg mb-4 md:mb-8 line-clamp-2 leading-relaxed drop-shadow-md max-w-xl">${heroDesc}</p>
                         <div class="flex gap-4">
-                            <a href="/${list[0].slug}" class="spa-link bg-white text-black px-8 py-3.5 rounded font-bold hover:bg-gray-200 transition flex items-center gap-2">
-                                <i data-lucide="play" class="w-5 h-5 fill-black"></i> Play Now
+                            <a href="/${list[0].slug}" class="spa-link bg-white text-black px-6 py-2.5 md:px-8 md:py-3.5 rounded font-bold hover:bg-gray-200 transition flex items-center gap-2 text-sm md:text-base">
+                                <i data-lucide="play" class="w-4 h-4 md:w-5 md:h-5 fill-black"></i> Play Now
                             </a>
                         </div>
                     </div>
@@ -253,28 +225,29 @@
             </div>`;
         }
 
-        // 2. GRID SECTION
+        // 2. Grid Section
         html += `
-        <div class="px-4 lg:px-12 relative z-10 pb-10">
-            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i data-lucide="flame" class="text-brand"></i> Trending Now</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 gap-y-10">`;
+        <div class="px-3 lg:px-12 relative z-10 pb-10">
+            <h2 class="text-lg md:text-xl font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="flame" class="text-brand w-5 h-5"></i> Trending Now</h2>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 gap-y-6 md:gap-y-10">`;
 
-        // Start from index 1 if hero exists, else 0
         const gridItems = list[0] ? list.slice(1) : list;
 
         gridItems.forEach(item => {
+            // FIX: Mobile uses aspect-video (16:9), Desktop uses portrait (2:3)
             html += `
                 <a href="/${item.slug}" class="spa-link group block">
-                    <div class="aspect-[2/3] card-bg rounded-lg overflow-hidden mb-3 relative border border-transparent group-hover:border-[#333] transition">
-                        <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-90 group-hover:opacity-100">
+                    <div class="aspect-video md:aspect-[2/3] bg-[#141414] rounded-lg overflow-hidden mb-2 relative border border-transparent group-hover:border-[#333] transition">
+                        <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <div class="bg-brand p-3 rounded-full shadow-lg transform scale-50 group-hover:scale-100 transition"><i data-lucide="play" class="w-6 h-6 fill-white text-white"></i></div>
+                            <div class="bg-brand p-2 md:p-3 rounded-full shadow-lg transform scale-50 group-hover:scale-100 transition"><i data-lucide="play" class="w-4 h-4 md:w-6 md:h-6 fill-white text-white"></i></div>
                         </div>
-                        <span class="absolute top-2 right-2 bg-brand text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow">${item.type === 'series' ? 'TV' : 'HD'}</span>
+                        <span class="absolute top-1 right-1 md:top-2 md:right-2 bg-brand text-white text-[8px] md:text-[9px] font-bold px-1.5 py-0.5 rounded shadow">${item.type === 'series' ? 'TV' : 'HD'}</span>
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.title}</h3>
-                        <div class="flex justify-between items-center mt-1 text-[11px] text-gray-500">
+                        <h3 class="font-bold text-xs md:text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.title}</h3>
+                        <div class="flex justify-between items-center mt-1 text-[10px] md:text-[11px] text-gray-500">
                             <span>${item.date || '2025'}</span>
                             <span class="border border-[#333] px-1 rounded text-gray-400">${item.category || 'Mov'}</span>
                         </div>
@@ -287,14 +260,11 @@
         lucide.createIcons();
     }
 
-    // --- RENDER WATCH (With HTML Description) ---
+    // --- RENDER WATCH (Smart Player Logic) ---
     function renderWatch(item) {
-        // Auto-Description if empty
-        const fallbackDesc = `<p>Watch <strong>${item.title}</strong> full HD online on Ranginx. Enjoy the best ${item.category || 'entertainment'} content for free without registration.</p>`;
+        const fallbackDesc = `<p>Watch <strong>${item.title}</strong> full HD online on Ranginx.</p>`;
         const finalDesc = (item.description && item.description.trim() !== "") ? item.description : fallbackDesc;
-        
-        // Update SEO
-        updateSEO(`Watch ${item.title}`, finalDesc);
+        updateSEO(`Watch ${item.title} - Ranginx`, finalDesc);
 
         const isSeries = item.episodes && item.episodes.length > 0;
         const src = isSeries ? item.episodes[0].url : item.video;
@@ -302,51 +272,47 @@
         const suggestions = STATE.data.filter(i => i.slug !== item.slug).slice(0, 8);
 
         let html = `
-        <div class="pt-24 px-4 lg:px-12 max-w-[1800px] mx-auto animate-fade">
-            <div class="text-sm text-gray-500 mb-6 flex items-center gap-2">
-                <a href="/" class="spa-link hover:text-white">Home</a> 
-                <i data-lucide="chevron-right" class="w-4 h-4"></i> 
-                <span class="text-white font-medium">${item.title}</span>
+        <div id="watch-container" class="pt-20 px-0 md:px-4 lg:px-12 max-w-[1800px] mx-auto animate-fade">
+            <div class="hidden md:flex text-sm text-gray-500 mb-6 items-center gap-2">
+                <a href="/" class="spa-link hover:text-white">Home</a> <i data-lucide="chevron-right" class="w-4 h-4"></i> <span class="text-white font-medium">${item.title}</span>
             </div>
 
-            <div class="flex flex-col lg:flex-row gap-10">
+            <div class="flex flex-col lg:flex-row gap-0 md:gap-10">
                 <div class="w-full lg:w-[75%] player-container">
-                    <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl border border-[#222] aspect-video">
-                        <video id="plyr-video" controls crossorigin playsinline poster="${item.thumbnail}" class="w-full h-full"></video>
-                    </div>
+                    
+                    <div id="player-wrapper" class="w-full aspect-video bg-black md:rounded-xl overflow-hidden shadow-2xl border-b md:border border-[#222] relative z-10">
+                        </div>
 
-                    <div class="mt-6 details-section">
+                    <div class="p-4 md:p-0 mt-2 md:mt-6 details-section">
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                                <h1 id="player-title" class="text-2xl md:text-4xl font-bold text-white mb-2 leading-tight">${title}</h1>
+                                <h1 id="player-title" class="text-xl md:text-3xl font-bold text-white mb-2 leading-tight">${title}</h1>
                                 <div class="flex gap-3 text-xs text-gray-400">
-                                    <span class="border border-[#333] px-2 py-1 rounded bg-[#111] text-white">HD</span>
+                                    <span class="border border-[#333] px-2 py-0.5 rounded bg-[#141414] text-white">HD</span>
                                     <span>${item.date || '2025'}</span>
                                     <span>${item.category || 'General'}</span>
                                 </div>
                             </div>
-                            <button onclick="toggleCinemaMode()" class="flex items-center gap-2 text-xs bg-[#222] text-white px-4 py-2 rounded hover:bg-brand transition">
+                            <button onclick="toggleCinemaMode()" class="hidden md:flex items-center gap-2 text-xs bg-[#222] text-white px-4 py-2 rounded hover:bg-brand transition">
                                 <i data-lucide="monitor" class="w-4 h-4"></i> Cinema Mode
                             </button>
                         </div>
 
-                        <div class="bg-[#111] p-6 rounded-xl border border-[#222] mb-8">
-                            <h3 class="text-white font-bold mb-4 flex items-center gap-2 border-b border-[#222] pb-2">
-                                <i data-lucide="info" class="text-brand w-4 h-4"></i> Overview
+                        <div class="bg-[#141414] p-4 md:p-6 rounded-xl border border-[#222] mb-8">
+                            <h3 class="text-white font-bold mb-3 flex items-center gap-2 text-sm uppercase tracking-wider border-b border-[#222] pb-2">
+                                <i data-lucide="info" class="text-brand w-4 h-4"></i> Storyline
                             </h3>
-                            <div class="html-desc text-gray-400 text-sm leading-relaxed">
-                                ${finalDesc}
-                            </div>
+                            <div class="html-desc text-gray-400 text-sm leading-relaxed">${finalDesc}</div>
                         </div>
 
                         ${isSeries ? `
-                        <div class="mt-8">
-                            <h3 class="text-white font-bold mb-4 text-xl">Episodes</h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                        <div class="mb-10">
+                            <h3 class="text-white font-bold mb-4 text-lg">Episodes (${item.episodes.length})</h3>
+                            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                                 ${item.episodes.map((ep, idx) => `
-                                    <button onclick="changeSource('${ep.url}', '${item.title} - Ep ${ep.ep}', this)" 
+                                    <button onclick="playSource('${ep.url}', '${item.title} - Episode ${ep.ep}', '${item.thumbnail}', this)" 
                                         class="ep-btn ${idx===0?'bg-brand text-white border-brand':'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} 
-                                        border p-3 rounded font-medium text-sm transition text-center truncate">
+                                        border p-2 md:p-3 rounded font-medium text-xs md:text-sm transition text-center truncate">
                                         Ep ${ep.ep}
                                     </button>
                                 `).join('')}
@@ -355,17 +321,17 @@
                     </div>
                 </div>
 
-                <div class="w-full lg:w-[25%] sidebar-recs">
+                <div class="w-full lg:w-[25%] px-4 md:px-0 sidebar-recs pb-10">
                     <h3 class="text-white font-bold mb-4 text-lg border-l-4 border-brand pl-3">More Like This</h3>
-                    <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-3">
                         ${suggestions.map(s => `
-                        <a href="/${s.slug}" class="spa-link flex gap-3 group hover:bg-[#111] p-2 rounded transition">
-                            <div class="w-24 aspect-[2/3] bg-[#222] rounded overflow-hidden flex-shrink-0">
-                                <img src="${s.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition">
+                        <a href="/${s.slug}" class="spa-link flex gap-3 group hover:bg-[#141414] p-2 rounded transition">
+                            <div class="w-24 aspect-video bg-[#222] rounded overflow-hidden flex-shrink-0 relative">
+                                <img src="${s.thumbnail}" class="w-full h-full object-cover">
                             </div>
-                            <div class="flex flex-col justify-center">
-                                <h4 class="text-gray-200 font-bold text-sm line-clamp-2 group-hover:text-brand">${s.title}</h4>
-                                <span class="text-xs text-gray-500 mt-1">${s.category || 'Movie'}</span>
+                            <div class="flex flex-col justify-center min-w-0">
+                                <h4 class="text-gray-200 font-bold text-xs md:text-sm line-clamp-2 group-hover:text-brand">${s.title}</h4>
+                                <span class="text-[10px] text-gray-500 mt-1">${s.category || 'Movie'}</span>
                             </div>
                         </a>`).join('')}
                     </div>
@@ -374,98 +340,89 @@
         </div>`;
 
         document.getElementById('app').innerHTML = html;
-        initPlayer(src);
         lucide.createIcons();
+        
+        // Initial Play
+        playSource(src, title, item.thumbnail, null); 
     }
 
     function render404() {
-        document.getElementById('app').innerHTML = `
-        <div class="h-screen flex flex-col justify-center items-center">
-            <h1 class="text-6xl font-bold text-brand">404</h1>
-            <p class="text-gray-400 mt-2">Page not found</p>
-            <a href="/" class="spa-link mt-4 text-white underline">Go Home</a>
-        </div>`;
+        document.getElementById('app').innerHTML = `<div class="h-screen flex flex-col justify-center items-center"><h1 class="text-6xl font-bold text-brand">404</h1><p class="text-gray-400 mt-2">Content not found</p><a href="/" class="spa-link mt-4 text-white underline">Home</a></div>`;
     }
 
-    // --- PLAYER LOGIC ---
-    function destroyPlayer() {
-        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
-        if(STATE.playerInstance) { STATE.playerInstance.destroy(); STATE.playerInstance = null; }
-    }
-
-    function initPlayer(source) {
-        const video = document.getElementById('plyr-video');
-        if(!video) return;
-
-        const defaultOptions = {
-            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
-            settings: ['quality', 'speed'],
-            autoplay: false
-        };
-
-        // Check if Iframe (YouTube/Embed)
-        if (!source.includes('.mp4') && !source.includes('.m3u8') && source.includes('http')) {
-             const parent = video.parentElement;
-             parent.innerHTML = `<iframe src="${source}" class="w-full h-full border-0" allowfullscreen></iframe>`;
-             return;
-        }
-
-        // Check HLS
-        if (Hls.isSupported() && source.includes('.m3u8')) {
-            const hls = new Hls();
-            hls.loadSource(source);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                STATE.playerInstance = new Plyr(video, {
-                    ...defaultOptions,
-                    quality: { default: 720, options: [1080, 720, 480], forced: true, onChange: (q) => hls.levels.forEach((l, i) => { if(l.height === q) hls.currentLevel = i }) }
-                });
+    // --- UNIVERSAL PLAY FUNCTION ---
+    window.playSource = (url, title, poster, btn) => {
+        // UI Updates
+        if(title) document.getElementById('player-title').innerText = title;
+        if(btn) {
+            document.querySelectorAll('.ep-btn').forEach(b => {
+                b.className = 'ep-btn bg-[#141414] text-gray-400 border border-[#333] hover:bg-[#222] border p-2 md:p-3 rounded font-medium text-xs md:text-sm transition text-center truncate';
             });
-            STATE.hls = hls;
-        } else {
-            // Standard MP4
-            video.src = source;
-            STATE.playerInstance = new Plyr(video, defaultOptions);
+            btn.className = 'ep-btn bg-brand text-white border border-brand p-2 md:p-3 rounded font-medium text-xs md:text-sm transition text-center truncate';
         }
-    }
 
-    window.changeSource = (url, title, btn) => {
-        document.getElementById('player-title').innerText = title;
-        document.querySelectorAll('.ep-btn').forEach(b => {
-            b.className = 'ep-btn bg-[#141414] text-gray-400 border border-[#333] hover:bg-[#222] p-3 rounded font-medium text-sm transition text-center truncate';
-        });
-        btn.className = 'ep-btn bg-brand text-white border border-brand p-3 rounded font-medium text-sm transition text-center truncate';
+        const wrapper = document.getElementById('player-wrapper');
         
-        // Reset player container if iframe was used previously
-        const container = document.querySelector('.aspect-video');
-        if(!container.querySelector('video')) {
-            container.innerHTML = `<video id="plyr-video" controls crossorigin playsinline class="w-full h-full"></video>`;
+        // CLEANUP PREVIOUS PLAYERS
+        if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
+        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+        wrapper.innerHTML = ''; // Clear DOM
+
+        // CHECK TYPE
+        const isFile = url.includes('.mp4') || url.includes('.m3u8') || url.includes('.mkv');
+
+        if(isFile) {
+            // Create Video Element
+            const video = document.createElement('video');
+            video.id = 'player';
+            video.className = 'w-full h-full';
+            video.controls = true;
+            video.poster = poster || '';
+            video.setAttribute('playsinline', '');
+            video.setAttribute('crossorigin', '');
+            wrapper.appendChild(video);
+
+            // Initialize HLS/Plyr
+            if(Hls.isSupported() && url.includes('.m3u8')) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    STATE.player = new Plyr(video, { 
+                        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
+                        settings: ['quality', 'speed']
+                    });
+                });
+                STATE.hls = hls;
+            } else {
+                video.src = url;
+                STATE.player = new Plyr(video, { 
+                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen']
+                });
+            }
+        } else {
+            // Iframe (Youtube/Embed)
+            wrapper.innerHTML = `<iframe src="${url}" class="w-full h-full absolute inset-0 border-0" allowfullscreen allow="autoplay"></iframe>`;
         }
 
-        destroyPlayer();
-        initPlayer(url);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+        if(btn) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     window.toggleCinemaMode = () => {
         document.body.classList.toggle('cinema-mode');
         if(document.body.classList.contains('cinema-mode')) document.querySelector('.player-container').scrollIntoView();
     };
 
-    // --- MODAL UTILS ---
     window.openModal = (t) => {
         document.getElementById('modal-title').innerText = t.toUpperCase();
         document.getElementById('modal-body').innerHTML = LEGAL_TEXT[t];
         document.getElementById('legal-modal').classList.remove('hidden');
         document.getElementById('legal-modal').classList.add('flex');
-        document.body.style.overflow = 'hidden';
     }
     window.closeModal = () => {
         document.getElementById('legal-modal').classList.add('hidden');
         document.getElementById('legal-modal').classList.remove('flex');
-        document.body.style.overflow = '';
     }
-    
     window.filterType = (type) => renderHome(STATE.data.filter(i => i.type && i.type.toLowerCase().includes(type)));
     window.filterContent = (val) => {
         if(!val) return renderHome(STATE.data);
