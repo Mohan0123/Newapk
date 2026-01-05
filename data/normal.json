@@ -1,12 +1,1678 @@
 [
   {
-    "slug": "Leelavati",
-    "title": "Leelavati",
-    "type": "movie",
-    "category": "General",
-    "thumbnail": "https://xmaza.ac/wp-content/uploads/2025/03/Leelavati.webp",
-    "description": "<p><strong>Leelavati Romantic</strong> ek Hindi romantic drama web series hai jo pyaar, emotions aur dil se judi ek gehri kahani ko pesh karti hai.</p>\n\n<p>Is web series ki story Leelavati ke around ghoomti hai, jahan romance, understanding aur emotional connection ke saath ek khoobsurat love journey dikhai jati hai. Har episode pyaar ke naye rang aur ehsaas ko ubharta hai.</p>\n\n<p><strong>Leelavati Romantic</strong> sweet moments, strong emotions aur relatable characters ke zariye yeh batati hai ki sachcha pyaar patience, respect aur trust se banta hai.</p>\n\n<p>\n<strong>Genre:</strong> Romantic, Drama, Emotional<br>\n<strong>Language:</strong> Hindi<br>\n<strong>Category:</strong> Romantic Web Series<br>\n<strong>Release Year:</strong> 2025\n</p>",
-    "date": "2026-01-05",
-    "video": "https://video.maalcdn.com/Bijli/Leelavati.mp4"
+    "slug": "kiraedarr",
+    "title": "Kiraedarr",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2025/09/Kiraedaar-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Dzyreplay/Kiraedaar/Kiraedaar%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Dzyreplay/Kiraedaar/Kiraedaar%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "jija-ji",
+    "title": "Jija Ji",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Jija-Ji.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Oolala/Jija%20Ji/Jija%20Ji%20E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Oolala/Jija%20Ji/Jija%20Ji%20E2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Oolala/Jija%20Ji/Jija%20Ji%20E3.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "atrangi",
+    "title": "Atrangi",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/WYFrgTg/Picsart-25-12-20-22-41-16-986.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Atrangii/Inspiration/Inspiration%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Atrangii/Inspiration/Inspiration%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Atrangii/Inspiration/Inspiration%20Episode%203.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "rat-rani",
+    "title": "Rat Rani",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/12/Raat-Ranii-Episode-1.webp",
+    "description": "Watch Rat Rani Web Series online. Check cast, plot, episodes, OTT platform, release date, and complete review of the Hindi web series.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Rat Rani Episode 1 ",
+        "url": "https://video.maalcdn.com/Rio%20Plus/Raat%20Ranii/Raat%20Ranii%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Rat Rani Episode 2 ",
+        "url": "https://video.maalcdn.com/Rio%20Plus/Raat%20Ranii/Raat%20Ranii%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Rat Rani Episode 3",
+        "url": "https://video.maalcdn.com/Rio%20Plus/Raat%20Ranii/Raat%20Ranii%20Episode%203.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "shadi-vivah",
+    "title": "Shadi Vivah",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Shaadi-Vivah.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Kooku/Shaadi Vivah/Shaadi Vivah E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Kooku/Shaadi Vivah/Shaadi Vivah E2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Kooku/Shaadi Vivah/Shaadi Vivah E3.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Kooku/Shaadi Vivah/Shaadi Vivah E4.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "mirchi-sukh",
+    "title": "Mirchi Sukh",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Mirchi-Sukh.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Mastram/Mirchi Sukh/Mirchi Sukh Episode 1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Mastram/Mirchi Sukh/Mirchi Sukh Episode 2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Mastram/Mirchi Sukh/Mirchi Sukh Episode 3.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "raaz",
+    "title": "RaaZ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/84nGPgMq/Picsart-25-12-19-20-02-05-241.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Desi%20Flix/Raaz/Raaz%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Desi%20Flix/Raaz/Raaz%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Desi%20Flix/Raaz/Raaz%20Episode%203.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "manchala-aasiq",
+    "title": "Manchala Aasiq",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Manchala-Aashiq.webp",
+    "description": "Watch Manchala Aasiq romantic web series full episodes online. A passionate love story filled with romance, drama, emotions and bold moments.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Pehli Mulakaat",
+        "url": "https://video.maalcdn.com/Moovi/Manchala%20Aashiq/Manchala%20Aashiq%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Jazbaaton Ki Shuruaat",
+        "url": "https://video.maalcdn.com/Moovi/Manchala%20Aashiq/Manchala%20Aashiq%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Pyaar Ya Junoon",
+        "url": "https://video.maalcdn.com/Moovi/Manchala%20Aashiq/Manchala%20Aashiq%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Bharosa Aur Dhoka",
+        "url": "https://video.maalcdn.com/Moovi/Manchala%20Aashiq/Manchala%20Aashiq%20Episode%204.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "tu-ha-kar-ya-naa-kar",
+    "title": "Tu ha kar Ya naa kar ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.to/wp-content/uploads/2025/10/Tu-Haan-Kar-Ya-Naa-Kar-Episode-3.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/ULLU/Tu Haan Kar Ya Naa Kar/Tu Haan Kar Ya Naa Kar Episode 1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/ULLU/Tu Haan Kar Ya Naa Kar/Tu Haan Kar Ya Naa Kar Episode 2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/ULLU/Tu Haan Kar Ya Naa Kar/Tu Haan Kar Ya Naa Kar Episode 2.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "gubare-wali",
+    "title": "Gubare wali ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/201zWPBf/retouch-2025110210055024.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Hunt/Gubare Wali/Gubare Wali Episode 1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Hunt/Gubare Wali/Gubare Wali Episode 2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Hunt/Gubare Wali/Gubare Wali Episode 3.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "saiyaan-farebi",
+    "title": "Saiyaan Farebi",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/23yKY1Bv/Picsart-25-12-19-21-12-38-688.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://cdn.bmaal.com/ALTT/Saiyaan%20Farebi/Saiyaan%20Farebi%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://cdn.bmaal.com/ALTT/Saiyaan%20Farebi/Saiyaan%20Farebi%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "najayaz",
+    "title": "Najayaz",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Najayaz.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Prime%20Shots/Najayaz/Najayaz%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Prime%20Shots/Najayaz/Najayaz%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Prime%20Shots/Najayaz/Najayaz%20Episode%203.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "obsession",
+    "title": "Obsession",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/11/Obsession-Episode-3.webp",
+    "description": "Obsession Romantic is a Hindi romantic drama web series exploring love, attachment and emotional depth.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Possession ",
+        "url": "https://video.maalcdn.com/Atrangii/Obsession/Obsession%20Episode%201.mp4",
+        "summary": "right place! Here, you can watch all Episode of Obsession for free. It is a Atrangii Original web series, released on October 24, 2025.Soma Majhi are the lead actresses in this series."
+      },
+      {
+        "ep": 2,
+        "title": "Janoon",
+        "url": "https://video.maalcdn.com/Atrangii/Obsession/Obsession%20Episode%202.mp4",
+        "summary": "Are you looking for Obsession Episode 2? You’re at the right place! Here, you can watch all Episode of Obsession for free. It is a Atrangii Original web series, released on October 24, 2025.Soma Majhi are the lead actresses in this series."
+      },
+      {
+        "ep": 3,
+        "title": "Pehli Nazar",
+        "url": "https://video.maalcdn.com/Atrangii/Obsession/Obsession%20Episode%203.mp4",
+        "summary": "Are you looking for Obsession Episode 3? You’re at the right place! Here, you can watch all Episode of Obsession for free. It is a Atrangii Original web series, released on October 24, 2025.Soma Majhi are the lead actresses in this series."
+      },
+      {
+        "ep": 4,
+        "title": "Attraction",
+        "url": "https://video.maalcdn.com/Atrangii/Obsession/Obsession%20Episode%204.mp4",
+        "summary": "Are you looking for Obsession Episode 4? You’re at the right place! Here, you can watch all Episode of Obsession for free. It is a Atrangii Original web series, released on October 24, 2025.Soma Majhi are the lead actresses in this series."
+      }
+    ]
+  },
+  {
+    "slug": "rasili",
+    "title": "Rasili",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2025/06/Rasili-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Voovi/Rasili%20(2023)/Rasili%20S01E01%20(XSeries.IN).mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Voovi/Rasili%20(2023)/Rasili%20S01E02%20(XSeries.IN).mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Voovi/Rasili%20(2023)/Rasili%20S01E03%20(XSeries.IN).mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "nayi-padosan",
+    "title": "Nayi Padosan ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/12/Nayi-Padosan-768x432.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://cdn.bmaal.com/Feel/Nayi%20Padosan/Nayi%20Padosan%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://cdn.bmaal.com/Feel/Nayi%20Padosan/Nayi%20Padosan%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://cdn.bmaal.com/Feel/Nayi%20Padosan/Nayi%20Padosan%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://cdn.bmaal.com/Feel/Nayi%20Padosan/Nayi%20Padosan%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://cdn.bmaal.com/Feel/Nayi%20Padosan/Nayi%20Padosan%20Episode%205.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://cdn.bmaal.com/Feel/Nayi%20Padosan/Nayi%20Padosan%20Episode%206.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "london-dreams",
+    "title": "London Dreams",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/12/London-Dreams-Episode-3.webp",
+    "description": "London Dreams Romantic is a Hindi romantic drama web series showcasing love, ambition and relationships in a foreign setting.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Atrangii/London%20Dreams/London%20Dreams%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Atrangii/London%20Dreams/London%20Dreams%20Episode%202.mp4",
+        "summary": "Are You Looking For London Dreams Episode 2? You’re At The Right Place! Here, You Can Watch All Episode of London Dreams for free. It is a Atrangii Original Web Series, Released On December 12, 2025. Joyita Chatterjee, Satarupa Pyne Are The Lead Actresses In This Series."
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Atrangii/London%20Dreams/London%20Dreams%20Episode%203.mp4",
+        "summary": "Are You Looking For London Dreams Episode 3? You’re At The Right Place! Here, You Can Watch All Episode of London Dreams for free. It is a Atrangii Original Web Series, Released On December 12, 2025. Joyita Chatterjee, Satarupa Pyne Are The Lead Actresses In This Series."
+      }
+    ]
+  },
+  {
+    "slug": "sapnon-ki-raani",
+    "title": "Sapnon Ki Raani",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.ac/wp-content/uploads/2024/12/Sapnon-Ki-Raani-Episode-4.webp",
+    "description": "Watch Sapnon Ki Raani web series full episodes online. A romantic love story where dreams, emotions and reality beautifully collide.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/ALTT/Sapnon%20Ki%20Raani/Sapnon%20Ki%20Raani%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/ALTT/Sapnon%20Ki%20Raani/Sapnon%20Ki%20Raani%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/ALTT/Sapnon%20Ki%20Raani/Sapnon%20Ki%20Raani%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/ALTT/Sapnon%20Ki%20Raani/Sapnon%20Ki%20Raani%20Episode%204.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "jaanu-jaanlewa",
+    "title": "Jaanu Jaanlewa",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.ac/wp-content/uploads/2024/12/Jaanu-Jaanlewa-Episode-4.webp",
+    "description": "Janu Jaanlewa is a romantic web series filled with love, desire, emotions, and dramatic twists. Watch the intense story of passion and heartbreak.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/ALTT/Jaanu%20Jaanlewa/Jaanu%20Jaanlewa%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/ALTT/Jaanu%20Jaanlewa/Jaanu%20Jaanlewa%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/ALTT/Jaanu%20Jaanlewa/Jaanu%20Jaanlewa%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/ALTT/Jaanu%20Jaanlewa/Jaanu%20Jaanlewa%20Episode%204.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "sajan-chale-sasural",
+    "title": "Sajan Chale Sasural",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Sajan-Chale-Sasural.webp",
+    "description": "Watch Sajan Chale Sasural Web Series online in HD quality. Enjoy full episodes, bold drama, romance, story, cast details & streaming info.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "New Beginning",
+        "url": "https://video.maalcdn.com/Moovi/Sajan%20Chale%20Sasural/Sajan%20Chale%20Sasural%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Unexpected Feelings",
+        "url": "https://video.maalcdn.com/Moovi/Sajan%20Chale%20Sasural/Sajan%20Chale%20Sasural%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Sasural Secrets",
+        "url": "https://video.maalcdn.com/Moovi/Sajan%20Chale%20Sasural/Sajan%20Chale%20Sasural%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Relationship Twist",
+        "url": "https://video.maalcdn.com/Moovi/Sajan%20Chale%20Sasural/Sajan%20Chale%20Sasural%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/Moovi/Sajan%20Chale%20Sasural/Sajan%20Chale%20Sasural%20Episode%205.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://video.maalcdn.com/Moovi/Sajan%20Chale%20Sasural/Sajan%20Chale%20Sasural%20Episode%206.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "lehenga-chunri",
+    "title": "Lehenga Chunri",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/04/Lehenga-Chunri-Episode-3.webp",
+    "description": "Lehenga Chunri Romantic is a Hindi romantic drama web series showcasing love, culture and heartfelt relationships.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Chunri Ki Pehli Jhalak",
+        "url": "https://video.maalcdn.com/ALTT/Lehenga%20Chunri/S1/Lehenga%20Chunri%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Lehenga Aur Ehsaas",
+        "url": "https://video.maalcdn.com/ALTT/Lehenga%20Chunri/S1/Lehenga%20Chunri%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Nazron Ka Milan",
+        "url": "https://video.maalcdn.com/ALTT/Lehenga%20Chunri/S1/Lehenga%20Chunri%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Pyaar Aur Parampara",
+        "url": "https://video.maalcdn.com/ALTT/Lehenga%20Chunri/S1/Lehenga%20Chunri%20Episode%204.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "love-in-goa",
+    "title": "Love in Goa",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2025/10/Love-in-Goa-Episode-2.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Cine%20Prime/Love%20in%20Goa/Love%20in%20Goa%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Cine%20Prime/Love%20in%20Goa/Love%20in%20Goa%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "back-road-hustle",
+    "title": "Back Road Hustle ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://mxporn.net/wp-content/uploads/2025/04/BackRoad-Hustle-Episode-1.webp",
+    "description": "Watch Back Road Hustle, a bold 18+ web series on ALTBalaji featuring crime, ambition, and dark realities of the hustle world.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Back Road Hustle Episode 1",
+        "url": "https://video.maalcdn.com/ALTT/BackRoad%20Hustle/BackRoad%20Hustle%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Back Road Hustle Episode 2 ",
+        "url": "https://video.maalcdn.com/ALTT/BackRoad%20Hustle/BackRoad%20Hustle%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Back Road Hustle Episode 3",
+        "url": "https://video.maalcdn.com/ALTT/BackRoad%20Hustle/BackRoad%20Hustle%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Back Road Hustle Episode 4",
+        "url": "https://video.maalcdn.com/ALTT/BackRoad%20Hustle/BackRoad%20Hustle%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Back Road Hustle Episode 5",
+        "url": "https://video.maalcdn.com/ALTT/BackRoad%20Hustle/BackRoad%20Hustle%20Episode%205.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Back Road Hustle Episode 6",
+        "url": "https://video.maalcdn.com/ALTT/BackRoad%20Hustle/BackRoad%20Hustle%20Episode%206.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "ristey",
+    "title": "Ristey ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/0R35LqXp/Picsart-25-12-20-19-40-11-081.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Ristey/Ristey%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Ristey/Ristey%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Ristey/Ristey%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Ristey/Ristey%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Ristey/Ristey%20Episode%205.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Ristey/Ristey%20Episode%206.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "mard-ko-dard",
+    "title": "Mard ko dard ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://mastiwala.com/wp-content/uploads/2024/10/Mard-Ko-Dard-2-Episode-1-300x169.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://mastiwala.com/wp-content/uploads/2024/10/Mard-Ko-Dard-2-Episode-1-300x169.webp",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "black-coffee",
+    "title": "Black coffee ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/12/Black-Coffee-Episode-1.webp",
+    "description": "Black Coffee Romantic is a Hindi romantic drama web series exploring love, loneliness and emotional bonding.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Pehla Cup",
+        "url": "https://video.maalcdn.com/Atrangii/Black%20Coffee/Black%20Coffee%20Episode%201.mp4",
+        "summary": "Are you looking for Black Coffee Episode 1? You’re at the right place! Here, you can watch all Episode of Black Coffee for free. It is a Atrangii Original web series, released on October 13, 2022. Kajal Shankhwar are the lead actresses in this series."
+      },
+      {
+        "ep": 2,
+        "title": "Coffee Aur Baaten",
+        "url": "https://video.maalcdn.com/Atrangii/Black%20Coffee/Black%20Coffee%20Episode%202.mp4",
+        "summary": "Are you looking for Black Coffee Episode 2? You’re at the right place! Here, you can watch all Episode of Black Coffee for free. It is a Atrangii Original web series, released on October 13, 2022. Kajal Shankhwar are the lead actresses in this series."
+      }
+    ]
+  },
+  {
+    "slug": "pyaar-ka-bazaar",
+    "title": "Pyaar Ka Bazaar",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/0Vy6wN3f/Picsart-25-12-19-21-16-43-973.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://cdn.bmaal.com/ALTT/Pyar%20Ka%20Bazaar/Pyar%20Ka%20Bazaar%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://cdn.bmaal.com/ALTT/Pyar%20Ka%20Bazaar/Pyar%20Ka%20Bazaar%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://cdn.bmaal.com/ALTT/Pyar%20Ka%20Bazaar/Pyar%20Ka%20Bazaar%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://cdn.bmaal.com/ALTT/Pyar%20Ka%20Bazaar/Pyar%20Ka%20Bazaar%20Episode%204.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "gore-gore-gaal",
+    "title": "Gore Gore Gaal",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.cfd/wp-content/uploads/2025/08/Screenshot-2025-08-10-at-2.17.28-AM.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/ULLU/Gore%20Gore%20Gaal/Gore%20Gore%20Gaal%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/ULLU/Gore%20Gore%20Gaal/Gore%20Gore%20Gaal%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/ULLU/Gore%20Gore%20Gaal/Gore%20Gore%20Gaal%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://cdn.bmaal.com/ULLU/Gore%20Gore%20Gaal%20D1/Gore%20Gore%20Gaal%20Episode%205.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "babuji",
+    "title": "Babuji",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Babuji.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Prime%20Play/BabuJi/Babuji%20E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Prime%20Play/BabuJi/Babuji%20E2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Prime%20Play/BabuJi/Babuji%20E3.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Prime%20Play/BabuJi/Babuji%20E4.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/Prime%20Play/BabuJi/Babuji%20E5.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://video.maalcdn.com/Prime%20Play/BabuJi/Babuji%20E6.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "pati-patni-and-she-episode-1",
+    "title": "Pati Patni and She Episode 1",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.to/wp-content/uploads/2025/10/Pati-Patni-and-She-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Hunt/Pati Patni and She/Pati Patni and She Episode 1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Hunt/Pati Patni and She/Pati Patni and She Episode 2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Hunt/Pati Patni and She/Pati Patni and She Episode 3.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "khoj",
+    "title": "Khoj",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/10/khoj-Episode-1.webp",
+    "description": "Watch Khoj Romantic web series full episodes online. A heartfelt love story about searching for love, emotions and true connection.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Talaash Ki Shuruaat",
+        "url": "https://video.maalcdn.com/Atrangii/Khoj-D1/Khoj%20Episode%201.mp4",
+        "summary": "khoj Episode 1: You’re At The Right Place! Here, You Can Watch And Download All Episode Of khoj For Free. It Is A Atrangii Original Web Series, Released On 26 September 2025. Rakshika Sharma Is The Lead Actresses In This Series."
+      },
+      {
+        "ep": 2,
+        "title": "Anjaani Mulakaat",
+        "url": "https://video.maalcdn.com/Atrangii/Khoj-D1/Khoj%20Episode%202.mp4",
+        "summary": "khoj Episode 2: You’re At The Right Place! Here, You Can Watch And Download All Episode Of khoj For Free. It Is A Atrangii Original Web Series, Released On 26 September 2025. Rakshika Sharma Is The Lead Actresses In This Series."
+      },
+      {
+        "ep": 3,
+        "title": "Dil Ka Raasta",
+        "url": "https://video.maalcdn.com/Atrangii/Khoj-D1/Khoj%20Episode%203.mp4",
+        "summary": "khoj Episode 3: You’re At The Right Place! Here, You Can Watch And Download All Episode Of khoj For Free. It Is A Atrangii Original Web Series, Released On 26 September 2025. Rakshika Sharma Is The Lead Actresses In This Series."
+      },
+      {
+        "ep": 4,
+        "title": "Ehsaason Ki Khoj",
+        "url": "https://video.maalcdn.com/Atrangii/Khoj-D1/Khoj%20Episode%204.mp4",
+        "summary": "khoj Episode 4: You’re At The Right Place! Here, You Can Watch And Download All Episode Of khoj For Free. It Is A Atrangii Original Web Series, Released On 26 September 2025. Rakshika Sharma Is The Lead Actresses In This Series."
+      },
+      {
+        "ep": 5,
+        "title": "Nazdeekiyan",
+        "url": "https://video.maalcdn.com/Atrangii/Khoj-D1/Khoj%20Episode%205.mp4",
+        "summary": "khoj Episode 5: You’re At The Right Place! Here, You Can Watch And Download All Episode Of khoj For Free. It Is A Atrangii Original Web Series, Released On 26 September 2025. Rakshika Sharma Is The Lead Actresses In This Series."
+      }
+    ]
+  },
+  {
+    "slug": "bhabhi-ka-pyaar",
+    "title": "Bhabhi Ka Pyaar",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/12/Bhabhi-Ka-Pyaar-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Rio%20Plus/Bhabhi%20Ka%20Pyaar/Bhabhi%20Ka%20Pyaar%20Episode%201.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "mayajaal",
+    "title": "Mayajaal",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://mxporn.net/wp-content/uploads/2025/12/Mayajaal-Episode-2.webp",
+    "description": "Mayajaal Bold Web Series ek 18+ erotic thriller hai jisme passion, betrayal aur crime ki intense kahani hot scenes aur suspense ke saath dikhayi gayi hai.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Mayajal Episode 1 ",
+        "url": "https://video.maalcdn.com/Kangan/Mayajaal/Mayajaal%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Mayajal Episode 2 ",
+        "url": "https://video.maalcdn.com/Kangan/Mayajaal/Mayajaal%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "munni-badnaam-hui",
+    "title": "Munni Badnaam Hui",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://mxporn.net/wp-content/uploads/2025/12/Munni-Badnaam-Hui-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Desi%20Flix/Munni%20Badnaam%20Hui/Munni%20Badnaam%20Hui%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Desi%20Flix/Munni%20Badnaam%20Hui/Munni%20Badnaam%20Hui%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Desi%20Flix/Munni%20Badnaam%20Hui/Munni%20Badnaam%20Hui%20Episode%203.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "gupt-rog",
+    "title": "Gupt Rog ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2025/06/GuptRog-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Cine%20Prime/GuptRog/GuptRog%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Cine%20Prime/GuptRog/GuptRog%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "aakarshan",
+    "title": "Aakarshan",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.to/wp-content/uploads/2024/10/Aakarshan-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/HitPrime/Aakarshan/Aakarshan%20E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/HitPrime/Aakarshan/Aakarshan%20E2.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "the-happiness",
+    "title": "The Happiness ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.ac/wp-content/uploads/2025/09/The-Happiness-Episode-1.webp",
+    "description": "Watch The Happiness web series full episodes online. An emotional love story about life, relationships, struggles and true happiness.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "The Search for Happiness",
+        "url": "https://video.maalcdn.com/Badtameez/The%20Happiness/The%20Happiness%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "When Love Begins",
+        "url": "https://video.maalcdn.com/Badtameez/The%20Happiness/The%20Happiness%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "kamya-sutra",
+    "title": "Kamya Sutra",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Kamya-Sutra.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Prime Flix/Kamya Sutra/Kamya Sutra E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Prime Flix/Kamya Sutra/Kamya Sutra E2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Prime Flix/Kamya Sutra/Kamya Sutra E3.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Prime Flix/Kamya Sutra/Kamya Sutra E4.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/Prime Flix/Kamya Sutra/Kamya Sutra E5.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://video.maalcdn.com/Prime Flix/Kamya Sutra/Kamya Sutra E6.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "swapna-dosh",
+    "title": "Swapna Dosh",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/10/Swapna-Dosh-Episode-2.webp",
+    "description": "Swapna Dosh Romantic is a Hindi drama web series that blends love, dreams and emotional conflicts into a meaningful story.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Badtameez/Swapna%20Dosh/Swapna%20Dosh%20E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Badtameez/Swapna%20Dosh/Swapna%20Dosh%20E2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Badtameez/Swapna%20Dosh/Swapna%20Dosh%20E3.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Badtameez/Swapna%20Dosh/Swapna%20Dosh%20E4.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/Badtameez/Swapna%20Dosh/Swapna%20Dosh%20E5.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "mard-ko-dard",
+    "title": "Mard ko dard ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://mastiwala.com/wp-content/uploads/2024/10/Mard-Ko-Dard-2-Episode-1-300x169.webp",
+    "description": "Watch Mard Ko Dard web series full episodes online. An emotional Hindi drama highlighting hidden pain, strength and social reality.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Chhupa Hua Dard",
+        "url": "https://video.maalcdn.com/Aaha%20Flix/Mard%20Ko%20Dard%202/Mard%20Ko%20Dard%202%20E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Zimmedariyon Ka Bojh",
+        "url": "https://video.maalcdn.com/Aaha%20Flix/Mard%20Ko%20Dard%202/Mard%20Ko%20Dard%202%20E2.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "holi",
+    "title": "Holi",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/tTxvPn21/Picsart-25-12-20-22-29-14-125.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Holi/Holi%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Holi/Holi%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Holi/Holi%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Holi/Holi%20Episode%204.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "bijili",
+    "title": "Bijili",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://mxporn.net/wp-content/uploads/2025/12/Bijili-Episode-5.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Bijili/Bijili%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Bijili/Bijili%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Bijili/Bijili%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Bijili/Bijili%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Bijili/Bijili%20Episode%205.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://video.maalcdn.com/Kahani%20Play/Bijili/Bijili%20Episode%206.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "double-trouble",
+    "title": "Double Trouble ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.to/wp-content/uploads/2025/11/Double-Trouble-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Atrangii/Double Trouble/Double Trouble E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Atrangii/Double Trouble/Double Trouble E2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Atrangii/Double Trouble/Double Trouble E3.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/Atrangii/Double Trouble/Double Trouble E4.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/Atrangii/Double Trouble/Double Trouble E5.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://video.maalcdn.com/Atrangii/Double Trouble/Double Trouble E6.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 7,
+        "title": "Episode 7",
+        "url": "https://video.maalcdn.com/Atrangii/Double Trouble/Double Trouble E7.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "band-darwaze-ke-piche",
+    "title": "Band Darwaze Ke Piche",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/04/Band-Darwaze-Ke-Piche-Episode-3.webp\"",
+    "description": "Band Darwaze Ke Piche Romantic is a Hindi romantic drama web series where love and hidden truths collide.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Band Darwaza",
+        "url": "https://video.maalcdn.com/ALTT/Band%20Darwaze%20Ke%20Piche/Band%20Darwaze%20Ke%20Piche%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Chhupa Hua Ehsaas",
+        "url": "https://video.maalcdn.com/ALTT/Band%20Darwaze%20Ke%20Piche/Band%20Darwaze%20Ke%20Piche%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Nazdeekiyan",
+        "url": "https://video.maalcdn.com/ALTT/Band%20Darwaze%20Ke%20Piche/Band%20Darwaze%20Ke%20Piche%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Raaz Ki Aahat",
+        "url": "https://video.maalcdn.com/ALTT/Band%20Darwaze%20Ke%20Piche/Band%20Darwaze%20Ke%20Piche%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Dil Ke Peechhe",
+        "url": "https://video.maalcdn.com/ALTT/Band%20Darwaze%20Ke%20Piche/Band%20Darwaze%20Ke%20Piche%20Episode%205.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "chhinar",
+    "title": "Chhinar",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2025/11/Chhinar-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Rabbit/Chhinar/Chhinar%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Rabbit/Chhinar/Chhinar%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "inspiration",
+    "title": "Inspiration ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.ac/wp-content/uploads/2025/12/Inspiration-Episode-2.webp",
+    "description": "Watch Inspiration 18+ web series full episodes online. A bold emotional drama exploring desires, dreams, struggles and self-discovery.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "The Hidden Desire",
+        "url": "https://video.maalcdn.com/Atrangii/Inspiration/Inspiration%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Dreams vs Reality",
+        "url": "https://video.maalcdn.com/Atrangii/Inspiration/Inspiration%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "meri-padosan",
+    "title": "Meri Padosan",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2024/11/Meri-Padosan-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://cdn.bmaal.com/ULLU/Meri%20Padosan/Meri%20Padosan%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://cdn.bmaal.com/ULLU/Meri%20Padosan/Meri%20Padosan%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "akeli",
+    "title": "Akeli",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.cfd/wp-content/uploads/2025/08/Akeli-Episode-3.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Prime%20Shots/Akeli/Akeli%20E1.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Prime%20Shots/Akeli/Akeli%20E2.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/Prime%20Shots/Akeli/Akeli%20E3.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "deewane",
+    "title": "Deewane",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.to/wp-content/uploads/2025/09/Deewane-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Jalva/Deewane/Deewane Episode 1.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "honey-trap",
+    "title": "Honey Trap",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://mastiwala.com/wp-content/uploads/2024/11/Honey-Trap-Episode-2-300x169.webp",
+    "description": "Watch Honey Trap web series full episodes online. A gripping romantic thriller where love, deception and secrets collide.",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Sweet Attraction",
+        "url": "https://cdn.bmaal.com/ULLU/Honey%20Trap/Honey%20Trap%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "The First Move",
+        "url": "https://cdn.bmaal.com/ULLU/Honey%20Trap/Honey%20Trap%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Hidden Motives",
+        "url": "https://cdn.bmaal.com/ULLU/Honey%20Trap/Honey%20Trap%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Web of Lies",
+        "url": "https://cdn.bmaal.com/ULLU/Honey%20Trap/Honey%20Trap%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Emotional Bait",
+        "url": "https://cdn.bmaal.com/ULLU/Honey%20Trap/Honey%20Trap%20Episode%205.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "chul-le-zara",
+    "title": "Chul Le zara",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/svY2vP7q/Screenshot-20251219-080819.png",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://cdn.bmaal.com/ULLU/Chhu%20Le%20Zara/Chhu%20Le%20Zara%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://cdn.bmaal.com/ULLU/Chhu%20Le%20Zara/Chhu%20Le%20Zara%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://cdn.bmaal.com/ULLU/Chhu%20Le%20Zara/Chhu%20Le%20Zara%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://cdn.bmaal.com/ULLU/Chhu%20Le%20Zara/Chhu%20Le%20Zara%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://cdn.bmaal.com/ULLU/Chhu%20Le%20Zara/Chhu%20Le%20Zara%20Episode%205.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://cdn.bmaal.com/ULLU/Chhu%20Le%20Zara/Chhu%20Le%20Zara%20Episode%206.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 7,
+        "title": "Episode 7",
+        "url": "https://cdn.bmaal.com/ULLU/Chhu%20Le%20Zara/Chhu%20Le%20Zara%20Episode%207.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "daal-chawal",
+    "title": "Daal Chawal ",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://xmaza.cfd/wp-content/uploads/2025/08/Screenshot-2025-08-09-at-3.29.44-PM.jpg",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/ULLU/Daal%20Chawal-D1/Daal%20Chawal%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/ULLU/Daal%20Chawal-D1/Daal%20Chawal%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://video.maalcdn.com/ULLU/Daal%20Chawal-D1/Daal%20Chawal%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://video.maalcdn.com/ULLU/Daal%20Chawal-D1/Daal%20Chawal%20Episode%204.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 5,
+        "title": "Episode 5",
+        "url": "https://video.maalcdn.com/ULLU/Daal%20Chawal-D1/Daal%20Chawal%20Episode%205.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 6,
+        "title": "Episode 6",
+        "url": "https://video.maalcdn.com/ULLU/Daal%20Chawal-D1/Daal%20Chawal%20Episode%206.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 7,
+        "title": "Episode 7",
+        "url": "https://video.maalcdn.com/ULLU/Daal%20Chawal-D1/Daal%20Chawal%20Episode%207.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "miss-doctor",
+    "title": "Miss Doctor",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://redmaal.com/wp-content/uploads/2025/12/Miss-Doctor-Episode-1.webp",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://video.maalcdn.com/Rio%20Plus/Miss%20Doctor/Miss%20Doctor%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://video.maalcdn.com/Rio%20Plus/Miss%20Doctor/Miss%20Doctor%20Episode%202.mp4",
+        "summary": ""
+      }
+    ]
+  },
+  {
+    "slug": "bhool-chook-maaf",
+    "title": "Bhool Chook Maaf",
+    "type": "series",
+    "category": "Web Series",
+    "thumbnail": "https://i.ibb.co/MydqVdTz/Picsart-25-12-19-15-54-29-606.png",
+    "description": "",
+    "episodes": [
+      {
+        "ep": 1,
+        "title": "Episode 1",
+        "url": "https://cdn.bmaal.com/Feel/Bhool%20Chook%20Maaf/Bhool%20Chook%20Maaf%20%20Episode%201.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 2,
+        "title": "Episode 2",
+        "url": "https://cdn.bmaal.com/Feel/Bhool%20Chook%20Maaf/Bhool%20Chook%20Maaf%20%20Episode%202.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 3,
+        "title": "Episode 3",
+        "url": "https://cdn.bmaal.com/Feel/Bhool%20Chook%20Maaf/Bhool%20Chook%20Maaf%20%20Episode%203.mp4",
+        "summary": ""
+      },
+      {
+        "ep": 4,
+        "title": "Episode 4",
+        "url": "https://cdn.bmaal.com/Feel/Bhool%20Chook%20Maaf/Bhool%20Chook%20Maaf%20%20Episode%204.mp4",
+        "summary": ""
+      }
+    ]
   }
 ]
