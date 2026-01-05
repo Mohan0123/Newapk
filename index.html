@@ -8,14 +8,8 @@
     <meta name="description" content="Watch latest HD web series and movies online for free on Ranginx.">
     <meta name="robots" content="index, follow">
     
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ranginx - Premium Streaming">
-    <meta property="og:description" content="Watch latest HD web series and movies online.">
-    <meta property="og:image" content="https://ranginx.fun/og-image.jpg">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -36,9 +30,9 @@
     <style>
         body { background-color: #000000; color: #ffffff; font-family: sans-serif; overflow-x: hidden; }
         
-        /* Navbar Gradient */
         .glass-nav { 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 100%);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid #222;
         }
 
@@ -47,21 +41,16 @@
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #e50914; border-radius: 4px; }
 
-        /* HTML Description Styles */
-        .html-desc h1, .html-desc h2 { font-size: 1.2rem; font-weight: bold; margin: 1rem 0 0.5rem; color: #fff; }
+        /* HTML Desc */
+        .html-desc h1, .html-desc h2 { font-size: 1.1rem; font-weight: bold; margin: 1rem 0 0.5rem; color: #fff; }
         .html-desc p { margin-bottom: 0.8rem; opacity: 0.8; line-height: 1.6; }
         .html-desc strong { color: #e50914; }
-        .html-desc ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
 
         /* Cinema Mode */
         .cinema-mode { position: fixed; inset: 0; background: black; z-index: 100; padding: 0; display: flex; align-items: center; justify-content: center; }
         .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section { display: none !important; }
-        .cinema-mode .player-container { width: 100% !important; max-width: 100% !important; height: 100vh; display: flex; align-items: center; }
-        .cinema-mode #player-wrapper { height: 100vh !important; width: 100% !important; aspect-ratio: unset !important; }
-
-        /* Loader */
-        .loader { border: 3px solid #333; border-top: 3px solid #e50914; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .cinema-mode .player-container { width: 100% !important; max-width: 100% !important; height: 100vh; }
+        .cinema-mode #player-wrapper { height: 100vh !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -88,7 +77,7 @@
 </nav>
 
 <div id="mobile-search" class="fixed top-16 left-0 w-full bg-black p-4 hidden z-[90] border-b border-[#333]">
-    <input type="text" id="mobile-search-input" placeholder="Search titles..." class="w-full p-3 rounded outline-none border border-[#333] bg-[#141414] text-white">
+    <input type="text" id="mobile-search-input" placeholder="Search..." class="w-full p-3 rounded outline-none border border-[#333] bg-[#141414] text-white">
 </div>
 
 <main id="app" class="min-h-screen pt-20 pb-12"></main>
@@ -97,9 +86,9 @@
     <div class="max-w-[1600px] mx-auto px-4 text-center">
         <h3 class="text-brand font-bold text-2xl mb-4">Ranginx</h3>
         <div class="flex justify-center gap-6 mb-6 text-sm text-gray-500">
-            <button onclick="openModal('dmca')" class="hover:text-white transition">DMCA</button>
-            <button onclick="openModal('privacy')" class="hover:text-white transition">Privacy</button>
-            <button onclick="openModal('terms')" class="hover:text-white transition">Terms</button>
+            <button onclick="openModal('dmca')" class="hover:text-white">DMCA</button>
+            <button onclick="openModal('privacy')" class="hover:text-white">Privacy</button>
+            <button onclick="openModal('terms')" class="hover:text-white">Terms</button>
         </div>
         <p class="text-[11px] text-[#444]">&copy; 2026 Ranginx. All rights reserved.</p>
     </div>
@@ -107,7 +96,7 @@
 
 <div id="legal-modal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="relative bg-[#141414] border border-[#333] w-full max-w-2xl max-h-[80vh] rounded-xl shadow-2xl flex flex-col overflow-hidden animate-fade">
+    <div class="relative bg-[#141414] border border-[#333] w-full max-w-2xl max-h-[80vh] rounded-xl shadow-2xl flex flex-col animate-fade">
         <div class="flex justify-between items-center p-5 border-b border-[#333]">
             <h2 id="modal-title" class="text-xl font-bold text-white">Legal</h2>
             <button onclick="closeModal()" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
@@ -121,7 +110,6 @@
 
     // --- INIT ---
     document.addEventListener('DOMContentLoaded', async () => {
-        // SPA Routing
         document.body.addEventListener('click', e => {
             const link = e.target.closest('a.spa-link');
             if (link) { 
@@ -131,7 +119,6 @@
             }
         });
 
-        // Search
         const handleSearch = (e) => filterContent(e.target.value);
         document.getElementById('search-input').addEventListener('keyup', handleSearch);
         document.getElementById('mobile-search-input').addEventListener('keyup', handleSearch);
@@ -143,7 +130,6 @@
     window.addEventListener('popstate', router);
 
     async function loadData() {
-        document.getElementById('app').innerHTML = `<div class="h-[60vh] flex justify-center items-center"><div class="loader"></div></div>`;
         try {
             const res = await fetch('data/normal.json');
             if (!res.ok) throw new Error("JSON Error");
@@ -151,26 +137,20 @@
             STATE.data = json.reverse();
             router();
         } catch (e) { 
-            console.error(e);
-            document.getElementById('app').innerHTML = `<div class="h-screen flex justify-center items-center text-gray-500">Error loading content</div>`;
+            document.getElementById('app').innerHTML = `<div class="h-screen flex justify-center items-center text-red-500">Error: /data/normal.json not found</div>`;
         }
     }
 
     function router() {
         window.scrollTo(0, 0);
-        // Force cleanup when leaving pages
-        if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
-        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
-        document.body.classList.remove('cinema-mode');
-
+        destroyPlayer();
         const path = window.location.pathname.replace(/\/$/, '');
         const slug = path.substring(1);
-
         document.getElementById('mobile-search').classList.add('hidden');
 
         if (path === '' || path === '/index.html') {
             renderHome(STATE.data);
-            updateSEO('Ranginx - Watch Movies & Web Series', 'Stream latest HD content.');
+            updateSEO('Ranginx - Home', 'Watch latest movies.');
         } else {
             const item = STATE.data.find(i => i.slug.toLowerCase() === slug.toLowerCase());
             if (item) renderWatch(item);
@@ -180,19 +160,16 @@
 
     function updateSEO(title, desc) {
         document.title = title;
-        const cleanDesc = desc.replace(/<[^>]*>?/gm, '');
         let m = document.querySelector('meta[name="description"]');
         if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
-        m.content = cleanDesc;
+        m.content = desc.replace(/<[^>]*>?/gm, '');
     }
 
-    // --- HOME VIEW (Fix: 2 Cols Mobile, 16:9 Thumbs) ---
+    // --- HOME ---
     function renderHome(list) {
         let html = `<div class="px-2 md:px-8 max-w-[1600px] mx-auto animate-fade">`;
 
-        // Hero Banner
         if (list[0] && !document.getElementById('search-input').value) {
-            const desc = list[0].description ? list[0].description.replace(/<[^>]*>?/gm, '') : '';
             html += `
             <div class="relative w-full aspect-video md:h-[70vh] rounded-xl overflow-hidden mb-8 group border border-[#222] hidden md:block">
                 <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${list[0].thumbnail}');"></div>
@@ -200,7 +177,6 @@
                 <div class="absolute bottom-0 left-0 p-12 w-full md:w-2/3">
                     <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase mb-4 inline-block">Latest</span>
                     <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-xl">${list[0].title}</h1>
-                    <p class="text-gray-300 text-lg mb-6 line-clamp-2 max-w-xl">${desc}</p>
                     <a href="/${list[0].slug}" class="spa-link bg-white text-black px-8 py-3 rounded font-bold hover:bg-gray-200 inline-flex items-center gap-2">
                         <i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now
                     </a>
@@ -208,28 +184,23 @@
             </div>`;
         }
 
-        // Grid Title
-        html += `<h2 class="text-lg md:text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Uploads</h2>`;
-        
-        // Grid: grid-cols-2 (Mobile) -> grid-cols-6 (Desktop)
-        html += `<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6">`;
+        html += `<h2 class="text-lg md:text-xl font-bold text-white mb-4 pl-2 border-l-4 border-brand">Latest Uploads</h2>
+                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6">`;
 
         const items = (list[0] && !document.getElementById('search-input').value) ? list.slice(1) : list;
-
         items.forEach(item => {
-            const isSeries = item.type === 'series';
             html += `
                 <a href="/${item.slug}" class="spa-link group block">
-                    <div class="relative aspect-video bg-[#141414] rounded-lg overflow-hidden border border-[#222]">
+                    <div class="relative aspect-video bg-[#141414] rounded-lg overflow-hidden mb-2 border border-[#222]">
                         <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                             <div class="bg-brand p-2 rounded-full shadow-lg"><i data-lucide="play" class="w-4 h-4 fill-white text-white"></i></div>
                         </div>
                         <span class="absolute top-1 right-1 bg-brand text-white text-[8px] font-bold px-1.5 py-0.5 rounded">
-                            ${isSeries ? 'TV' : 'HD'}
+                            ${item.type === 'series' ? 'TV' : 'HD'}
                         </span>
                     </div>
-                    <div class="mt-2 px-1">
+                    <div class="px-1">
                         <h3 class="font-bold text-xs md:text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.title}</h3>
                         <div class="flex justify-between items-center mt-1 text-[10px] text-gray-500">
                             <span>${item.date || '2025'}</span>
@@ -238,22 +209,19 @@
                     </div>
                 </a>`;
         });
-
         html += `</div></div>`;
         document.getElementById('app').innerHTML = html;
         lucide.createIcons();
     }
 
-    // --- WATCH VIEW (Fixed Player Loading) ---
+    // --- WATCH ---
     function renderWatch(item) {
-        // Auto Description
-        const fallbackDesc = `<p>Watch <strong>${item.title}</strong> full HD online on Ranginx.</p>`;
-        const finalDesc = (item.description && item.description.trim() !== "") ? item.description : fallbackDesc;
-        updateSEO(`Watch ${item.title}`, finalDesc);
+        const desc = item.description || `<p>Watch <strong>${item.title}</strong> full HD online.</p>`;
+        updateSEO(`Watch ${item.title}`, desc);
 
         const isSeries = item.episodes && item.episodes.length > 0;
-        const initialSrc = isSeries ? item.episodes[0].url : item.video;
-        const initialTitle = isSeries ? `${item.title} - Episode 1` : item.title;
+        const src = isSeries ? item.episodes[0].url : item.video;
+        const title = isSeries ? `${item.title} - Episode 1` : item.title;
         const suggestions = STATE.data.filter(i => i.slug !== item.slug).slice(0, 8);
 
         let html = `
@@ -264,29 +232,24 @@
 
             <div class="flex flex-col lg:flex-row gap-8">
                 <div class="w-full lg:w-[75%] player-container">
-                    <div class="relative bg-black rounded-xl overflow-hidden border border-[#222] shadow-2xl aspect-video">
-                        <div id="player-wrapper" class="w-full h-full">
-                            </div>
+                    <div class="bg-black rounded-xl overflow-hidden border border-[#222] shadow-2xl relative aspect-video">
+                        <div id="player-wrapper" class="w-full h-full"></div>
                     </div>
 
                     <div class="mt-4 details-section">
                         <div class="flex justify-between items-start mb-2">
-                            <h1 id="player-title" class="text-xl md:text-3xl font-bold text-white leading-tight">${initialTitle}</h1>
+                            <h1 id="player-title" class="text-xl md:text-3xl font-bold text-white leading-tight">${title}</h1>
                             <button onclick="toggleCinemaMode()" class="flex items-center gap-2 text-xs bg-[#222] text-white px-3 py-1.5 rounded hover:bg-brand transition">
-                                <i data-lucide="monitor" class="w-3 h-3"></i> Cinema Mode
+                                <i data-lucide="monitor" class="w-3 h-3"></i> Mode
                             </button>
                         </div>
                         
-                        <div class="flex gap-2 text-[10px] text-gray-400 mb-4">
-                            <span class="bg-[#222] px-2 py-0.5 rounded border border-[#333]">HD</span>
-                            <span class="bg-[#222] px-2 py-0.5 rounded border border-[#333]">${item.category || 'Video'}</span>
-                        </div>
+                        <a id="fallback-btn" href="${src}" target="_blank" class="hidden mb-4 bg-[#222] text-brand text-xs px-3 py-2 rounded border border-[#333] hover:bg-[#333]">
+                            Video not playing? Click here to watch directly
+                        </a>
 
                         <div class="bg-[#141414] p-4 rounded-xl border border-[#222] mb-6">
-                            <h3 class="text-white font-bold mb-2 flex items-center gap-2 text-sm border-b border-[#222] pb-2">
-                                <i data-lucide="info" class="text-brand w-4 h-4"></i> Overview
-                            </h3>
-                            <div class="html-desc text-gray-400 text-sm leading-relaxed">${finalDesc}</div>
+                            <div class="html-desc text-gray-400 text-sm leading-relaxed">${desc}</div>
                         </div>
 
                         ${isSeries ? `
@@ -309,7 +272,7 @@
                     <h3 class="text-white font-bold mb-4 text-sm border-l-4 border-brand pl-3">More Like This</h3>
                     <div class="flex flex-col gap-3">
                         ${suggestions.map(s => `
-                        <a href="/${s.slug}" class="spa-link flex gap-3 p-2 rounded hover:bg-[#141414] transition group border border-transparent hover:border-[#222]">
+                        <a href="/${s.slug}" class="spa-link flex gap-3 p-2 rounded hover:bg-[#141414] transition border border-transparent hover:border-[#222]">
                             <div class="w-24 aspect-video bg-[#222] rounded overflow-hidden flex-shrink-0">
                                 <img src="${s.thumbnail}" class="w-full h-full object-cover">
                             </div>
@@ -324,71 +287,79 @@
         </div>`;
 
         document.getElementById('app').innerHTML = html;
+        playVideo(src, title, item.thumbnail, null);
         lucide.createIcons();
-        
-        // Initial Play
-        playVideo(initialSrc, initialTitle, item.thumbnail, null);
     }
 
     function render404() {
-        document.getElementById('app').innerHTML = `<div class="h-[60vh] flex flex-col justify-center items-center text-center"><h1 class="text-6xl font-bold text-brand">404</h1><p class="text-gray-400 mt-2">Content Not Found</p><a href="/" class="spa-link mt-4 bg-white text-black px-4 py-2 rounded font-bold">Home</a></div>`;
+        document.getElementById('app').innerHTML = `<div class="h-[60vh] flex flex-col justify-center items-center text-center"><h1 class="text-6xl font-bold text-brand">404</h1><a href="/" class="spa-link mt-4 text-white underline">Home</a></div>`;
     }
 
-    // --- PLAYER ENGINE (FIXED) ---
+    // --- ROBUST PLAYER LOGIC ---
+    function destroyPlayer() {
+        if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
+        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+    }
+
     function playVideo(url, title, poster, btn) {
-        // Update Title
         if(title) document.getElementById('player-title').innerText = title;
         
-        // Update Buttons Styling
+        // Update Buttons
         if(btn) {
             document.querySelectorAll('.ep-btn').forEach(b => b.className = 'ep-btn bg-[#141414] text-gray-400 border border-[#333] hover:bg-[#222] border p-2 rounded text-xs font-medium transition text-center truncate');
             btn.className = 'ep-btn bg-brand text-white border-brand border p-2 rounded text-xs font-medium transition text-center truncate';
         }
 
-        // Cleanup Old Player
-        if(STATE.player) { STATE.player.destroy(); STATE.player = null; }
-        if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+        // Show Fallback Button link
+        const fallback = document.getElementById('fallback-btn');
+        if(fallback) { fallback.href = url; fallback.classList.remove('hidden'); }
 
+        destroyPlayer();
         const wrapper = document.getElementById('player-wrapper');
-        wrapper.innerHTML = ''; // Reset DOM
+        wrapper.innerHTML = ''; // Clear container
+
+        // Logic to determine type
+        const isMp4 = url.includes('.mp4') || url.includes('.mkv');
+        const isHls = url.includes('.m3u8');
+        const isEmbed = !isMp4 && !isHls;
+
+        if (isEmbed) {
+            wrapper.innerHTML = `<iframe src="${url}" class="w-full h-full border-0" allowfullscreen></iframe>`;
+            return;
+        }
 
         // Create Video Element
         const video = document.createElement('video');
-        video.id = 'plyr-video';
+        video.className = "w-full h-full";
         video.controls = true;
-        video.className = 'w-full h-full';
         video.poster = poster || '';
         video.setAttribute('playsinline', '');
         video.setAttribute('crossorigin', 'anonymous');
+        wrapper.appendChild(video);
 
-        // Check Type
-        if (url.includes('.mp4') || url.includes('.m3u8')) {
-            wrapper.appendChild(video);
-            
-            const defaultOptions = {
-                controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
-                autoplay: true // Auto play on switch
-            };
+        const options = { 
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
+            autoplay: true,
+            muted: false
+        };
 
-            if (Hls.isSupported() && url.includes('.m3u8')) {
-                const hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    STATE.player = new Plyr(video, defaultOptions);
+        if (isHls && Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                STATE.player = new Plyr(video, options);
+                // Handle Error
+                STATE.player.on('error', () => { 
+                    console.log("Plyr Error"); 
+                    fallback.innerHTML = "Error loading. Click to watch direct.";
                 });
-                STATE.hls = hls;
-            } else {
-                video.src = url;
-                STATE.player = new Plyr(video, defaultOptions);
-            }
+            });
+            STATE.hls = hls;
         } else {
-            // Iframe Fallback
-            wrapper.innerHTML = `<iframe src="${url}" class="w-full h-full border-0" allowfullscreen allow="autoplay"></iframe>`;
+            video.src = url;
+            STATE.player = new Plyr(video, options);
         }
-
-        // Scroll to top
-        if(btn) window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     window.toggleCinemaMode = () => {
@@ -397,11 +368,7 @@
     };
 
     // --- UTILS ---
-    const LEGAL_TEXT = {
-        dmca: `<h2>DMCA</h2><p>We do not host content. We only link to content available on the internet.</p>`,
-        privacy: `<h2>Privacy</h2><p>No personal data collected.</p>`,
-        terms: `<h2>Terms</h2><p>For personal use only.</p>`
-    };
+    const LEGAL_TEXT = { dmca: `<h2>DMCA</h2><p>Content hosted by third parties.</p>`, privacy: `<h2>Privacy</h2><p>No data collected.</p>`, terms: `<h2>Terms</h2><p>Personal use only.</p>` };
     window.openModal = (t) => {
         document.getElementById('modal-title').innerText = t.toUpperCase();
         document.getElementById('modal-body').innerHTML = LEGAL_TEXT[t];
@@ -413,7 +380,10 @@
         document.getElementById('legal-modal').classList.remove('flex');
     }
     window.filterType = (t) => renderHome(STATE.data.filter(i => i.type && i.type.toLowerCase().includes(t)));
-    window.filterContent = (v) => renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(v.toLowerCase())));
+    window.filterContent = (v) => {
+        if(!v) return renderHome(STATE.data);
+        renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(v.toLowerCase())));
+    };
 </script>
 </body>
 </html>
