@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +7,6 @@
     
     <meta name="description" content="Watch latest HD web series and movies online for free on Ranginx.">
     <meta name="robots" content="index, follow">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ranginx - Premium Streaming">
-    <meta property="og:description" content="Watch latest HD web series and movies online.">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,143 +16,132 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <script>
-        // --- AUTO THEME DETECTOR ---
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        }
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            if (event.matches) document.documentElement.classList.add('dark');
-            else document.documentElement.classList.remove('dark');
-        });
-
+        // Force Dark Mode Configuration
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: { 
                         brand: '#e50914', 
-                        dark: { bg: '#0f0f0f', card: '#18181b', border: '#27272a', text: '#e4e4e7' },
-                        light: { bg: '#ffffff', card: '#f4f4f5', border: '#e4e4e7', text: '#18181b' }
+                        // Pure Black Backgrounds
+                        dark: { bg: '#000000', card: '#141414', border: '#333333', text: '#ffffff' }
                     },
-                    animation: { 'fade': 'fadeIn 0.4s ease-out' },
-                    keyframes: { fadeIn: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
+                    animation: { 'fade': 'fadeIn 0.5s ease-out' },
+                    keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } } }
                 }
             }
         }
     </script>
 
     <style>
-        /* Base Transitions */
-        body { transition: background-color 0.3s, color 0.3s; }
+        /* Force Black Theme Defaults */
+        body { background-color: #000000; color: #ffffff; font-family: system-ui, sans-serif; }
         
-        /* DARK MODE (Premium Dark Gray) */
-        html.dark body { background-color: #0f0f0f; color: #e4e4e7; }
-        html.dark .glass-nav { background: rgba(15, 15, 15, 0.9); border-bottom: 1px solid #27272a; }
-        html.dark input { background-color: #18181b; border-color: #27272a; color: white; }
-        html.dark .card-bg { background-color: #18181b; border-color: #27272a; }
-        html.dark .section-title { color: white; }
-        
-        /* LIGHT MODE (Clean White) */
-        html:not(.dark) body { background-color: #ffffff; color: #18181b; }
-        html:not(.dark) .glass-nav { background: rgba(255, 255, 255, 0.95); border-bottom: 1px solid #e4e4e7; }
-        html:not(.dark) input { background-color: #f4f4f5; border-color: #d4d4d8; color: black; }
-        html:not(.dark) .card-bg { background-color: #ffffff; border-color: #e4e4e7; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        html:not(.dark) .section-title { color: #18181b; }
-
-        /* General UI */
-        .glass-nav { backdrop-filter: blur(12px); }
-        .spa-link { transition: color 0.2s; }
-        .spa-link:hover { color: #e50914; }
-        
-        /* PLYR PLAYER CUSTOMIZATION (Red Theme) */
-        :root { --plyr-color-main: #e50914; }
-        .plyr { border-radius: 12px; overflow: hidden; height: 100%; width: 100%; }
-        .player-wrapper { 
-            position: relative; 
-            width: 100%; 
-            aspect-ratio: 16/9; 
-            background: #000; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        /* Glass Navbar (Black Tint) */
+        .glass-nav { 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            border-bottom: none; 
+            transition: background 0.3s;
+        }
+        .glass-nav.scrolled {
+            background: #000000;
+            border-bottom: 1px solid #333;
         }
 
-        /* Cinema Mode */
-        .cinema-mode { position: fixed; inset: 0; background: black; z-index: 100; padding: 0; display: flex; align-items: center; justify-content: center; }
-        .cinema-mode nav, .cinema-mode footer, .cinema-mode .sidebar-recs, .cinema-mode .details-section { display: none !important; }
-        .cinema-mode .player-container { width: 100% !important; max-width: 1400px !important; margin: 0 auto; }
-        .cinema-mode .player-wrapper { border-radius: 0; box-shadow: none; }
+        /* Inputs & Cards */
+        input { background-color: #141414 !important; border-color: #333 !important; color: white !important; }
+        .card-bg { background-color: #141414; border: 1px solid #333; }
         
-        /* Modal */
-        .legal-content h2 { font-size: 1.2rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; }
-        .legal-content p { font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.8; line-height: 1.6; }
+        /* HTML Description Formatting */
+        .html-desc h1, .html-desc h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; color: white; }
+        .html-desc p { margin-bottom: 0.8rem; opacity: 0.8; line-height: 1.6; }
+        .html-desc ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .html-desc strong { color: #e50914; }
+
+        /* Hero Section Gradient */
+        .hero-gradient {
+            background: linear-gradient(to top, #000000 10%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0) 100%);
+        }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-<nav class="fixed top-0 w-full h-16 glass-nav z-[60] flex items-center justify-between px-4 lg:px-8">
+<nav id="navbar" class="fixed top-0 w-full h-16 glass-nav z-[60] flex items-center justify-between px-4 lg:px-8">
     <div class="flex items-center gap-6">
-        <a href="/" class="spa-link text-2xl font-bold tracking-tighter text-brand">Ranginx</a>
-        <div class="hidden md:flex gap-6 text-sm font-medium opacity-80">
-            <a href="/" class="spa-link">Home</a>
-            <a href="/" onclick="filterType('movie')" class="cursor-pointer spa-link">Movies</a>
-            <a href="/" onclick="filterType('series')" class="cursor-pointer spa-link">Web Series</a>
+        <a href="/" class="spa-link text-3xl font-bold tracking-tighter text-brand uppercase">Ranginx</a>
+        <div class="hidden md:flex gap-6 text-sm font-medium text-gray-300">
+            <a href="/" class="spa-link hover:text-white transition">Home</a>
+            <a href="/" onclick="filterType('movie')" class="cursor-pointer hover:text-white transition">Movies</a>
+            <a href="/" onclick="filterType('series')" class="cursor-pointer hover:text-white transition">Web Series</a>
         </div>
     </div>
-    <div class="flex-grow max-w-md mx-6 relative hidden md:block">
-        <input type="text" id="search-input" placeholder="Search..." class="w-full pl-10 pr-4 py-2 rounded-full text-sm outline-none focus:border-brand border transition-all focus:ring-1 focus:ring-brand">
-        <i data-lucide="search" class="w-4 h-4 opacity-50 absolute left-3.5 top-2.5"></i>
+    
+    <div class="flex items-center gap-4">
+        <div class="relative hidden md:block w-64">
+            <input type="text" id="search-input" placeholder="Search..." class="w-full pl-10 pr-4 py-1.5 rounded-full text-sm outline-none focus:ring-1 focus:ring-brand">
+            <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-2"></i>
+        </div>
+        <button class="md:hidden text-white" onclick="document.getElementById('mobile-search').classList.toggle('hidden')">
+            <i data-lucide="search" class="w-6 h-6"></i>
+        </button>
     </div>
-    <button class="md:hidden" onclick="document.getElementById('mobile-search').classList.toggle('hidden')"><i data-lucide="search" class="w-6 h-6"></i></button>
 </nav>
 
-<div id="mobile-search" class="fixed top-16 left-0 w-full glass-nav p-4 hidden z-50 shadow-lg">
-    <input type="text" id="mobile-search-input" placeholder="Search..." class="w-full p-3 rounded outline-none border">
+<div id="mobile-search" class="fixed top-16 left-0 w-full bg-black p-4 hidden z-50 border-b border-[#333]">
+    <input type="text" id="mobile-search-input" placeholder="Search titles..." class="w-full p-3 rounded outline-none border border-[#333] bg-[#141414] text-white">
 </div>
 
-<main id="app" class="pt-24 min-h-screen pb-10"></main>
+<main id="app" class="min-h-screen pb-12"></main>
 
-<footer class="border-t dark:border-[#27272a] border-gray-200 dark:bg-[#0f0f0f] bg-gray-50 pt-12 pb-8 mt-12">
+<footer class="border-t border-[#222] bg-[#050505] pt-12 pb-8 mt-12">
     <div class="max-w-[1600px] mx-auto px-4 text-center">
-        <h3 class="text-brand font-bold text-xl mb-4">Ranginx</h3>
-        <div class="flex justify-center gap-6 mb-6 text-sm opacity-70">
-            <button onclick="openModal('dmca')" class="hover:text-brand transition">DMCA</button>
-            <button onclick="openModal('privacy')" class="hover:text-brand transition">Privacy Policy</button>
-            <button onclick="openModal('terms')" class="hover:text-brand transition">Terms of Use</button>
+        <h3 class="text-brand font-bold text-2xl mb-4">Ranginx</h3>
+        <div class="flex justify-center gap-6 mb-6 text-sm text-gray-500">
+            <button onclick="openModal('dmca')" class="hover:text-white transition">DMCA</button>
+            <button onclick="openModal('privacy')" class="hover:text-white transition">Privacy</button>
+            <button onclick="openModal('terms')" class="hover:text-white transition">Terms</button>
         </div>
-        <p class="text-[11px] opacity-50">&copy; 2026 Ranginx. All rights reserved. <br> This site does not host any files on its server.</p>
+        <p class="text-[11px] text-[#444]">&copy; 2026 Ranginx. All rights reserved.</p>
     </div>
 </footer>
 
 <div id="legal-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="relative dark:bg-[#18181b] bg-white w-full max-w-2xl max-h-[80vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade">
-        <div class="flex justify-between items-center p-5 border-b dark:border-[#27272a] border-gray-200">
-            <h2 id="modal-title" class="text-xl font-bold section-title">Legal</h2>
-            <button onclick="closeModal()" class="opacity-50 hover:opacity-100"><i data-lucide="x"></i></button>
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="relative bg-[#141414] border border-[#333] w-full max-w-2xl max-h-[80vh] rounded-xl shadow-2xl flex flex-col overflow-hidden animate-fade">
+        <div class="flex justify-between items-center p-5 border-b border-[#333]">
+            <h2 id="modal-title" class="text-xl font-bold text-white">Legal</h2>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
         </div>
-        <div id="modal-body" class="p-8 overflow-y-auto legal-content"></div>
+        <div id="modal-body" class="p-8 overflow-y-auto html-desc text-gray-300"></div>
     </div>
 </div>
 
 <script>
     const STATE = { data: [], playerInstance: null, hls: null };
 
+    // --- SCROLL EFFECT ---
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        if(window.scrollY > 50) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+    });
+
     // --- LEGAL TEXT ---
     const LEGAL_TEXT = {
-        dmca: `<h2>DMCA Notice</h2><p>Ranginx operates as a search engine/indexer. We do not host, upload, or store any video files on our servers. All content is provided by non-affiliated third parties.</p>`,
-        privacy: `<h2>Privacy Policy</h2><p>We do not collect personal data. We use local storage for preferences (like theme) and cookies for site performance.</p>`,
-        terms: `<h2>Terms & Conditions</h2><p>By using this website, you agree that you are using it for personal entertainment only.</p>`
+        dmca: `<h2>DMCA Notice</h2><p>Ranginx is a search engine. We do not host content on our servers. All content is provided by non-affiliated third parties. If you have a copyright concern, please contact the host directly.</p>`,
+        privacy: `<h2>Privacy Policy</h2><p>We respect your privacy. No personal data is collected on this site. Cookies are used for site performance only.</p>`,
+        terms: `<h2>Terms & Conditions</h2><p>By using Ranginx, you agree to watch content for personal entertainment use only.</p>`
     };
 
     // --- INIT ---
     document.addEventListener('DOMContentLoaded', async () => {
-        // SPA Link Handling
+        // SPA Links
         document.body.addEventListener('click', e => {
             const link = e.target.closest('a.spa-link');
             if (link) { e.preventDefault(); history.pushState(null, '', link.href); router(); }
         });
 
-        // Search Handling
+        // Search
         const handleSearch = (e) => filterContent(e.target.value);
         document.getElementById('search-input').addEventListener('keyup', handleSearch);
         document.getElementById('mobile-search-input').addEventListener('keyup', handleSearch);
@@ -176,10 +161,10 @@
             router();
         } catch (e) { 
             document.getElementById('app').innerHTML = `
-            <div class="flex flex-col items-center justify-center h-[50vh] text-center opacity-60">
-                <i data-lucide="alert-circle" class="w-12 h-12 mb-4"></i>
-                <h2 class="text-xl font-bold">Content Load Error</h2>
-                <p>Please check /data/normal.json</p>
+            <div class="flex flex-col items-center justify-center h-screen text-center text-gray-500">
+                <i data-lucide="server-off" class="w-16 h-16 mb-4"></i>
+                <h2 class="text-xl font-bold text-white">Content Unavailable</h2>
+                <p>Ensure /data/normal.json exists</p>
             </div>`;
             lucide.createIcons();
         }
@@ -188,13 +173,12 @@
     function router() {
         window.scrollTo(0, 0);
         destroyPlayer();
-        document.body.classList.remove('cinema-mode');
         const path = window.location.pathname;
         const slug = path.substring(1);
 
         if (path === '/' || path === '/index.html' || path === '') {
             renderHome(STATE.data);
-            updateSEO('Ranginx - Watch Movies & Web Series', 'Stream latest HD movies and web series online.');
+            updateSEO('Ranginx - Home', 'Stream movies and series.');
         } else {
             const item = STATE.data.find(i => i.slug === slug);
             if (item) renderWatch(item);
@@ -204,112 +188,146 @@
 
     function updateSEO(title, desc) {
         document.title = title;
-        let metaDesc = document.querySelector('meta[name="description"]');
-        if(!metaDesc) { metaDesc = document.createElement('meta'); metaDesc.name = "description"; document.head.appendChild(metaDesc); }
-        metaDesc.content = desc;
+        let m = document.querySelector('meta[name="description"]');
+        if(!m) { m = document.createElement('meta'); m.name="description"; document.head.appendChild(m); }
+        m.content = desc.replace(/<[^>]*>?/gm, ''); // Strip HTML for SEO tag
     }
 
-    // --- HOME VIEW ---
+    // --- RENDER HOME (NETFLIX STYLE HERO) ---
     function renderHome(list) {
-        let html = `<div class="px-4 lg:px-8 max-w-[1600px] mx-auto animate-fade">`;
-        
-        // Hero Section (Featured)
+        let html = ``;
+
+        // 1. HERO SECTION (Featured)
         if (list[0]) {
+            // Strip HTML for Hero preview to keep layout clean, or use line-clamp
+            // We use a temporary div to strip tags if needed, but here we render raw with line-clamp
+            
             html += `
-            <div class="relative w-full aspect-[21/9] md:h-[65vh] rounded-2xl overflow-hidden mb-10 group shadow-2xl">
-                <div class="absolute inset-0 bg-cover bg-top transition duration-700 group-hover:scale-105" style="background-image: url('${list[0].thumbnail}');"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                <div class="absolute bottom-0 left-0 p-6 md:p-12 w-full md:w-2/3">
-                    <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block shadow-lg">Latest Release</span>
-                    <h1 class="text-3xl md:text-6xl font-bold text-white mb-4 drop-shadow-xl leading-tight">${list[0].title}</h1>
-                    <p class="text-gray-300 line-clamp-2 mb-6 text-sm md:text-lg max-w-xl">${list[0].description || 'Watch the latest blockbuster now.'}</p>
-                    <a href="/${list[0].slug}" class="spa-link inline-flex items-center gap-2 bg-white text-black px-8 py-3.5 rounded-xl font-bold hover:bg-gray-200 transition transform hover:scale-105">
-                        <i data-lucide="play" class="w-5 h-5 fill-black"></i> Watch Now
-                    </a>
+            <div class="relative w-full h-[85vh] group">
+                <div class="absolute inset-0 bg-cover bg-center transition duration-1000 group-hover:scale-105" 
+                     style="background-image: url('${list[0].thumbnail}');">
+                </div>
+                
+                <div class="absolute inset-0 hero-gradient"></div>
+
+                <div class="absolute bottom-0 left-0 w-full p-6 md:p-16 flex flex-col justify-end h-full">
+                    <div class="max-w-2xl animate-fade">
+                        <span class="bg-brand text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-wider mb-4 inline-block shadow-lg">
+                            New Release
+                        </span>
+                        
+                        <h1 class="text-4xl md:text-7xl font-bold text-white mb-4 leading-tight drop-shadow-2xl">
+                            ${list[0].title}
+                        </h1>
+
+                        <div class="text-gray-300 text-sm md:text-lg mb-8 line-clamp-3 leading-relaxed drop-shadow-md html-desc">
+                            ${list[0].description}
+                        </div>
+
+                        <div class="flex gap-4">
+                            <a href="/${list[0].slug}" class="spa-link bg-white text-black px-8 py-3.5 rounded font-bold hover:bg-gray-200 transition flex items-center gap-2">
+                                <i data-lucide="play" class="w-5 h-5 fill-black"></i> Play Now
+                            </a>
+                            <a href="/${list[0].slug}" class="spa-link bg-[#333]/80 backdrop-blur text-white px-8 py-3.5 rounded font-bold hover:bg-[#444] transition flex items-center gap-2">
+                                <i data-lucide="info" class="w-5 h-5"></i> More Info
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>`;
         }
 
-        // Grid Section
-        html += `<div class="flex items-center gap-2 mb-6"><i data-lucide="flame" class="text-brand"></i> <h2 class="text-2xl font-bold section-title">Trending Now</h2></div>
-                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 gap-y-8">`;
-        
+        // 2. GRID SECTION
+        html += `
+        <div class="px-4 lg:px-12 -mt-20 relative z-10">
+            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <i data-lucide="trending-up" class="text-brand"></i> Trending Now
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 gap-y-10">`;
+
         list.slice(1).forEach(item => {
             html += `
-                <a href="/${item.slug}" class="spa-link group block relative">
-                    <div class="aspect-[2/3] card-bg rounded-xl overflow-hidden mb-3 border dark:border-[#27272a] border-gray-200 shadow-sm transition hover:shadow-xl hover:-translate-y-1">
-                        <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:opacity-80 transition duration-300">
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-                            <div class="bg-brand/90 p-3 rounded-full shadow-lg transform scale-75 group-hover:scale-100 transition"><i data-lucide="play" class="w-6 h-6 fill-white text-white"></i></div>
+                <a href="/${item.slug}" class="spa-link group block">
+                    <div class="aspect-[2/3] card-bg rounded-lg overflow-hidden mb-3 relative border border-transparent group-hover:border-[#444] transition">
+                        <img src="${item.thumbnail}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-90 group-hover:opacity-100">
+                        
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <div class="bg-brand p-3 rounded-full shadow-lg transform scale-50 group-hover:scale-100 transition">
+                                <i data-lucide="play" class="w-6 h-6 fill-white text-white"></i>
+                            </div>
                         </div>
-                        <span class="absolute top-2 right-2 bg-black/70 backdrop-blur text-white text-[10px] font-bold px-2 py-0.5 rounded">${item.type === 'series' ? 'TV' : 'HD'}</span>
+                        
+                        <span class="absolute top-2 right-2 bg-brand text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                            ${item.type === 'series' ? 'TV' : 'HD'}
+                        </span>
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm section-title line-clamp-1 group-hover:text-brand transition">${item.title}</h3>
-                        <div class="flex justify-between items-center mt-1 text-[11px] opacity-60">
+                        <h3 class="font-bold text-sm text-gray-200 line-clamp-1 group-hover:text-white">${item.title}</h3>
+                        <div class="flex justify-between items-center mt-1 text-[11px] text-gray-500">
                             <span>${item.date || '2025'}</span>
-                            <span class="border border-current px-1 rounded">${item.category || 'Movie'}</span>
+                            <span class="border border-[#333] px-1 rounded text-gray-400">${item.category || 'Mov'}</span>
                         </div>
                     </div>
                 </a>`;
         });
+
         html += `</div></div>`;
         document.getElementById('app').innerHTML = html;
         lucide.createIcons();
     }
 
-    // --- WATCH VIEW ---
+    // --- RENDER WATCH (WITH HTML DESCRIPTION SUPPORT) ---
     function renderWatch(item) {
-        // Auto SEO
-        const finalDesc = (item.description && item.description.trim() !== "") ? item.description : `Watch ${item.title} full HD online on Ranginx.`;
-        updateSEO(`Watch ${item.title} - Ranginx`, finalDesc);
+        // Auto SEO (Strip tags for meta)
+        const stripDesc = item.description ? item.description.replace(/<[^>]*>?/gm, '') : `Watch ${item.title}`;
+        updateSEO(`Watch ${item.title}`, stripDesc);
 
         const isSeries = item.episodes && item.episodes.length > 0;
         const src = isSeries ? item.episodes[0].url : item.video;
-        const title = isSeries ? `${item.title} - Ep 1` : item.title;
+        const title = isSeries ? `${item.title} - Episode 1` : item.title;
 
         let html = `
-        <div class="max-w-[1600px] mx-auto px-4 lg:px-8 py-4 animate-fade">
-            <div class="text-sm opacity-60 mb-4 flex items-center gap-2">
-                <a href="/" class="spa-link hover:text-brand">Home</a> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>${item.title}</span>
+        <div class="pt-24 px-4 lg:px-12 max-w-[1800px] mx-auto animate-fade">
+            <div class="text-sm text-gray-500 mb-6 flex items-center gap-2">
+                <a href="/" class="spa-link hover:text-white">Home</a> 
+                <i data-lucide="chevron-right" class="w-4 h-4"></i> 
+                <span class="text-white font-medium">${item.title}</span>
             </div>
 
-            <div class="flex flex-col lg:flex-row gap-8">
-                <div class="w-full lg:w-[75%] player-container">
-                    
-                    <div class="player-wrapper mb-4">
-                        <video id="plyr-video" controls crossorigin playsinline poster="${item.thumbnail}"></video>
+            <div class="flex flex-col lg:flex-row gap-10">
+                <div class="w-full lg:w-[75%]">
+                    <div class="relative bg-black rounded-xl overflow-hidden shadow-2xl border border-[#222]">
+                        <div class="aspect-video w-full">
+                            <video id="plyr-video" controls crossorigin playsinline poster="${item.thumbnail}"></video>
+                        </div>
                     </div>
 
-                    <div class="details-section">
-                        <div class="flex flex-wrap justify-between items-start gap-4 mb-4">
-                            <div>
-                                <h1 id="player-title" class="text-2xl md:text-3xl font-bold section-title mb-2">${title}</h1>
-                                <div class="flex gap-3 text-xs opacity-70">
-                                    <span class="bg-brand text-white px-2 py-0.5 rounded">HD</span>
-                                    <span>${item.date || '2025'}</span>
-                                    <span>${item.category || 'General'}</span>
-                                </div>
-                            </div>
-                            <button onclick="toggleCinemaMode()" class="flex items-center gap-2 text-xs card-bg border dark:border-[#27272a] border-gray-300 px-4 py-2 rounded-lg hover:bg-brand hover:text-white transition shadow-sm">
-                                <i data-lucide="monitor" class="w-4 h-4"></i> Cinema Mode
-                            </button>
+                    <div class="mt-6">
+                        <h1 id="player-title" class="text-3xl md:text-4xl font-bold text-white mb-3">${title}</h1>
+                        <div class="flex gap-3 text-xs text-gray-400 mb-6">
+                            <span class="border border-[#333] px-2 py-1 rounded bg-[#111] text-white">HD</span>
+                            <span>${item.date || '2025'}</span>
+                            <span>${item.category || 'General'}</span>
                         </div>
 
-                        <div class="card-bg p-6 rounded-xl border dark:border-[#27272a] border-gray-200 mb-8 shadow-sm">
-                            <h3 class="font-bold mb-2 flex items-center gap-2 section-title"><i data-lucide="info" class="text-brand w-4 h-4"></i> Storyline</h3>
-                            <p class="text-sm opacity-80 leading-relaxed">${finalDesc}</p>
+                        <div class="bg-[#111] p-6 rounded-xl border border-[#222]">
+                            <h3 class="text-white font-bold mb-4 flex items-center gap-2 border-b border-[#333] pb-2">
+                                <i data-lucide="info" class="text-brand w-4 h-4"></i> Overview
+                            </h3>
+                            <div class="html-desc text-gray-400 text-sm leading-relaxed">
+                                ${item.description || 'No description available.'}
+                            </div>
                         </div>
 
                         ${isSeries ? `
-                        <div class="mb-10">
-                            <h3 class="font-bold mb-4 flex items-center gap-2 section-title"><i data-lucide="layers" class="text-brand w-4 h-4"></i> Episodes</h3>
+                        <div class="mt-8">
+                            <h3 class="text-white font-bold mb-4 text-xl">Episodes</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                                 ${item.episodes.map((ep, idx) => `
                                     <button onclick="changeSource('${ep.url}', '${item.title} - Ep ${ep.ep}', this)" 
-                                        class="ep-btn ${idx===0 ? 'bg-brand text-white border-brand' : 'card-bg dark:border-[#27272a] border-gray-200 opacity-80 hover:opacity-100'} 
-                                        border p-3 rounded-lg text-sm font-medium transition truncate text-center shadow-sm">
-                                        Ep ${ep.ep}: ${ep.title}
+                                        class="ep-btn ${idx===0?'bg-brand text-white border-brand':'bg-[#141414] text-gray-400 border-[#333] hover:bg-[#222]'} 
+                                        border p-3 rounded font-medium text-sm transition text-center truncate">
+                                        Episode ${ep.ep}
                                     </button>
                                 `).join('')}
                             </div>
@@ -317,20 +335,34 @@
                     </div>
                 </div>
 
-                <div class="w-full lg:w-[25%] sidebar-recs">
-                    <h3 class="font-bold mb-4 border-l-4 border-brand pl-3 section-title">Recommended</h3>
-                    <div class="flex flex-col gap-3">
-                         <p class="text-sm opacity-50 italic">More suggestions coming...</p>
+                <div class="w-full lg:w-[25%]">
+                    <h3 class="text-white font-bold mb-4 text-lg border-l-4 border-brand pl-3">You May Also Like</h3>
+                    <div class="flex flex-col gap-4">
+                        ${STATE.data.filter(i => i.slug !== item.slug).slice(0, 6).map(s => `
+                        <a href="/${s.slug}" class="spa-link flex gap-3 group hover:bg-[#111] p-2 rounded transition">
+                            <div class="w-24 aspect-[2/3] bg-[#222] rounded overflow-hidden flex-shrink-0">
+                                <img src="${s.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition">
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <h4 class="text-gray-200 font-bold text-sm line-clamp-2 group-hover:text-brand">${s.title}</h4>
+                                <span class="text-xs text-gray-500 mt-1">${s.category || 'Movie'}</span>
+                            </div>
+                        </a>`).join('')}
                     </div>
                 </div>
             </div>
         </div>`;
+
         document.getElementById('app').innerHTML = html;
         initPlayer(src);
         lucide.createIcons();
     }
 
-    // --- PLAYER ENGINE ---
+    function render404() {
+        document.getElementById('app').innerHTML = `<div class="h-screen flex flex-col justify-center items-center"><h1 class="text-6xl font-bold text-brand">404</h1><p class="text-gray-400 mt-2">Page not found</p><a href="/" class="spa-link mt-4 text-white underline">Go Home</a></div>`;
+    }
+
+    // --- PLAYER ---
     function destroyPlayer() {
         if(STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
         if(STATE.playerInstance) { STATE.playerInstance.destroy(); STATE.playerInstance = null; }
@@ -341,56 +373,53 @@
         const video = document.getElementById('plyr-video');
         if(!video) return;
 
-        // Default Config
-        const defaultOptions = {
-            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
-            settings: ['quality', 'speed', 'loop']
-        };
+        // Iframe Support
+        if (!sourceUrl.includes('.mp4') && !sourceUrl.includes('.m3u8')) {
+            const container = video.parentElement;
+            container.innerHTML = `<iframe src="${sourceUrl}" class="w-full h-full border-0" allowfullscreen></iframe>`;
+            return;
+        }
 
+        // HLS or MP4
         if (Hls.isSupported() && sourceUrl.includes('.m3u8')) {
             const hls = new Hls();
             hls.loadSource(sourceUrl);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                STATE.playerInstance = new Plyr(video, {
-                    ...defaultOptions,
-                    quality: { default: 720, options: [1080, 720, 480, 360], forced: true, onChange: (e) => hls.levels.forEach((l, i) => { if(l.height === e) hls.currentLevel = i }) }
+                STATE.playerInstance = new Plyr(video, { 
+                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
+                    quality: { default: 720, options: [1080, 720, 480], forced: true, onChange: (q) => hls.levels.forEach((l, i) => { if(l.height === q) hls.currentLevel = i }) }
                 });
             });
             STATE.hls = hls;
         } else {
             video.src = sourceUrl;
-            STATE.playerInstance = new Plyr(video, defaultOptions);
+            STATE.playerInstance = new Plyr(video);
         }
     }
 
     window.changeSource = (url, title, btn) => {
         document.getElementById('player-title').innerText = title;
         document.querySelectorAll('.ep-btn').forEach(b => {
-             b.classList.remove('bg-brand','text-white','border-brand'); 
-             b.classList.add('card-bg','opacity-80');
+             b.classList.remove('bg-brand','text-white','border-brand');
+             b.classList.add('bg-[#141414]','text-gray-400','border-[#333]');
         });
-        btn.classList.remove('card-bg','opacity-80');
+        btn.classList.remove('bg-[#141414]','text-gray-400','border-[#333]');
         btn.classList.add('bg-brand','text-white','border-brand');
         initPlayer(url);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    window.toggleCinemaMode = () => {
-        document.body.classList.toggle('cinema-mode');
-    };
-
-    // --- MODAL & FILTER UTILS ---
     window.openModal = (t) => {
         document.getElementById('modal-title').innerText = t.toUpperCase();
         document.getElementById('modal-body').innerHTML = LEGAL_TEXT[t];
         document.getElementById('legal-modal').classList.remove('hidden');
         document.getElementById('legal-modal').classList.add('flex');
-    };
+    }
     window.closeModal = () => {
         document.getElementById('legal-modal').classList.add('hidden');
         document.getElementById('legal-modal').classList.remove('flex');
-    };
+    }
     window.filterType = (t) => renderHome(STATE.data.filter(i => i.type && i.type.includes(t)));
     window.filterContent = (v) => renderHome(STATE.data.filter(i => i.title.toLowerCase().includes(v.toLowerCase())));
 </script>
