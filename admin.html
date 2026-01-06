@@ -3,346 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranginx Admin - Upload Panel</title>
-    
+    <title>Ranginx Admin Panel (JSON Manager)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <script>
-        // Force Dark Mode Configuration
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { 
-                        brand: '#e50914', 
-                        // Pure Black Palette
-                        dark: { bg: '#000000', card: '#141414', border: '#333333', text: '#ffffff' }
-                    }
+                    colors: { brand: '#e50914', dark: { bg: '#0f0f0f', card: '#18181b', border: '#27272a' } }
                 }
             }
         }
     </script>
-
     <style>
-        /* Force Black Theme Defaults */
-        body { background-color: #000000; color: #ffffff; font-family: sans-serif; }
-        
-        /* Inputs & Cards */
-        input, select, textarea { 
-            background-color: #141414 !important; 
-            border: 1px solid #333 !important; 
-            color: white !important; 
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            width: 100%;
-            outline: none;
-        }
-        
-        /* Focus State */
-        input:focus, select:focus, textarea:focus { 
-            border-color: #e50914 !important; 
-            box-shadow: 0 0 0 1px #e50914;
-        }
-
-        .card-bg { 
-            background-color: #141414; 
-            border: 1px solid #333; 
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        
-        .fade-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body { background-color: #0f0f0f; color: #fff; font-family: sans-serif; }
+        .glass { background: rgba(24, 24, 27, 0.95); border: 1px solid #27272a; }
+        input, textarea, select { background: #0a0a0a !important; border: 1px solid #333 !important; color: white !important; outline: none; }
+        input:focus, textarea:focus, select:focus { border-color: #e50914 !important; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="p-6 max-w-[1400px] mx-auto">
 
-    <nav class="border-b border-[#333] bg-black/90 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl font-bold tracking-tight text-brand">Ranginx</span>
-                <span class="text-[10px] font-bold uppercase bg-[#222] text-gray-400 px-2 py-0.5 rounded border border-[#333]">Admin</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-500">
-                <div class="w-2 h-2 rounded-full bg-green-500"></div> System Ready
-            </div>
+    <header class="flex justify-between items-center mb-8 bg-[#18181b] p-4 rounded-xl border border-[#27272a]">
+        <h1 class="text-2xl font-bold text-brand flex items-center gap-2">
+            <i data-lucide="shield"></i> Ranginx Admin
+        </h1>
+        <div class="flex gap-3">
+            <label class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2">
+                <i data-lucide="upload"></i> Load JSON
+                <input type="file" id="fileInput" accept=".json" class="hidden" onchange="loadJSON(this)">
+            </label>
+            <button onclick="downloadJSON()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                <i data-lucide="download"></i> Download JSON
+            </button>
         </div>
-    </nav>
+    </header>
 
-    <main class="flex-grow p-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <div class="lg:col-span-8">
-            <div class="card-bg rounded-xl p-6 lg:p-8 shadow-2xl">
-                <div class="flex justify-between items-center mb-6 border-b border-[#333] pb-4">
-                    <h1 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="file-plus" class="text-brand"></i> Add Content
-                    </h1>
-                    <button onclick="resetForm()" class="text-xs text-gray-500 hover:text-white underline">Reset Form</button>
-                </div>
-
-                <form id="upload-form" class="space-y-5">
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Title <span class="text-brand">*</span></label>
-                            <input type="text" id="title" placeholder="e.g. Mirzapur S3" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Slug (Auto)</label>
-                            <input type="text" id="slug" placeholder="mirzapur-s3">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Target File</label>
-                            <select id="targetFile">
-                                <option value="normal">Normal.json (Movies/Series)</option>
-                                <option value="adult">Adult.json (18+)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Category</label>
-                            <input type="text" id="category" placeholder="e.g. Action, Drama">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Poster URL <span class="text-brand">*</span></label>
-                        <input type="url" id="thumbnail" placeholder="https://image..." required>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Description (HTML Supported)</label>
-                        <textarea id="description" rows="3" placeholder="Enter description (HTML tags allowed)..."></textarea>
-                    </div>
-
-                    <hr class="border-[#333]">
-
-                    <div class="bg-black border border-[#333] rounded-lg p-5">
-                        <div class="mb-4">
-                            <label class="block text-sm font-bold text-white mb-1">Option A: Single Video</label>
-                            <input type="url" id="video" placeholder="https://video.mp4 or .m3u8">
-                        </div>
-
-                        <div class="relative flex py-2 items-center">
-                            <div class="flex-grow border-t border-[#333]"></div>
-                            <span class="flex-shrink-0 mx-4 text-gray-500 text-xs uppercase font-bold">OR</span>
-                            <div class="flex-grow border-t border-[#333]"></div>
-                        </div>
-
-                        <div class="mt-2">
-                            <div class="flex justify-between items-center mb-3">
-                                <label class="block text-sm font-bold text-white">Option B: Episodes</label>
-                                <button type="button" onclick="addEpisodeRow()" class="text-xs bg-brand hover:bg-red-700 text-white px-3 py-1.5 rounded flex items-center gap-1 transition">
-                                    <i data-lucide="plus" class="w-3 h-3"></i> Add Row
-                                </button>
-                            </div>
-                            <div id="episode-list" class="space-y-2"></div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full bg-white hover:bg-gray-200 text-black font-bold py-4 rounded-lg shadow-lg transition transform active:scale-[0.99] flex items-center justify-center gap-2">
-                        <i data-lucide="plus-circle" class="w-5 h-5"></i> Add to Queue
-                    </button>
-                </form>
+        <div class="lg:col-span-1 h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Content List</h2>
+                <button onclick="newItem()" class="bg-brand hover:bg-red-700 px-3 py-1 rounded text-sm font-bold">+ New</button>
+            </div>
+            <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" class="w-full p-2 rounded mb-4">
+            
+            <div id="contentList" class="flex-1 overflow-y-auto space-y-2 pr-2">
+                <p class="text-gray-500 text-center mt-10">Load normal.json file first.</p>
             </div>
         </div>
 
-        <div class="lg:col-span-4">
-            <div class="card-bg rounded-xl shadow-xl sticky top-24 h-[85vh] flex flex-col">
-                
-                <div class="p-5 border-b border-[#333] flex justify-between items-center bg-[#111] rounded-t-xl">
-                    <h2 class="font-bold text-white flex items-center gap-2">
-                        <i data-lucide="list-video" class="w-5 h-5 text-brand"></i> Queue
-                        <span id="queue-count" class="bg-brand text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
-                    </h2>
-                    <button onclick="clearQueue()" class="text-xs text-red-500 hover:text-white transition">Clear All</button>
-                </div>
-
-                <div id="queue-container" class="flex-grow overflow-y-auto p-4 space-y-3">
-                    <div class="h-full flex flex-col items-center justify-center text-gray-600 space-y-2 opacity-50">
-                        <i data-lucide="box" class="w-10 h-10"></i>
-                        <p class="text-sm">Queue is empty</p>
+        <div class="lg:col-span-2 bg-[#18181b] p-6 rounded-xl border border-[#27272a] h-fit hidden" id="editorPanel">
+            <h2 class="text-xl font-bold mb-6 border-b border-[#333] pb-2 text-brand">Edit Details</h2>
+            
+            <form id="editForm" onsubmit="event.preventDefault(); saveCurrentItem();">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Title</label>
+                        <input type="text" id="inp_title" class="w-full p-2 rounded" required onkeyup="generateSlug(this.value)">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Slug (Auto)</label>
+                        <input type="text" id="inp_slug" class="w-full p-2 rounded text-gray-500" readonly>
                     </div>
                 </div>
 
-                <div class="p-5 border-t border-[#333] bg-[#111] rounded-b-xl space-y-3">
-                    <p class="text-[10px] text-gray-500 text-center uppercase tracking-widest mb-1">Download Files</p>
-                    <button onclick="downloadJSON('normal')" id="btn-dl-normal" class="w-full py-3 bg-black border border-[#333] text-gray-300 hover:border-brand hover:text-white rounded-lg transition text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                        <i data-lucide="download" class="w-4 h-4"></i> Download Normal.json
-                    </button>
-                    <button onclick="downloadJSON('adult')" id="btn-dl-adult" class="w-full py-3 bg-black border border-[#333] text-gray-300 hover:border-purple-500 hover:text-purple-400 rounded-lg transition text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                        <i data-lucide="download" class="w-4 h-4"></i> Download Adult.json
-                    </button>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Type</label>
+                        <select id="inp_type" class="w-full p-2 rounded" onchange="toggleTypeUI()">
+                            <option value="movie">Movie</option>
+                            <option value="series">Web Series</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Category</label>
+                        <input type="text" id="inp_category" class="w-full p-2 rounded" placeholder="e.g. Drama, Action">
+                    </div>
                 </div>
-            </div>
-        </div>
 
-    </main>
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">Thumbnail URL</label>
+                    <input type="text" id="inp_thumb" class="w-full p-2 rounded">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">Description</label>
+                    <textarea id="inp_desc" rows="3" class="w-full p-2 rounded"></textarea>
+                </div>
+
+                <div id="movieSection" class="hidden mb-4 p-4 border border-[#333] rounded bg-black/20">
+                    <label class="block text-xs text-brand mb-1 font-bold">Movie Video URL</label>
+                    <input type="text" id="inp_movie_url" class="w-full p-2 rounded" placeholder="https://...">
+                </div>
+
+                <div id="seriesSection" class="hidden mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs text-brand font-bold">Episodes</label>
+                        <button type="button" onclick="addEpisodeInput()" class="text-xs bg-gray-700 px-2 py-1 rounded hover:bg-gray-600">+ Add Ep</button>
+                    </div>
+                    <div id="episodesContainer" class="space-y-2 max-h-60 overflow-y-auto pr-2">
+                        </div>
+                </div>
+
+                <div class="flex gap-4 mt-6 pt-4 border-t border-[#333]">
+                    <button type="submit" class="bg-brand hover:bg-red-700 text-white px-6 py-2 rounded font-bold flex-1">Save Changes</button>
+                    <button type="button" onclick="deleteCurrentItem()" class="bg-red-900/50 hover:bg-red-900 text-red-200 px-4 py-2 rounded border border-red-800">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
-        // --- STATE ---
-        let QUEUE = [];
-        const DOM = {
-            form: document.getElementById('upload-form'),
-            queueList: document.getElementById('queue-container'),
-            queueCount: document.getElementById('queue-count'),
-            epContainer: document.getElementById('episode-list'),
-            btnNormal: document.getElementById('btn-dl-normal'),
-            btnAdult: document.getElementById('btn-dl-adult')
-        };
-
-        // --- 1. EPISODE LOGIC ---
-        function addEpisodeRow() {
-            const count = DOM.epContainer.children.length + 1;
-            const div = document.createElement('div');
-            div.className = 'grid grid-cols-12 gap-2 fade-in items-center bg-[#111] p-2 rounded border border-[#333] mb-2';
-            div.innerHTML = `
-                <div class="col-span-1 text-center text-gray-500 text-xs font-mono">#${count}</div>
-                <div class="col-span-4">
-                    <input type="text" class="ep-title w-full !bg-transparent !border-0 !p-1 text-xs" placeholder="Title (Opt)">
-                </div>
-                <div class="col-span-6">
-                    <input type="url" class="ep-url w-full !p-1.5 text-xs rounded !bg-black" placeholder="https://..." required>
-                </div>
-                <div class="col-span-1 flex justify-end">
-                    <button type="button" onclick="this.closest('div.grid').remove()" class="text-gray-500 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>
-                </div>
-            `;
-            DOM.epContainer.appendChild(div);
-            lucide.createIcons();
-        }
-
-        // --- 2. ADD TO QUEUE ---
-        DOM.form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const title = document.getElementById('title').value.trim();
-            const thumbnail = document.getElementById('thumbnail').value.trim();
-            let slug = document.getElementById('slug').value.trim();
-            const category = document.getElementById('category').value.trim();
-            const description = document.getElementById('description').value.trim();
-            const targetFile = document.getElementById('targetFile').value;
-
-            if (!slug) {
-                slug = title.toLowerCase().trim()
-                    .replace(/[^\w\s-]/g, '')
-                    .replace(/[\s_-]+/g, '-')
-                    .replace(/^-+|-+$/g, '');
-            }
-
-            const video = document.getElementById('video').value.trim();
-            const episodes = [];
-            document.querySelectorAll('#episode-list .grid').forEach((row, idx) => {
-                const u = row.querySelector('.ep-url').value.trim();
-                const t = row.querySelector('.ep-title').value.trim();
-                if(u) episodes.push({ ep: idx+1, title: t || `Episode ${idx+1}`, url: u });
-            });
-
-            if (!video && episodes.length === 0) {
-                alert("Please add a Video URL or Episodes.");
-                return;
-            }
-
-            // Create Object Matching Frontend Logic
-            const newItem = {
-                slug: slug,
-                title: title,
-                // Frontend logic: normal = series/movie based on eps. adult = adult.
-                type: targetFile === 'normal' ? (episodes.length > 0 ? 'series' : 'movie') : 'adult',
-                category: category || "General",
-                thumbnail: thumbnail,
-                description: description,
-                date: new Date().toISOString().split('T')[0],
-                _target: targetFile
-            };
-
-            if (episodes.length > 0) newItem.episodes = episodes;
-            else newItem.video = video;
-
-            QUEUE.push(newItem);
-            renderQueue();
-            
-            // Soft Reset
-            const savedTarget = document.getElementById('targetFile').value;
-            const savedCat = document.getElementById('category').value;
-            DOM.form.reset();
-            DOM.epContainer.innerHTML = '';
-            document.getElementById('targetFile').value = savedTarget;
-            document.getElementById('category').value = savedCat;
-        });
-
-        // --- 3. RENDER QUEUE ---
-        function renderQueue() {
-            DOM.queueCount.innerText = QUEUE.length;
-            const hasItems = QUEUE.length > 0;
-            DOM.btnNormal.disabled = !hasItems;
-            DOM.btnAdult.disabled = !hasItems;
-
-            if (!hasItems) {
-                DOM.queueList.innerHTML = `
-                    <div class="h-full flex flex-col items-center justify-center text-gray-600 space-y-2 opacity-50">
-                        <i data-lucide="box" class="w-10 h-10"></i>
-                        <p class="text-sm">Queue is empty</p>
-                    </div>`;
-                lucide.createIcons();
-                return;
-            }
-
-            DOM.queueList.innerHTML = QUEUE.map((item, idx) => `
-                <div class="bg-[#111] p-3 rounded border border-[#333] flex gap-3 group relative fade-in hover:border-brand transition">
-                    <div class="w-12 h-16 bg-black rounded overflow-hidden flex-shrink-0">
-                        <img src="${item.thumbnail}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex-grow min-w-0 flex flex-col justify-center">
-                        <h4 class="text-white text-sm font-bold truncate">${item.title}</h4>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span class="text-[10px] uppercase bg-[#222] text-gray-400 px-1.5 py-0.5 rounded border border-[#333]">${item.type}</span>
-                            <span class="text-[10px] text-gray-500">${item._target}</span>
-                        </div>
-                    </div>
-                    <button onclick="removeItem(${idx})" class="absolute top-2 right-2 text-gray-600 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        window.removeItem = (idx) => { QUEUE.splice(idx, 1); renderQueue(); };
-        window.clearQueue = () => { if(confirm("Clear All?")) { QUEUE = []; renderQueue(); } };
-        window.resetForm = () => { DOM.form.reset(); DOM.epContainer.innerHTML = ''; };
-
-        // --- 4. DOWNLOAD ---
-        window.downloadJSON = (target) => {
-            // Filter by _target flag
-            const items = QUEUE.filter(i => i._target === target).map(({_target, ...rest}) => rest);
-            
-            if(items.length === 0) { 
-                alert(`No items in queue specifically for '${target}.json'.\nCheck the "Target File" dropdown setting.`); 
-                return; 
-            }
-            
-            const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `${target}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            if(confirm(`Downloaded ${items.length} items for ${target}.json.\nRemove these items from the queue?`)) {
-                QUEUE = QUEUE.filter(i => i._target !== target);
-                renderQueue();
-            }
-        };
+        let DATA = [];
+        let editingIndex = -1;
 
         lucide.createIcons();
+
+        // 1. LOAD FILE
+        function loadJSON(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    DATA = JSON.parse(e.target.result);
+                    renderList();
+                    alert("Data Loaded! Found " + DATA.length + " items.");
+                } catch(err) {
+                    alert("Invalid JSON File");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 2. RENDER LIST
+        function renderList(filter = "") {
+            const list = document.getElementById('contentList');
+            list.innerHTML = "";
+            
+            const filteredData = DATA.filter(item => item.title.toLowerCase().includes(filter.toLowerCase()));
+
+            filteredData.forEach((item, index) => {
+                const realIndex = DATA.indexOf(item); // Keep track of original index
+                const el = document.createElement('div');
+                el.className = `p-3 rounded border border-[#27272a] bg-[#18181b] flex gap-3 items-center cursor-pointer hover:border-brand transition ${editingIndex === realIndex ? 'border-brand bg-[#222]' : ''}`;
+                el.onclick = () => loadItem(realIndex);
+                
+                el.innerHTML = `
+                    <img src="${item.thumbnail}" class="w-12 h-16 object-cover rounded bg-black">
+                    <div class="overflow-hidden">
+                        <h4 class="font-bold text-sm truncate">${item.title}</h4>
+                        <span class="text-xs text-gray-500 uppercase">${item.type}</span>
+                    </div>
+                `;
+                list.appendChild(el);
+            });
+        }
+
+        // 3. EDITOR LOGIC
+        function newItem() {
+            editingIndex = -1;
+            document.getElementById('editForm').reset();
+            document.getElementById('episodesContainer').innerHTML = "";
+            document.getElementById('editorPanel').classList.remove('hidden');
+            toggleTypeUI();
+        }
+
+        function loadItem(index) {
+            editingIndex = index;
+            const item = DATA[index];
+            document.getElementById('editorPanel').classList.remove('hidden');
+            
+            // Fill Fields
+            document.getElementById('inp_title').value = item.title;
+            document.getElementById('inp_slug').value = item.slug;
+            document.getElementById('inp_type').value = item.type || 'movie';
+            document.getElementById('inp_category').value = item.category || '';
+            document.getElementById('inp_thumb').value = item.thumbnail || '';
+            document.getElementById('inp_desc').value = item.description || '';
+
+            toggleTypeUI();
+
+            if (item.type === 'movie') {
+                document.getElementById('inp_movie_url').value = item.video || item.url || '';
+            } else {
+                const container = document.getElementById('episodesContainer');
+                container.innerHTML = "";
+                if(item.episodes) {
+                    item.episodes.forEach(ep => addEpisodeInput(ep));
+                }
+            }
+            renderList(document.getElementById('searchBox').value); // Refresh active state
+        }
+
+        function toggleTypeUI() {
+            const type = document.getElementById('inp_type').value;
+            if (type === 'movie') {
+                document.getElementById('movieSection').classList.remove('hidden');
+                document.getElementById('seriesSection').classList.add('hidden');
+            } else {
+                document.getElementById('movieSection').classList.add('hidden');
+                document.getElementById('seriesSection').classList.remove('hidden');
+            }
+        }
+
+        function addEpisodeInput(data = null) {
+            const container = document.getElementById('episodesContainer');
+            const idx = container.children.length + 1;
+            
+            const div = document.createElement('div');
+            div.className = "grid grid-cols-12 gap-2 items-center bg-black/20 p-2 rounded";
+            div.innerHTML = `
+                <div class="col-span-1 text-center font-bold text-gray-500">#${data ? data.ep : idx}</div>
+                <input type="text" class="col-span-7 p-1 rounded text-xs bg-[#111] border border-[#333] ep-url" placeholder="Video URL" value="${data ? data.url : ''}">
+                <input type="hidden" class="ep-num" value="${data ? data.ep : idx}">
+                <button type="button" onclick="this.parentElement.remove()" class="col-span-4 text-red-500 text-xs hover:underline text-right">Remove</button>
+            `;
+            container.appendChild(div);
+        }
+
+        // 4. SAVE LOGIC
+        function saveCurrentItem() {
+            const type = document.getElementById('inp_type').value;
+            
+            const newItemData = {
+                title: document.getElementById('inp_title').value,
+                slug: document.getElementById('inp_slug').value || generateSlug(document.getElementById('inp_title').value),
+                type: type,
+                category: document.getElementById('inp_category').value,
+                thumbnail: document.getElementById('inp_thumb').value,
+                description: document.getElementById('inp_desc').value,
+            };
+
+            if (type === 'movie') {
+                newItemData.video = document.getElementById('inp_movie_url').value;
+                newItemData.episodes = [];
+            } else {
+                const eps = [];
+                document.querySelectorAll('#episodesContainer > div').forEach((row, i) => {
+                    const url = row.querySelector('.ep-url').value;
+                    if(url) {
+                        eps.push({
+                            ep: i + 1,
+                            title: `Episode ${i + 1}`,
+                            url: url
+                        });
+                    }
+                });
+                newItemData.episodes = eps;
+                newItemData.video = "";
+            }
+
+            if (editingIndex === -1) {
+                DATA.push(newItemData); // Add new
+                alert("Added successfully!");
+            } else {
+                DATA[editingIndex] = newItemData; // Update
+                alert("Updated successfully!");
+            }
+            
+            renderList();
+            newItem(); // Reset form
+        }
+
+        function deleteCurrentItem() {
+            if(editingIndex === -1) return;
+            if(confirm("Are you sure you want to delete this?")) {
+                DATA.splice(editingIndex, 1);
+                renderList();
+                newItem();
+            }
+        }
+
+        // 5. DOWNLOAD LOGIC
+        function downloadJSON() {
+            const dataStr = JSON.stringify(DATA, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "normal.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Utils
+        function generateSlug(val) {
+            const slug = val.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+            document.getElementById('inp_slug').value = slug;
+            return slug;
+        }
+        
+        function filterList() {
+            renderList(document.getElementById('searchBox').value);
+        }
     </script>
 </body>
 </html>
