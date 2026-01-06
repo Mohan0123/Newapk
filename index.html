@@ -212,7 +212,7 @@
     async function init() {
         document.getElementById('app').innerHTML = getSkeleton();
         try {
-            const res = await fetch('data/normal.json');
+            const res = await fetch('/data/normal.json');
             if(!res.ok) throw new Error("JSON Not Found");
             const json = await res.json();
             
