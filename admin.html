@@ -1,307 +1,522 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranginx Admin Panel (JSON Manager)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { brand: '#e50914', dark: { bg: '#0f0f0f', card: '#18181b', border: '#27272a' } }
-                }
-            }
-        }
-    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ranginx Creator Studio v8.1 (Fixes Applied)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f0f0f; color: #fff; font-family: sans-serif; }
-        .glass { background: rgba(24, 24, 27, 0.95); border: 1px solid #27272a; }
-        input, textarea, select { background: #0a0a0a !important; border: 1px solid #333 !important; color: white !important; outline: none; }
-        input:focus, textarea:focus, select:focus { border-color: #e50914 !important; }
+        /* --- ADMIN PANEL STYLES --- */
+        :root {
+            --bg: #09090b; --surf: #18181b; --border: #27272a;
+            --primary: #e50914; --text: #e4e4e7; --muted: #a1a1aa;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background: #000; border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
+        .brand { color: var(--primary); font-size: 22px; font-weight: 800; margin-bottom: 30px; letter-spacing: 1px; }
+        .menu-btn { padding: 12px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; color: var(--muted); font-weight: 600; font-size: 14px; transition: 0.2s; }
+        .menu-btn:hover, .menu-btn.active { background: var(--surf); color: #fff; }
+        .menu-btn.active { border-left: 3px solid var(--primary); }
+
+        /* Main Content */
+        .main { flex: 1; display: flex; flex-direction: column; }
+        .top-bar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; font-weight: 700; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); justify-content: space-between; }
+        .scroll-view { flex: 1; overflow-y: auto; padding: 30px; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Forms */
+        .card { background: var(--surf); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 25px; }
+        .sec-title { font-size: 12px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full { grid-column: span 2; }
+
+        label { display: block; margin-bottom: 8px; font-size: 13px; color: #ccc; font-weight: 600; }
+        input, textarea { width: 100%; background: #09090b; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 6px; font-family: inherit; transition: 0.3s; font-size: 14px; }
+        input:focus, textarea:focus { border-color: var(--primary); }
+        textarea { height: 100px; resize: vertical; }
+        .helper { font-size: 11px; color: var(--muted); margin-top: 5px; font-style: italic; }
+
+        /* Episode Manager */
+        .ep-box { background: #000; padding: 15px; border-radius: 8px; border: 1px dashed var(--border); }
+        .ep-list { margin-top: 15px; max-height: 200px; overflow-y: auto; }
+        .ep-item { display: flex; justify-content: space-between; background: var(--surf); padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; font-size: 13px; align-items: center; border: 1px solid var(--border); }
+        .del-btn { color: #ef4444; cursor: pointer; font-weight: bold; padding: 5px; }
+
+        /* Buttons */
+        .btn-row { display: flex; gap: 15px; margin-top: 20px; }
+        .btn { flex: 1; padding: 14px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-secondary { background: #333; color: #fff; }
+        .btn-add { background: var(--primary); color: #fff; padding: 0 20px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
+
+        /* Output */
+        .output-area { display: none; margin-top: 40px; border-top: 1px dashed var(--border); padding-top: 30px; }
+        .code-box { background: #000; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+        .box-head { background: #111; padding: 10px 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--muted); }
+        .copy-btn { background: var(--surf); color: #fff; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border); cursor: pointer; font-size: 11px; font-weight: 600; }
+        pre { padding: 15px; color: #4cd137; overflow-x: auto; font-family: monospace; font-size: 12px; max-height: 300px; }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        
+        @media (max-width: 768px) { .sidebar{width:70px;padding:15px 10px} .brand span, .menu-btn span{display:none} .brand{margin-bottom:20px;font-size:18px} .grid{grid-template-columns:1fr} }
     </style>
 </head>
-<body class="p-6 max-w-[1400px] mx-auto">
+<body>
 
-    <header class="flex justify-between items-center mb-8 bg-[#18181b] p-4 rounded-xl border border-[#27272a]">
-        <h1 class="text-2xl font-bold text-brand flex items-center gap-2">
-            <i data-lucide="shield"></i> Ranginx Admin
-        </h1>
-        <div class="flex gap-3">
-            <label class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2">
-                <i data-lucide="upload"></i> Load JSON
-                <input type="file" id="fileInput" accept=".json" class="hidden" onchange="loadJSON(this)">
-            </label>
-            <button onclick="downloadJSON()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
-                <i data-lucide="download"></i> Download JSON
-            </button>
-        </div>
-    </header>
+<div class="sidebar">
+    <div class="brand">RANGINX <span>v8.1</span></div>
+    <div class="menu-btn active" onclick="switchTab('movie')">🎬 <span>Movie</span></div>
+    <div class="menu-btn" onclick="switchTab('series')">📺 <span>Series</span></div>
+</div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <div class="lg:col-span-1 h-[80vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold">Content List</h2>
-                <button onclick="newItem()" class="bg-brand hover:bg-red-700 px-3 py-1 rounded text-sm font-bold">+ New</button>
-            </div>
-            <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" class="w-full p-2 rounded mb-4">
+<div class="main">
+    <div class="top-bar">
+        <span id="pageTitle">Movie Generator</span>
+        <a href="/" class="btn-secondary" style="padding:8px 15px; border-radius:4px; font-size:12px; text-decoration:none; color:white;">🏠 HOME</a>
+    </div>
+    
+    <div class="scroll-view">
+        <div class="container">
             
-            <div id="contentList" class="flex-1 overflow-y-auto space-y-2 pr-2">
-                <p class="text-gray-500 text-center mt-10">Load normal.json file first.</p>
-            </div>
-        </div>
-
-        <div class="lg:col-span-2 bg-[#18181b] p-6 rounded-xl border border-[#27272a] h-fit hidden" id="editorPanel">
-            <h2 class="text-xl font-bold mb-6 border-b border-[#333] pb-2 text-brand">Edit Details</h2>
-            
-            <form id="editForm" onsubmit="event.preventDefault(); saveCurrentItem();">
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Title</label>
-                        <input type="text" id="inp_title" class="w-full p-2 rounded" required onkeyup="generateSlug(this.value)">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Slug (Auto)</label>
-                        <input type="text" id="inp_slug" class="w-full p-2 rounded text-gray-500" readonly>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Type</label>
-                        <select id="inp_type" class="w-full p-2 rounded" onchange="toggleTypeUI()">
-                            <option value="movie">Movie</option>
-                            <option value="series">Web Series</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Category</label>
-                        <input type="text" id="inp_category" class="w-full p-2 rounded" placeholder="e.g. Drama, Action">
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-xs text-gray-400 mb-1">Thumbnail URL</label>
-                    <input type="text" id="inp_thumb" class="w-full p-2 rounded">
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-xs text-gray-400 mb-1">Description</label>
-                    <textarea id="inp_desc" rows="3" class="w-full p-2 rounded"></textarea>
-                </div>
-
-                <div id="movieSection" class="hidden mb-4 p-4 border border-[#333] rounded bg-black/20">
-                    <label class="block text-xs text-brand mb-1 font-bold">Movie Video URL</label>
-                    <input type="text" id="inp_movie_url" class="w-full p-2 rounded" placeholder="https://...">
-                </div>
-
-                <div id="seriesSection" class="hidden mb-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="text-xs text-brand font-bold">Episodes</label>
-                        <button type="button" onclick="addEpisodeInput()" class="text-xs bg-gray-700 px-2 py-1 rounded hover:bg-gray-600">+ Add Ep</button>
-                    </div>
-                    <div id="episodesContainer" class="space-y-2 max-h-60 overflow-y-auto pr-2">
+            <div id="tab-movie" class="tab-panel active">
+                <div class="card">
+                    <div class="sec-title">Movie Details</div>
+                    <div class="grid">
+                        <div class="full">
+                            <label>Slug (File Name) - *Required*</label>
+                            <input type="text" id="mSlug" placeholder="e.g. pathaan-full-movie" oninput="autoTitle('m')" style="color:var(--primary); font-weight:bold;">
                         </div>
+                        <div class="full">
+                            <label>Movie Title (Auto-fill)</label>
+                            <input type="text" id="mTitle" placeholder="Auto-filled from slug">
+                        </div>
+                        <div class="full">
+                            <label>Video URL (MP4 / Embed)</label>
+                            <input type="text" id="mVideo" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label>Thumbnail (16:9 Landscape)</label>
+                            <input type="text" id="mPoster" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label>Tags (Comma separated)</label>
+                            <input type="text" id="mTags" placeholder="Action, Drama, HD">
+                        </div>
+                        <div class="full">
+                            <label>Storyline / Description (Auto-fill)</label>
+                            <textarea id="mDesc" placeholder="Auto-filled if empty"></textarea>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="generate('movie')">Generate Code</button>
+                        <button class="btn btn-secondary" onclick="resetForm('m')">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-series" class="tab-panel">
+                <div class="card">
+                    <div class="sec-title">Series Details</div>
+                    <div class="grid">
+                         <div class="full">
+                            <label>Slug (File Name) - *Required*</label>
+                            <input type="text" id="sSlug" placeholder="e.g. farzi-season-1" oninput="autoTitle('s')" style="color:var(--primary); font-weight:bold;">
+                        </div>
+                        <div class="full">
+                            <label>Series Title (Auto-fill)</label>
+                            <input type="text" id="sTitle" placeholder="Auto-filled from slug">
+                        </div>
+                        <div>
+                            <label>Thumbnail (16:9 Landscape)</label>
+                            <input type="text" id="sPoster" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label>Tags</label>
+                            <input type="text" id="sTags" placeholder="Web Series, Thriller">
+                        </div>
+                        
+                        <div class="full ep-box">
+                            <label style="margin-bottom:10px">Episode Manager</label>
+                            <div style="display:flex; gap:10px;">
+                                <input type="text" id="epName" placeholder="Ep 1" style="width:30%">
+                                <input type="text" id="epUrl" placeholder="Video URL">
+                                <button class="btn-add" onclick="addEpisode()">ADD</button>
+                            </div>
+                            <div id="epList" class="ep-list"></div>
+                        </div>
+
+                        <div class="full">
+                            <label>Storyline (Auto-fill)</label>
+                            <textarea id="sDesc" placeholder="Auto-filled if empty"></textarea>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="generate('series')">Generate Code</button>
+                        <button class="btn btn-secondary" onclick="resetForm('s')">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="outputArea" class="output-area">
+                <div class="code-box">
+                    <div class="box-head">
+                        <span>JSON Data (Append to list)</span>
+                        <button class="copy-btn" onclick="copyText('jsonOut')">COPY JSON</button>
+                    </div>
+                    <pre id="jsonOut"></pre>
                 </div>
 
-                <div class="flex gap-4 mt-6 pt-4 border-t border-[#333]">
-                    <button type="submit" class="bg-brand hover:bg-red-700 text-white px-6 py-2 rounded font-bold flex-1">Save Changes</button>
-                    <button type="button" onclick="deleteCurrentItem()" class="bg-red-900/50 hover:bg-red-900 text-red-200 px-4 py-2 rounded border border-red-800">Delete</button>
+                <div class="code-box">
+                    <div class="box-head">
+                        <span>HTML Code</span>
+                        <div style="display:flex; gap:10px">
+                            <button class="copy-btn" onclick="copyText('htmlOut')">COPY HTML</button>
+                            <button class="copy-btn" style="background:var(--primary);border:none" onclick="downloadHtml()">DOWNLOAD</button>
+                        </div>
+                    </div>
+                    <pre id="htmlOut"></pre>
                 </div>
-            </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let episodes = [];
+    let currentSlug = "";
+
+    function switchTab(t) {
+        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-'+t).classList.add('active');
+        document.getElementById('pageTitle').innerText = t === 'movie' ? 'Movie Generator' : 'Web Series Generator';
+        document.getElementById('outputArea').style.display = 'none';
+    }
+
+    function autoTitle(p) {
+        // Optional: Auto-fill logic can go here
+    }
+
+    function performAutoFill(prefix, type) {
+        let slugField = document.getElementById(prefix + 'Slug');
+        let titleField = document.getElementById(prefix + 'Title');
+        let descField = document.getElementById(prefix + 'Desc');
+
+        let slug = slugField.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+        slugField.value = slug; // Normalize Slug in Input
+
+        if (!slug) return alert("Slug is required for auto-generation!");
+
+        if (!titleField.value.trim()) {
+            let autoTitle = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            titleField.value = autoTitle;
+        }
+
+        if (!descField.value.trim()) {
+            let title = titleField.value;
+            let autoDesc = "";
+            if (type === 'movie') {
+                autoDesc = `Watch ${title} in full HD quality exclusively on Ranginx. Stream this movie online for free. Discover the best of bollywood and hollywood movies.`;
+            } else {
+                autoDesc = `Stream all episodes of ${title} web series in HD on Ranginx. Binge-watch the complete season online for free.`;
+            }
+            descField.value = autoDesc;
+        }
+    }
+
+    function addEpisode() {
+        let n = document.getElementById('epName').value;
+        let u = document.getElementById('epUrl').value;
+        if(!n || !u) return alert("Enter Ep Name & URL");
+        episodes.push({name:n, url:u});
+        renderEp();
+        document.getElementById('epName').value = ""; document.getElementById('epUrl').value = "";
+    }
+
+    function renderEp() {
+        let h = "";
+        episodes.forEach((e,i) => {
+            h += `<div class="ep-item"><span>${e.name}</span> <span class="del-btn" onclick="delEp(${i})">×</span></div>`;
+        });
+        document.getElementById('epList').innerHTML = h || '<div style="text-align:center;color:#555;font-size:12px;padding:10px">No episodes</div>';
+    }
+    function delEp(i) { episodes.splice(i,1); renderEp(); }
+    function resetForm(p) {
+        document.querySelectorAll(`#tab-${p==='m'?'movie':'series'} input, textarea`).forEach(e=>e.value='');
+        if(p==='s') { episodes=[]; renderEp(); }
+    }
+
+    function generate(type) {
+        let p = type === 'movie' ? 'm' : 's';
+        performAutoFill(p, type);
+
+        let d = getData(p);
+        if(!d.title || !d.slug) return alert("Title and Slug are required!");
+
+        let playerHtml = "", extrasHtml = "";
+
+        if (type === 'movie') {
+            if(!d.video) return alert("Video URL required!");
+            playerHtml = getPlayer(d.video, d.poster);
+        } else {
+             if(episodes.length===0) return alert("Add Episodes!");
+             extrasHtml = buildSeriesExtras(d.poster);
+             playerHtml = getPlayer(episodes[0].url, d.poster, true);
+        }
+        
+        let html = buildTemplate(d, playerHtml, extrasHtml, d.poster);
+        let json = JSON.stringify({ title: d.title, slug: d.slug, thumbnail: d.poster, type: type }, null, 2) + ",";
+        
+        showOutput(html, json, d.slug);
+    }
+
+    function getData(p) {
+        return {
+            title: document.getElementById(p+'Title').value,
+            slug: document.getElementById(p+'Slug').value,
+            video: document.getElementById(p==='m'?'mVideo':'epUrl').value, 
+            poster: document.getElementById(p+'Poster').value,
+            tags: document.getElementById(p+'Tags').value,
+            desc: document.getElementById(p+'Desc').value.replace(/"/g, '&quot;')
+        };
+    }
+
+    function getPlayer(url, poster, id=false) {
+        let isMp4 = url.trim().includes('.mp4') || url.trim().includes('.mkv');
+        let style = `width:100%;height:100%;object-fit:contain;background:#000;`;
+        let vidId = id ? 'id="main-player"' : '';
+        
+        // Fix: Removed autoplay to prevent layout shift issues, user must tap to play
+        if(isMp4) return `<video ${vidId} controls playsinline preload="metadata" poster="${poster}" referrerpolicy="no-referrer" style="${style}"><source src="${url}"></video>`;
+        return `<iframe ${vidId} src="${url}" allowfullscreen style="${style};border:none"></iframe>`;
+    }
+
+    function buildSeriesExtras(poster) {
+        let btns = `<div class="ep-box-out"><div class="ep-head">Episodes</div><div class="ep-grid">`;
+        episodes.forEach((e,i) => {
+            let mp4 = e.url.includes('.mp4');
+            btns += `<button class="ep-btn ${i===0?'active':''}" onclick="playEp('${e.url}', ${mp4}, this)">${i+1}</button>`;
+        });
+        btns += `</div></div>`;
+
+        let sc = `
+        <script>
+        function playEp(u,m,b){
+            document.querySelectorAll('.ep-btn').forEach(x=>x.classList.remove('active'));
+            b.classList.add('active');
+            let c=document.getElementById('video-box');
+            if(m) c.innerHTML=\`<video controls autoplay playsinline style="width:100%;height:100%;object-fit:contain;background:#000;"><source src="\${u}"></video>\`;
+            else c.innerHTML=\`<iframe src="\${u}" allowfullscreen style="width:100%;height:100%;border:none;background:#000;"></iframe>\`;
+        }
+        <\/script>
+        <style>.ep-box-out{background:#18181b;padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #27272a}.ep-head{font-weight:700;margin-bottom:15px}.ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:10px}.ep-btn{background:#27272a;border:1px solid #333;color:#fff;padding:12px 0;border-radius:8px;cursor:pointer;font-weight:700}.ep-btn.active{background:#e50914;border-color:#e50914}</style>`;
+        return btns + sc;
+    }
+
+    function buildTemplate(d, player, extras, poster) {
+        let tagsHtml = d.tags ? d.tags.split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('') : '';
+
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch ${d.title} Full HD - Ranginx</title>
+<meta name="description" content="${d.desc.substring(0,150)}...">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ranginx.fun/movies/${d.slug}.html">
+<meta property="og:image" content="${poster}">
+<meta property="og:title" content="${d.title}">
+<meta property="og:type" content="video.movie">
+<meta property="og:url" content="https://ranginx.fun/movies/${d.slug}.html">
+<meta property="og:site_name" content="Ranginx">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="rating" content="RTA-5042-1996-1400-1577-RTA">
+<meta name="audience" content="adult">
+<meta name="adult" content="true">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="/ads/movie-ads.js" defer><\/script>
+<script src="/ads/popunder.js" defer><\/script>
+<style>
+:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
+a{text-decoration:none;color:inherit}
+header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#000;position:sticky;top:0;z-index:99;border-bottom:1px solid #222}
+.logo{color:var(--p);font-weight:800;font-size:24px;text-transform:uppercase}
+.home-btn{padding:8px 16px;background:var(--card);border:1px solid #333;border-radius:20px;font-size:12px;font-weight:600;color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0}
+.video-area{position:relative;width:100%;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
+.content-pad{padding:20px}
+h1{font-size:22px;margin-bottom:5px;font-weight:700}
+.meta-row{display:flex;gap:10px;align-items:center;margin-bottom:20px;font-size:12px;color:var(--m)}
+.badge{background:#333;color:#fff;padding:2px 6px;border-radius:4px;font-weight:600}
+/* Storyline Card */
+.story-card{background:var(--card);padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #222}
+.card-head{display:flex;align-items:center;gap:8px;color:var(--p);font-weight:700;margin-bottom:10px;font-size:15px}
+.desc-text{color:#ccc;font-size:14px;line-height:1.6;margin-bottom:15px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{background:#222;border:1px solid #333;padding:5px 12px;border-radius:50px;font-size:11px;color:#ccc}
+/* Social Buttons Fixed */
+.social-row{display:flex;gap:12px;margin-bottom:20px}
+.soc-btn{flex:1;height:45px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid #333;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;color:white;transition:0.2s}
+.tg{color:#38bdf8;border-color:rgba(56,189,248,0.3)}
+.wa{color:#4ade80;border-color:rgba(74,222,128,0.3)}
+.cp{background:#7c3aed;border-color:#7c3aed;color:white}
+.soc-btn:hover{filter:brightness(1.2)}
+/* Ads Auto Hide */
+.ad-box{width:100%;background:#000;display:flex;align-items:center;justify-content:center;margin:20px 0}
+.ad-box:empty{display:none}
+/* Related */
+.related-sec{padding:0 20px 40px 20px}
+.sec-title{font-weight:700;margin-bottom:15px;border-left:4px solid var(--p);padding-left:10px}
+.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.rel-card{display:block;border-radius:8px;overflow:hidden;background:var(--card)}
+.rel-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#111}
+.rel-title{padding:10px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.load-more{width:100%;padding:15px;background:var(--card);border:1px solid #333;color:#fff;font-weight:700;margin-top:20px;border-radius:8px;cursor:pointer}
+footer{background:#000;padding:40px;text-align:center;font-size:12px;color:#555}
+@media(min-width:768px){ .container{display:grid;grid-template-columns:7fr 3fr;gap:30px;padding:30px} .video-area{border-radius:12px;overflow:hidden;margin-top:20px} .content-pad{padding:0;margin-top:20px} .rel-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo">RANGINX</div>
+    <a href="/" class="home-btn">🏠 HOME</a>
+</header>
+
+<div class="video-area" id="video-box">${player}</div>
+
+<div class="container">
+    <div class="main-col">
+        <div class="content-pad">
+            <h1>${d.title}</h1>
+            <div class="meta-row">
+                <span class="badge">HD</span>
+                <span>Streaming</span>
+                <span>Free</span>
+            </div>
+
+            <div class="social-row">
+                 <a href="https://t.me/share/url?url=https://ranginx.fun/movies/${d.slug}.html" target="_blank" class="soc-btn tg">Telegram</a>
+                 <a href="https://api.whatsapp.com/send?text=Watch: https://ranginx.fun/movies/${d.slug}.html" target="_blank" class="soc-btn wa">WhatsApp</a>
+                 <button class="soc-btn cp" onclick="copyLink()">Copy Link</button>
+            </div>
+
+            <div id="ad-banner" class="ad-box"></div>
+
+            ${extras}
+
+            <div class="story-card">
+                <div class="card-head">📖 Storyline</div>
+                <div class="desc-text">${d.desc}</div>
+                <div class="tags">${tagsHtml}</div>
+            </div>
         </div>
     </div>
 
-    <script>
-        let DATA = [];
-        let editingIndex = -1;
-
-        lucide.createIcons();
-
-        // 1. LOAD FILE
-        function loadJSON(input) {
-            const file = input.files[0];
-            if (!file) return;
+    <div class="side-col">
+        <div class="related-sec">
+            <div class="sec-title">You May Also Like</div>
+            <div class="rel-grid" id="related-grid"></div>
+            <button class="load-more" id="loadBtn" onclick="loadNextBatch()">Load More</button>
             
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    DATA = JSON.parse(e.target.result);
-                    renderList();
-                    alert("Data Loaded! Found " + DATA.length + " items.");
-                } catch(err) {
-                    alert("Invalid JSON File");
-                }
-            };
-            reader.readAsText(file);
+            <div id="ad-sidebar" class="ad-box"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2025 Ranginx. All rights reserved.<br>
+    <a href="/dmca.html" style="color:#777;margin:0 5px">DMCA</a>
+    <a href="/terms.html" style="color:#777;margin:0 5px">Terms</a>
+    <a href="/privacy.html" style="color:#777;margin:0 5px">Privacy</a>
+</footer>
+
+<script>
+function copyLink(){
+    let t=document.createElement("textarea"); t.value=window.location.href; t.style.position="fixed";
+    document.body.appendChild(t); t.select(); document.execCommand("copy"); document.body.removeChild(t);
+    alert("Link Copied!");
+}
+
+let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "${d.slug}";
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    const grid = document.getElementById('related-grid');
+    // Fallback data for local testing
+    const fallback = [
+        {title:"Demo Movie 1", slug:"#", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo1"},
+        {title:"Demo Movie 2", slug:"#", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo2"}
+    ];
+
+    fetch('/data/movies.json')
+    .then(r=>{if(!r.ok)throw new Error();return r.json()})
+    .then(d=>{
+        allData = d.filter(m=>m.slug !== currentSlug);
+        if(allData.length === 0) {
+             grid.innerHTML = '<div style="padding:10px;color:#555">No related content found</div>';
+             document.getElementById('loadBtn').style.display='none';
+        } else {
+             loadNextBatch();
         }
+    })
+    .catch(()=>{
+        console.log("Local Mode: Using Fallback");
+        grid.innerHTML = fallback.map(m=>\`<a href="#" class="rel-card"><img src="\${m.thumbnail}" class="rel-img"><div class="rel-title">\${m.title}</div></a>\`).join('');
+        document.getElementById('loadBtn').style.display='none';
+    });
+});
 
-        // 2. RENDER LIST
-        function renderList(filter = "") {
-            const list = document.getElementById('contentList');
-            list.innerHTML = "";
-            
-            const filteredData = DATA.filter(item => item.title.toLowerCase().includes(filter.toLowerCase()));
+function loadNextBatch() {
+    const grid = document.getElementById('related-grid');
+    const btn = document.getElementById('loadBtn');
+    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
+    
+    nextBatch.forEach(m => {
+        grid.innerHTML += \`<a href="/movies/\${m.slug}.html" class="rel-card"><img src="\${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">\${m.title}</div></a>\`;
+    });
+    currentIndex += itemsPerPage;
+    if(currentIndex >= allData.length) btn.style.display = 'none';
+}
+<\/script>
+</body>
+</html>`;
+    }
 
-            filteredData.forEach((item, index) => {
-                const realIndex = DATA.indexOf(item); // Keep track of original index
-                const el = document.createElement('div');
-                el.className = `p-3 rounded border border-[#27272a] bg-[#18181b] flex gap-3 items-center cursor-pointer hover:border-brand transition ${editingIndex === realIndex ? 'border-brand bg-[#222]' : ''}`;
-                el.onclick = () => loadItem(realIndex);
-                
-                el.innerHTML = `
-                    <img src="${item.thumbnail}" class="w-12 h-16 object-cover rounded bg-black">
-                    <div class="overflow-hidden">
-                        <h4 class="font-bold text-sm truncate">${item.title}</h4>
-                        <span class="text-xs text-gray-500 uppercase">${item.type}</span>
-                    </div>
-                `;
-                list.appendChild(el);
-            });
-        }
+    function showOutput(h,j,s) {
+        currentSlug = s;
+        document.getElementById('htmlOut').textContent = h;
+        document.getElementById('jsonOut').textContent = j + ","; 
+        document.getElementById('outputArea').style.display = 'block';
+        document.getElementById('outputArea').scrollIntoView({behavior:'smooth'});
+    }
 
-        // 3. EDITOR LOGIC
-        function newItem() {
-            editingIndex = -1;
-            document.getElementById('editForm').reset();
-            document.getElementById('episodesContainer').innerHTML = "";
-            document.getElementById('editorPanel').classList.remove('hidden');
-            toggleTypeUI();
-        }
+    function copyText(id){
+        let t=document.getElementById(id).textContent;
+        let ta=document.createElement("textarea");
+        ta.value=t; ta.style.position="fixed"; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+        alert("Copied!");
+    }
 
-        function loadItem(index) {
-            editingIndex = index;
-            const item = DATA[index];
-            document.getElementById('editorPanel').classList.remove('hidden');
-            
-            // Fill Fields
-            document.getElementById('inp_title').value = item.title;
-            document.getElementById('inp_slug').value = item.slug;
-            document.getElementById('inp_type').value = item.type || 'movie';
-            document.getElementById('inp_category').value = item.category || '';
-            document.getElementById('inp_thumb').value = item.thumbnail || '';
-            document.getElementById('inp_desc').value = item.description || '';
-
-            toggleTypeUI();
-
-            if (item.type === 'movie') {
-                document.getElementById('inp_movie_url').value = item.video || item.url || '';
-            } else {
-                const container = document.getElementById('episodesContainer');
-                container.innerHTML = "";
-                if(item.episodes) {
-                    item.episodes.forEach(ep => addEpisodeInput(ep));
-                }
-            }
-            renderList(document.getElementById('searchBox').value); // Refresh active state
-        }
-
-        function toggleTypeUI() {
-            const type = document.getElementById('inp_type').value;
-            if (type === 'movie') {
-                document.getElementById('movieSection').classList.remove('hidden');
-                document.getElementById('seriesSection').classList.add('hidden');
-            } else {
-                document.getElementById('movieSection').classList.add('hidden');
-                document.getElementById('seriesSection').classList.remove('hidden');
-            }
-        }
-
-        function addEpisodeInput(data = null) {
-            const container = document.getElementById('episodesContainer');
-            const idx = container.children.length + 1;
-            
-            const div = document.createElement('div');
-            div.className = "grid grid-cols-12 gap-2 items-center bg-black/20 p-2 rounded";
-            div.innerHTML = `
-                <div class="col-span-1 text-center font-bold text-gray-500">#${data ? data.ep : idx}</div>
-                <input type="text" class="col-span-7 p-1 rounded text-xs bg-[#111] border border-[#333] ep-url" placeholder="Video URL" value="${data ? data.url : ''}">
-                <input type="hidden" class="ep-num" value="${data ? data.ep : idx}">
-                <button type="button" onclick="this.parentElement.remove()" class="col-span-4 text-red-500 text-xs hover:underline text-right">Remove</button>
-            `;
-            container.appendChild(div);
-        }
-
-        // 4. SAVE LOGIC
-        function saveCurrentItem() {
-            const type = document.getElementById('inp_type').value;
-            
-            const newItemData = {
-                title: document.getElementById('inp_title').value,
-                slug: document.getElementById('inp_slug').value || generateSlug(document.getElementById('inp_title').value),
-                type: type,
-                category: document.getElementById('inp_category').value,
-                thumbnail: document.getElementById('inp_thumb').value,
-                description: document.getElementById('inp_desc').value,
-            };
-
-            if (type === 'movie') {
-                newItemData.video = document.getElementById('inp_movie_url').value;
-                newItemData.episodes = [];
-            } else {
-                const eps = [];
-                document.querySelectorAll('#episodesContainer > div').forEach((row, i) => {
-                    const url = row.querySelector('.ep-url').value;
-                    if(url) {
-                        eps.push({
-                            ep: i + 1,
-                            title: `Episode ${i + 1}`,
-                            url: url
-                        });
-                    }
-                });
-                newItemData.episodes = eps;
-                newItemData.video = "";
-            }
-
-            if (editingIndex === -1) {
-                DATA.push(newItemData); // Add new
-                alert("Added successfully!");
-            } else {
-                DATA[editingIndex] = newItemData; // Update
-                alert("Updated successfully!");
-            }
-            
-            renderList();
-            newItem(); // Reset form
-        }
-
-        function deleteCurrentItem() {
-            if(editingIndex === -1) return;
-            if(confirm("Are you sure you want to delete this?")) {
-                DATA.splice(editingIndex, 1);
-                renderList();
-                newItem();
-            }
-        }
-
-        // 5. DOWNLOAD LOGIC
-        function downloadJSON() {
-            const dataStr = JSON.stringify(DATA, null, 2);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "normal.json";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
-        // Utils
-        function generateSlug(val) {
-            const slug = val.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
-            document.getElementById('inp_slug').value = slug;
-            return slug;
-        }
-        
-        function filterList() {
-            renderList(document.getElementById('searchBox').value);
-        }
-    </script>
+    function downloadHtml(){
+        if(!currentSlug) return alert("Generate first!");
+        let b=new Blob([document.getElementById('htmlOut').textContent],{type:'text/html'});
+        let a=document.createElement('a');
+        a.href=URL.createObjectURL(b);
+        a.download=currentSlug+".html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+</script>
 </body>
 </html>
