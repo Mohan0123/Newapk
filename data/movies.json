@@ -1,6 +1,30 @@
 
 [
   {
+  "title": "Akeli",
+  "slug": "akeli",
+  "thumbnail": "https://xmaza.cfd/wp-content/uploads/2025/08/Akeli-Episode-3.webp",
+  "type": "series"
+},
+  {
+  "title": "Miss Doctor",
+  "slug": "miss-doctor",
+  "thumbnail": "https://redmaal.com/wp-content/uploads/2025/12/Miss-Doctor-Episode-1.webp",
+  "type": "series"
+},
+  {
+  "title": "Najayaz",
+  "slug": "najayaz",
+  "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Najayaz.webp",
+  "type": "series"
+},
+  {
+  "title": "Jija Ji",
+  "slug": "jija-ji",
+  "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Jija-Ji.webp",
+  "type": "series"
+},
+  {
   "title": "https://video.xmaal.net/wp-content/uploads/2025/11/Babuji.webp",
   "slug": "babuji",
   "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Babuji.webp",
