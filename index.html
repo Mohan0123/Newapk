@@ -100,9 +100,9 @@
             margin: 15px 0;
             padding: 0 15px;
             overflow-x: auto;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
+            scrollbar-width: none;
         }
-        .filters::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+        .filters::-webkit-scrollbar { display: none; }
 
         .filter-btn {
             background: var(--surface);
@@ -123,7 +123,7 @@
             border-color: var(--primary);
         }
 
-        /* --- GRID LAYOUT (The Fix) --- */
+        /* --- GRID LAYOUT --- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -133,7 +133,6 @@
 
         .movie-grid {
             display: grid;
-            /* Desktop: Auto fit based on size */
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
         }
@@ -153,7 +152,7 @@
 
         .thumb-box {
             width: 100%;
-            aspect-ratio: 16/9; /* Landscape */
+            aspect-ratio: 16/9;
             background: #000;
             overflow: hidden;
         }
@@ -230,19 +229,15 @@
         .footer-links a { color: var(--muted); margin: 0 8px; font-size: 12px; }
         .copyright { color: #555; font-size: 11px; margin-top: 10px; }
 
-        /* --- MOBILE (ANDROID) SPECIFIC CSS --- */
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
             .movie-grid {
-                /* FORCE 2 COLUMNS ON MOBILE */
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 10px; /* Smaller gap for mobile */
+                grid-template-columns: repeat(2, 1fr); /* 2 Column Grid for Android */
+                gap: 10px;
             }
-            
             .hero h1 { font-size: 22px; }
             .hero p { font-size: 12px; }
             .container { padding: 10px; }
-            
-            /* Card adjustments for small screens */
             .card-info { padding: 8px; }
             .title { font-size: 12px; }
         }
@@ -304,12 +299,6 @@
 
         // 1. Fetch Data
         document.addEventListener("DOMContentLoaded", () => {
-            // Fallback data if JSON fails (for testing)
-            const fallbackData = [
-                {title: "Demo Movie 1", slug: "#", thumbnail: "https://via.placeholder.com/300x170/222/fff?text=Demo1", type: "movie"},
-                {title: "Demo Series 1", slug: "#", thumbnail: "https://via.placeholder.com/300x170/222/fff?text=Demo2", type: "series"}
-            ];
-
             fetch('data/movies.json')
                 .then(res => {
                     if (!res.ok) throw new Error("Failed to load");
@@ -321,14 +310,18 @@
                     renderGrid(true);
                 })
                 .catch(err => {
-                    console.warn("Using Fallback Data");
-                    allData = fallbackData;
+                    console.warn("Using Fallback Data (Local Mode)");
+                    // Fallback for demo
+                    allData = [
+                        {title: "Demo Movie 1", slug: "demo1", thumbnail: "https://via.placeholder.com/300x170", type: "movie"},
+                        {title: "Demo Series 1", slug: "movies/demo2", thumbnail: "https://via.placeholder.com/300x170", type: "series"}
+                    ];
                     filteredData = allData;
                     renderGrid(true);
                 });
         });
 
-        // 2. Render Function
+        // 2. Render Function (SMART LINK FIX)
         function renderGrid(reset = false) {
             const grid = document.getElementById('grid');
             const btn = document.getElementById('loadBtn');
@@ -351,8 +344,21 @@
                 const typeLabel = item.type === 'series' ? 'Series' : 'Movie';
                 const thumb = item.thumbnail || 'https://via.placeholder.com/300x170/111/333?text=No+Image';
 
+                // --- SMART LINK LOGIC START ---
+                // Agar slug me pehle se '/' hai (matlab 'movies/name'), to waisa hi rehne do.
+                // Agar nahi hai (matlab 'name'), to 'movies/' add kar do.
+                let linkSlug = item.slug;
+                if (!linkSlug.includes('/')) {
+                    linkSlug = 'movies/' + linkSlug;
+                }
+                // .html add karo agar nahi hai
+                if (!linkSlug.endsWith('.html')) {
+                    linkSlug += '.html';
+                }
+                // --- SMART LINK LOGIC END ---
+
                 const cardHTML = `
-                    <a href="movies/${item.slug}.html" class="card">
+                    <a href="${linkSlug}" class="card">
                         <div class="thumb-box">
                             <img src="${thumb}" alt="${item.title}" class="thumb-img" loading="lazy">
                         </div>
