@@ -1,6 +1,78 @@
 
 [
   {
+  "title": "Meri Padosan",
+  "slug": "meri-padosan",
+  "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2024/11/Meri-Padosan-Episode-1.webp",
+  "type": "series"
+},
+  {
+  "title": "Kiraedarr",
+  "slug": "kiraedarr",
+  "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2025/09/Kiraedaar-Episode-1.webp",
+  "type": "series"
+},
+  {
+  "title": "Chhinar",
+  "slug": "chhinar",
+  "thumbnail": "https://uncutmaza.com.co/wp-content/uploads/2025/11/Chhinar-Episode-1.webp",
+  "type": "series"
+},
+  {
+  "title": "Chul Le Zara",
+  "slug": "chul-le-zara",
+  "thumbnail": "https://i.ibb.co/svY2vP7q/Screenshot-20251219-080819.png",
+  "type": "series"
+},
+  {
+  "title": "Nayi Padosan",
+  "slug": "nayi-padosan",
+  "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/12/Nayi-Padosan-768x432.webp",
+  "type": "series"
+},
+  {
+  "title": "Bhool Chook Maaf",
+  "slug": "bhool-chook-maaf",
+  "thumbnail": "https://i.ibb.co/MydqVdTz/Picsart-25-12-19-15-54-29-606.png",
+  "type": "series"
+},
+  {
+  "title": "Raaz",
+  "slug": "raaz",
+  "thumbnail": "https://i.ibb.co/84nGPgMq/Picsart-25-12-19-20-02-05-241.jpg",
+  "type": "series"
+},
+  {
+  "title": "Munni Badnaam Hui",
+  "slug": "munni-badnaam-hui",
+  "thumbnail": "https://mxporn.net/wp-content/uploads/2025/12/Munni-Badnaam-Hui-Episode-1.webp",
+  "type": "series"
+},
+  {
+  "title": "Bijili",
+  "slug": "bijili",
+  "thumbnail": "https://mxporn.net/wp-content/uploads/2025/12/Bijili-Episode-5.webp",
+  "type": "series"
+},
+  {
+  "title": "Saiyaan Farebi",
+  "slug": "saiyaan-farebi",
+  "thumbnail": "https://i.ibb.co/23yKY1Bv/Picsart-25-12-19-21-12-38-688.jpg",
+  "type": "series"
+},
+  {
+  "title": "Pyaar Ka Bazaar",
+  "slug": "pyaar-ka-bazaar",
+  "thumbnail": "https://i.ibb.co/0Vy6wN3f/Picsart-25-12-19-21-16-43-973.jpg",
+  "type": "series"
+},
+  {
+  "title": "Ristey",
+  "slug": "ristey",
+  "thumbnail": "https://i.ibb.co/0R35LqXp/Picsart-25-12-20-19-40-11-081.jpg",
+  "type": "series"
+},
+  {
   "title": "Holi",
   "slug": "holi",
   "thumbnail": "https://i.ibb.co/tTxvPn21/Picsart-25-12-20-22-29-14-125.jpg",
