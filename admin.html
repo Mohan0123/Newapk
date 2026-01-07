@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ranginx Creator Studio v8.1 (Fixes Applied)</title>
+    <title>Ranginx Creator Studio v9.2 (Final)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* --- ADMIN PANEL STYLES --- */
@@ -70,7 +69,7 @@
 <body>
 
 <div class="sidebar">
-    <div class="brand">RANGINX <span>v8.1</span></div>
+    <div class="brand">RANGINX <span>v9.2</span></div>
     <div class="menu-btn active" onclick="switchTab('movie')">🎬 <span>Movie</span></div>
     <div class="menu-btn" onclick="switchTab('series')">📺 <span>Series</span></div>
 </div>
@@ -259,7 +258,7 @@
         performAutoFill(p, type);
 
         let d = getData(p);
-        if(!d.title || !d.slug) return alert("Title and Slug are required!");
+        if(!d.title || !d.slug) return alert("Title and Slug required!");
 
         let playerHtml = "", extrasHtml = "";
 
@@ -273,7 +272,14 @@
         }
         
         let html = buildTemplate(d, playerHtml, extrasHtml, d.poster);
-        let json = JSON.stringify({ title: d.title, slug: d.slug, thumbnail: d.poster, type: type }, null, 2) + ",";
+        
+        // --- JSON FIX: Auto "movies/" path & No Trailing Comma ---
+        let json = JSON.stringify({ 
+            title: d.title, 
+            slug: `movies/${d.slug}`,  // Hardcoded to standard movies/ folder
+            thumbnail: d.poster, 
+            type: type 
+        }, null, 2);
         
         showOutput(html, json, d.slug);
     }
@@ -294,7 +300,6 @@
         let style = `width:100%;height:100%;object-fit:contain;background:#000;`;
         let vidId = id ? 'id="main-player"' : '';
         
-        // Fix: Removed autoplay to prevent layout shift issues, user must tap to play
         if(isMp4) return `<video ${vidId} controls playsinline preload="metadata" poster="${poster}" referrerpolicy="no-referrer" style="${style}"><source src="${url}"></video>`;
         return `<iframe ${vidId} src="${url}" allowfullscreen style="${style};border:none"></iframe>`;
     }
@@ -345,12 +350,12 @@
 <script src="/ads/movie-ads.js" defer><\/script>
 <script src="/ads/popunder.js" defer><\/script>
 <style>
-:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
+:root{--bg:#09090b;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
 a{text-decoration:none;color:inherit}
 header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#000;position:sticky;top:0;z-index:99;border-bottom:1px solid #222}
-.logo{color:var(--p);font-weight:800;font-size:24px;text-transform:uppercase}
+.logo{color:var(--p);font-weight:800;font-size:24px;letter-spacing:1px}
 .home-btn{padding:8px 16px;background:var(--card);border:1px solid #333;border-radius:20px;font-size:12px;font-weight:600;color:#fff}
 .container{max-width:1200px;margin:0 auto;padding:0}
 .video-area{position:relative;width:100%;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
@@ -447,30 +452,24 @@ function copyLink(){
     alert("Link Copied!");
 }
 
-let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "${d.slug}";
+let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "movies/${d.slug}";
 
 document.addEventListener("DOMContentLoaded", ()=>{
     const grid = document.getElementById('related-grid');
-    // Fallback data for local testing
     const fallback = [
-        {title:"Demo Movie 1", slug:"#", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo1"},
-        {title:"Demo Movie 2", slug:"#", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo2"}
+        {title:"Demo Movie 1", slug:"movies/demo1", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo1"},
+        {title:"Demo Movie 2", slug:"movies/demo2", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo2"}
     ];
 
     fetch('/data/movies.json')
     .then(r=>{if(!r.ok)throw new Error();return r.json()})
     .then(d=>{
-        allData = d.filter(m=>m.slug !== currentSlug);
-        if(allData.length === 0) {
-             grid.innerHTML = '<div style="padding:10px;color:#555">No related content found</div>';
-             document.getElementById('loadBtn').style.display='none';
-        } else {
-             loadNextBatch();
-        }
+        allData = d.filter(m=> !m.slug.includes("${d.slug}"));
+        loadNextBatch();
     })
     .catch(()=>{
         console.log("Local Mode: Using Fallback");
-        grid.innerHTML = fallback.map(m=>\`<a href="#" class="rel-card"><img src="\${m.thumbnail}" class="rel-img"><div class="rel-title">\${m.title}</div></a>\`).join('');
+        grid.innerHTML = fallback.map(m=>\`<a href="/\${m.slug}.html" class="rel-card"><img src="\${m.thumbnail}" class="rel-img"><div class="rel-title">\${m.title}</div></a>\`).join('');
         document.getElementById('loadBtn').style.display='none';
     });
 });
@@ -480,8 +479,13 @@ function loadNextBatch() {
     const btn = document.getElementById('loadBtn');
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
     
+    if(nextBatch.length === 0 && currentIndex === 0) {
+         grid.innerHTML = '<div style="padding:10px;color:#555">No matches found</div>';
+         btn.style.display = 'none'; return;
+    }
     nextBatch.forEach(m => {
-        grid.innerHTML += \`<a href="/movies/\${m.slug}.html" class="rel-card"><img src="\${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">\${m.title}</div></a>\`;
+        let link = m.slug.includes('/') ? \`/\${m.slug}.html\` : \`/movies/\${m.slug}.html\`;
+        grid.innerHTML += \`<a href="\${link}" class="rel-card"><img src="\${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">\${m.title}</div></a>\`;
     });
     currentIndex += itemsPerPage;
     if(currentIndex >= allData.length) btn.style.display = 'none';
