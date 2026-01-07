@@ -1,6 +1,30 @@
 
 [
   {
+  "title": "https://video.xmaal.net/wp-content/uploads/2025/11/Babuji.webp",
+  "slug": "babuji",
+  "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Babuji.webp",
+  "type": "series"
+},
+  {
+  "title": "Kamya Sutra",
+  "slug": "kamya-sutra",
+  "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Kamya-Sutra.webp",
+  "type": "series"
+},
+  {
+  "title": "Mirchi Sukh",
+  "slug": "mirchi-sukh",
+  "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Mirchi-Sukh.webp",
+  "type": "series"
+},
+  {
+  "title": "Shadi Vivah",
+  "slug": "shadi-vivah",
+  "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Shaadi-Vivah.webp",
+  "type": "series"
+},
+  {
   "title": "Sajan Chale Sasural",
   "slug": "sajan-chale-sasural",
   "thumbnail": "https://video.xmaal.net/wp-content/uploads/2025/11/Sajan-Chale-Sasural.webp",
