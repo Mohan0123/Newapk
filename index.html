@@ -348,13 +348,20 @@
                 // Agar slug me pehle se '/' hai (matlab 'movies/name'), to waisa hi rehne do.
                 // Agar nahi hai (matlab 'name'), to 'movies/' add kar do.
                 let linkSlug = item.slug;
-                if (!linkSlug.includes('/')) {
-                    linkSlug = 'movies/' + linkSlug;
-                }
-                // .html add karo agar nahi hai
-                if (!linkSlug.endsWith('.html')) {
-                    linkSlug += '.html';
-                }
+
+// type ke basis par folder decide karo
+if (!linkSlug.includes('/')) {
+    if (item.type === 'series') {
+        linkSlug = 'series/' + linkSlug;
+    } else {
+        linkSlug = 'movies/' + linkSlug;
+    }
+}
+
+// .html ensure karo
+if (!linkSlug.endsWith('.html')) {
+    linkSlug += '.html';
+}
                 // --- SMART LINK LOGIC END ---
 
                 const cardHTML = `
