@@ -51,8 +51,13 @@
 
 <div class="sidebar">
     <div class="brand">RANGINX <span>SEO+</span></div>
-    <div class="menu-btn active" onclick="switchTab('movie')">🎬 <span>Movie</span></div>
-    <div class="menu-btn" onclick="switchTab('series')">📺 <span>Series</span></div>
+    <div class="menu-btn active" onclick="switchTab(event,'movie')">
+        🎬 <span>Movie</span>
+    </div>
+
+    <div class="menu-btn" onclick="switchTab(event,'series')">
+        📺 <span>Series</span>
+    </div>
 </div>
 
 <div class="main">
@@ -188,9 +193,10 @@
     let episodes = [];
     let currentSlug = "";
 
-    function switchTab(t) {
+    // FIXED: Function definition was broken. Added 'function switchTab(e, t)'
+    function switchTab(e, t) {
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        e.currentTarget.classList.add('active');
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.getElementById('tab-'+t).classList.add('active');
         document.getElementById('pageTitle').innerText = t === 'movie' ? 'Movie Generator' : 'Series Generator';
@@ -223,7 +229,6 @@
     // --- HELPER FUNCTIONS ---
     function sanitizeSlug(str) {
         if(!str) return "";
-        // Strict Rule: lowercase, space to hyphen, remove special chars
         return str.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
     }
 
@@ -234,12 +239,11 @@
 
     function encodeUrl(url) {
         if(!url) return "";
-        // Fix spaces in URL for video player safety
         return url.trim().replace(/\s/g, '%20');
     }
 
     // ============================================
-    //  ⚡ CORE GENERATION LOGIC (STRICT RULES)
+    //  ⚡ CORE GENERATION LOGIC (FIXED & SAFE)
     // ============================================
     function generate(type) {
         let p = type === 'movie' ? 'm' : 's';
@@ -248,7 +252,7 @@
         let data = {
             name: document.getElementById(p+'Title').value.trim(),
             slugRaw: document.getElementById(p+'Slug').value.trim(),
-            video: document.getElementById(p==='m'?'mVideo':'epUrl').value.trim(), 
+            video: p === 'm' ? document.getElementById('mVideo').value.trim() : '', 
             poster: document.getElementById(p+'Poster').value.trim(),
             tagsRaw: document.getElementById(p+'Tags').value.trim(),
             seoTitle: document.getElementById(p+'SeoTitle').value.trim(),
@@ -256,25 +260,24 @@
             storyline: document.getElementById(p+'Desc').value.trim()
         };
 
-        // 2. VALIDATION & SLUG PROCESSING
+        // 2. VALIDATION
         if(!data.name || !data.slugRaw) return alert("Movie Name and Slug are required!");
         if(type === 'movie' && !data.video) return alert("Video URL is required!");
         if(type === 'series' && episodes.length === 0) return alert("Add at least one episode!");
 
         let finalSlug = sanitizeSlug(data.slugRaw);
-        document.getElementById(p+'Slug').value = finalSlug; // Update UI
+        document.getElementById(p+'Slug').value = finalSlug; 
 
         // 3. AUTO-GENERATION: SEO TITLE
-       let finalTitle = data.seoTitle;
-if(!finalTitle) {
-    if(type === 'movie') {
-        finalTitle = `Watch ${data.name} Full HD Movie Online Free | Ranginx`;
-    } else {
-        finalTitle = `Watch ${data.name} All Episodes Online Free | Ranginx`;
-    }
-}
-finalTitle = finalTitle.substring(0, 60);
-        
+        let finalTitle = data.seoTitle;
+        if(!finalTitle) {
+            if(type === 'movie') {
+                finalTitle = `Watch ${data.name} Full HD Movie Online Free | Ranginx`;
+            } else {
+                finalTitle = `Watch ${data.name} All Episodes Online Free | Ranginx`;
+            }
+        }
+        finalTitle = finalTitle.substring(0, 60);
 
         // 4. AUTO-GENERATION: META DESCRIPTION
         let finalMeta = data.metaDesc;
@@ -286,10 +289,8 @@ finalTitle = finalTitle.substring(0, 60);
         // 5. AUTO-GENERATION: STORYLINE
         let finalStoryHtml = "";
         if(data.storyline) {
-            // Manual: Convert newlines to p tags
             finalStoryHtml = data.storyline.split('\n').map(l => l.trim() ? `<p>${l}</p>` : '').join('');
         } else {
-            // Automatic: 3-Paragraph SEO Logic
             if(type === 'movie') {
                 finalStoryHtml = `
                 <p><strong>${data.name}</strong> is now available to watch online in full HD quality on Ranginx. This movie delivers an engaging experience with high-quality visuals and audio. You can enjoy the complete film without any interruptions.</p>
@@ -298,7 +299,7 @@ finalTitle = finalTitle.substring(0, 60);
             } else {
                 finalStoryHtml = `
 <p>Stream <strong>${data.name}</strong> with <strong>free streaming</strong> and <strong>no registration</strong>. Our platform is optimized for <strong>mobile & desktop</strong> devices, ensuring fast loading speeds and smooth playback.</p>`;
- }
+            }
         }
 
         // 6. TAGS LOGIC
@@ -306,7 +307,7 @@ finalTitle = finalTitle.substring(0, 60);
         let tagsHtml = tagsList.length > 0 ? 
             `<div class="tags">${tagsList.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
 
-        // 7. PLAYER LOGIC (With URL encoding & Type Attribute)
+        // 7. PLAYER LOGIC
         let playerHtml = "", extrasHtml = "";
         if (type === 'movie') {
             playerHtml = getPlayerCode(data.video, data.poster);
@@ -315,27 +316,28 @@ finalTitle = finalTitle.substring(0, 60);
             playerHtml = getPlayerCode(episodes[0].url, data.poster, true);
         }
 
-        // 8. SCHEMA LOGIC (JSON-LD)
+        // 8. SCHEMA LOGIC
         let schemaData = {
-    "@context": "https://schema.org",
-    "@type": type === 'movie' ? "Movie" : "TVSeries",
-    "name": data.name,
-    "description": finalMeta,
-    "image": data.poster,
-    "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`,
-    "inLanguage": "en",
-    "genre": tagsList.length > 0 ? tagsList : ["Entertainment"],
-    "publisher": {
-        "@type": "Organization",
-        "name": "Ranginx"
-    },
-    "potentialAction": {
-        "@type": "WatchAction",
-        "target": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`
-    }
-};
+            "@context": "https://schema.org",
+            "@type": type === 'movie' ? "Movie" : "TVSeries",
+            "name": data.name,
+            "description": finalMeta,
+            "image": data.poster,
+            "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`,
+            "inLanguage": "en",
+            "genre": tagsList.length > 0 ? tagsList : ["Entertainment"],
+            "publisher": {
+                "@type": "Organization",
+                "name": "Ranginx"
+            },
+            "potentialAction": {
+                "@type": "WatchAction",
+                "target": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`
+            }
+        };
 
         // 9. FINAL HTML TEMPLATE ASSEMBLY
+        // SAFETY NOTE: All closing script tags are escaped as <\/script> to prevent parsing errors.
         let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -349,7 +351,7 @@ finalTitle = finalTitle.substring(0, 60);
 <meta property="og:title" content="${cleanStr(finalTitle)}">
 <meta property="og:description" content="${cleanStr(finalMeta)}">
 <meta property="og:image" content="${data.poster}">
-<meta property="og:type" content="${ogType}">
+<meta property="og:type" content="${type === 'movie' ? 'video.movie' : 'video.tv_show'}">
 <meta property="og:url" content="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
 <meta name="twitter:title" content="${cleanStr(finalTitle)}">
 <meta name="twitter:description" content="${cleanStr(finalMeta)}">
@@ -504,27 +506,26 @@ function loadNextBatch() {
 </html>`;
 
         const finalJson = {
-  title: data.name,
-  slug: finalSlug,
-  thumbnail: data.poster,
-  type: type
-};
+          title: data.name,
+          slug: finalSlug,
+          thumbnail: data.poster,
+          type: type
+        };
 
-showOutput(
-  html,
-  JSON.stringify(finalJson, null, 2) + ",",
-  finalSlug
-);
+        showOutput(
+          html,
+          JSON.stringify(finalJson, null, 2) + ",",
+          finalSlug
+        );
     }
 
     function getPlayerCode(url, poster, id=false) {
-        let cleanUrl = encodeUrl(url); // Ensure spaces are encoded
+        let cleanUrl = encodeUrl(url); 
         let isMp4 = cleanUrl.includes('.mp4') || cleanUrl.includes('.mkv');
         let style = `width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;`;
         let vidId = id ? 'id="main-player"' : '';
         
         if(isMp4) {
-            // FIXED: Added type="video/mp4" and cleaned URL
             return `<video ${vidId} controls playsinline preload="metadata" poster="${poster}" style="${style}"><source src="${cleanUrl}" type="video/mp4"></video>`;
         } else {
             return `<iframe ${vidId} src="${cleanUrl}" allowfullscreen scrolling="no" allow="encrypted-media; picture-in-picture" style="${style};border:none"></iframe>`;
@@ -539,6 +540,8 @@ showOutput(
             btns += `<button class="ep-btn ${i===0?'active':''}" onclick="playEp('${cleanU}', ${mp4}, this)">${i+1}</button>`;
         });
         btns += `</div></div>`;
+        
+        // SAFETY NOTE: Backticks are used here, and closing script tag is escaped.
         return btns + `
         <script>
         function playEp(u,m,b){
@@ -565,7 +568,7 @@ showOutput(
         let t=document.getElementById(id).textContent;
         let ta=document.createElement("textarea");
         ta.value=t; ta.style.position="fixed"; document.body.appendChild(ta);
-        ta.select(); navigator.clipboard.writeText(t); document.body.removeChild(ta);
+        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
         alert("Copied!");
     }
 
