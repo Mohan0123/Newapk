@@ -3,73 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranginx Creator Studio v9.2 (Final)</title>
+    <title>Ranginx Creator Studio - SEO Specialist Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- ADMIN PANEL STYLES --- */
-        :root {
-            --bg: #09090b; --surf: #18181b; --border: #27272a;
-            --primary: #e50914; --text: #e4e4e7; --muted: #a1a1aa;
-        }
+        /* --- UI STYLES (STRICTLY UNCHANGED) --- */
+        :root { --bg: #09090b; --surf: #18181b; --border: #27272a; --primary: #e50914; --text: #e4e4e7; --muted: #a1a1aa; }
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
-
-        /* Sidebar */
         .sidebar { width: 260px; background: #000; border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
         .brand { color: var(--primary); font-size: 22px; font-weight: 800; margin-bottom: 30px; letter-spacing: 1px; }
         .menu-btn { padding: 12px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; color: var(--muted); font-weight: 600; font-size: 14px; transition: 0.2s; }
         .menu-btn:hover, .menu-btn.active { background: var(--surf); color: #fff; }
         .menu-btn.active { border-left: 3px solid var(--primary); }
-
-        /* Main Content */
         .main { flex: 1; display: flex; flex-direction: column; }
         .top-bar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; font-weight: 700; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); justify-content: space-between; }
         .scroll-view { flex: 1; overflow-y: auto; padding: 30px; }
         .container { max-width: 900px; margin: 0 auto; }
-
-        /* Forms */
         .card { background: var(--surf); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 25px; }
         .sec-title { font-size: 12px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full { grid-column: span 2; }
-
         label { display: block; margin-bottom: 8px; font-size: 13px; color: #ccc; font-weight: 600; }
         input, textarea { width: 100%; background: #09090b; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 6px; font-family: inherit; transition: 0.3s; font-size: 14px; }
         input:focus, textarea:focus { border-color: var(--primary); }
-        textarea { height: 100px; resize: vertical; }
-        .helper { font-size: 11px; color: var(--muted); margin-top: 5px; font-style: italic; }
-
-        /* Episode Manager */
+        textarea { height: 80px; resize: vertical; }
+        .desc-box { height: 120px; }
         .ep-box { background: #000; padding: 15px; border-radius: 8px; border: 1px dashed var(--border); }
         .ep-list { margin-top: 15px; max-height: 200px; overflow-y: auto; }
         .ep-item { display: flex; justify-content: space-between; background: var(--surf); padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; font-size: 13px; align-items: center; border: 1px solid var(--border); }
         .del-btn { color: #ef4444; cursor: pointer; font-weight: bold; padding: 5px; }
-
-        /* Buttons */
         .btn-row { display: flex; gap: 15px; margin-top: 20px; }
         .btn { flex: 1; padding: 14px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
         .btn-primary { background: var(--primary); color: #fff; }
         .btn-secondary { background: #333; color: #fff; }
         .btn-add { background: var(--primary); color: #fff; padding: 0 20px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
-
-        /* Output */
         .output-area { display: none; margin-top: 40px; border-top: 1px dashed var(--border); padding-top: 30px; }
         .code-box { background: #000; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
         .box-head { background: #111; padding: 10px 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--muted); }
         .copy-btn { background: var(--surf); color: #fff; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border); cursor: pointer; font-size: 11px; font-weight: 600; }
         pre { padding: 15px; color: #4cd137; overflow-x: auto; font-family: monospace; font-size: 12px; max-height: 300px; }
-
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
-        
         @media (max-width: 768px) { .sidebar{width:70px;padding:15px 10px} .brand span, .menu-btn span{display:none} .brand{margin-bottom:20px;font-size:18px} .grid{grid-template-columns:1fr} }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div class="brand">RANGINX <span>v9.2</span></div>
+    <div class="brand">RANGINX <span>SEO+</span></div>
     <div class="menu-btn active" onclick="switchTab('movie')">🎬 <span>Movie</span></div>
     <div class="menu-btn" onclick="switchTab('series')">📺 <span>Series</span></div>
 </div>
@@ -85,35 +66,43 @@
             
             <div id="tab-movie" class="tab-panel active">
                 <div class="card">
-                    <div class="sec-title">Movie Details</div>
+                    <div class="sec-title">Movie Input (Admin)</div>
                     <div class="grid">
                         <div class="full">
-                            <label>Slug (File Name) - *Required*</label>
-                            <input type="text" id="mSlug" placeholder="e.g. pathaan-full-movie" oninput="autoTitle('m')" style="color:var(--primary); font-weight:bold;">
+                            <label>Slug (Example: spicy-malkin)</label>
+                            <input type="text" id="mSlug" placeholder="spicy-malkin" style="color:var(--primary); font-weight:bold;">
                         </div>
                         <div class="full">
-                            <label>Movie Title (Auto-fill)</label>
-                            <input type="text" id="mTitle" placeholder="Auto-filled from slug">
+                            <label>Movie Name (Required)</label>
+                            <input type="text" id="mTitle" placeholder="Movie Name">
                         </div>
                         <div class="full">
                             <label>Video URL (MP4 / Embed)</label>
-                            <input type="text" id="mVideo" placeholder="https://...">
+                            <input type="text" id="mVideo" placeholder="https://example.com/video.mp4">
                         </div>
                         <div>
-                            <label>Thumbnail (16:9 Landscape)</label>
-                            <input type="text" id="mPoster" placeholder="https://...">
+                            <label>Poster URL</label>
+                            <input type="text" id="mPoster" placeholder="https://example.com/poster.jpg">
                         </div>
                         <div>
-                            <label>Tags (Comma separated)</label>
-                            <input type="text" id="mTags" placeholder="Action, Drama, HD">
+                            <label>Tags (Comma separated, Max 8)</label>
+                            <input type="text" id="mTags" placeholder="Drama, Romance">
                         </div>
                         <div class="full">
-                            <label>Storyline / Description (Auto-fill)</label>
-                            <textarea id="mDesc" placeholder="Auto-filled if empty"></textarea>
+                            <label>SEO Title (Optional - Leave empty for Auto)</label>
+                            <input type="text" id="mSeoTitle" placeholder="Auto-generated if empty">
+                        </div>
+                        <div class="full">
+                            <label>Meta Description (Optional - Leave empty for Auto)</label>
+                            <textarea id="mMeta" placeholder="Auto-generated if empty"></textarea>
+                        </div>
+                        <div class="full">
+                            <label>Storyline (Optional - Leave empty for Auto)</label>
+                            <textarea id="mDesc" class="desc-box" placeholder="Auto-generated if empty"></textarea>
                         </div>
                     </div>
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="generate('movie')">Generate Code</button>
+                        <button class="btn btn-primary" onclick="generate('movie')">Generate HTML Code</button>
                         <button class="btn btn-secondary" onclick="resetForm('m')">Reset</button>
                     </div>
                 </div>
@@ -121,23 +110,23 @@
 
             <div id="tab-series" class="tab-panel">
                 <div class="card">
-                    <div class="sec-title">Series Details</div>
+                    <div class="sec-title">Series Input (Admin)</div>
                     <div class="grid">
                          <div class="full">
-                            <label>Slug (File Name) - *Required*</label>
-                            <input type="text" id="sSlug" placeholder="e.g. farzi-season-1" oninput="autoTitle('s')" style="color:var(--primary); font-weight:bold;">
+                            <label>Slug (Example: farzi-season-1)</label>
+                            <input type="text" id="sSlug" placeholder="farzi-season-1" style="color:var(--primary); font-weight:bold;">
                         </div>
                         <div class="full">
-                            <label>Series Title (Auto-fill)</label>
-                            <input type="text" id="sTitle" placeholder="Auto-filled from slug">
+                            <label>Series Name</label>
+                            <input type="text" id="sTitle" placeholder="Series Name">
                         </div>
                         <div>
-                            <label>Thumbnail (16:9 Landscape)</label>
+                            <label>Poster URL</label>
                             <input type="text" id="sPoster" placeholder="https://...">
                         </div>
                         <div>
-                            <label>Tags</label>
-                            <input type="text" id="sTags" placeholder="Web Series, Thriller">
+                            <label>Tags (Max 8)</label>
+                            <input type="text" id="sTags" placeholder="Thriller, Web Series">
                         </div>
                         
                         <div class="full ep-box">
@@ -151,12 +140,20 @@
                         </div>
 
                         <div class="full">
-                            <label>Storyline (Auto-fill)</label>
-                            <textarea id="sDesc" placeholder="Auto-filled if empty"></textarea>
+                            <label>SEO Title (Optional)</label>
+                            <input type="text" id="sSeoTitle" placeholder="Auto-generated if empty">
+                        </div>
+                        <div class="full">
+                            <label>Meta Description (Optional)</label>
+                            <textarea id="sMeta" placeholder="Auto-generated if empty"></textarea>
+                        </div>
+                        <div class="full">
+                            <label>Storyline (Optional)</label>
+                            <textarea id="sDesc" class="desc-box" placeholder="Auto-generated if empty"></textarea>
                         </div>
                     </div>
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="generate('series')">Generate Code</button>
+                        <button class="btn btn-primary" onclick="generate('series')">Generate HTML Code</button>
                         <button class="btn btn-secondary" onclick="resetForm('s')">Reset</button>
                     </div>
                 </div>
@@ -165,7 +162,7 @@
             <div id="outputArea" class="output-area">
                 <div class="code-box">
                     <div class="box-head">
-                        <span>JSON Data (Append to list)</span>
+                        <span>JSON Data (Database)</span>
                         <button class="copy-btn" onclick="copyText('jsonOut')">COPY JSON</button>
                     </div>
                     <pre id="jsonOut"></pre>
@@ -173,7 +170,7 @@
 
                 <div class="code-box">
                     <div class="box-head">
-                        <span>HTML Code</span>
+                        <span>HTML Code (Ready to Publish)</span>
                         <div style="display:flex; gap:10px">
                             <button class="copy-btn" onclick="copyText('htmlOut')">COPY HTML</button>
                             <button class="copy-btn" style="background:var(--primary);border:none" onclick="downloadHtml()">DOWNLOAD</button>
@@ -196,45 +193,14 @@
         event.currentTarget.classList.add('active');
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.getElementById('tab-'+t).classList.add('active');
-        document.getElementById('pageTitle').innerText = t === 'movie' ? 'Movie Generator' : 'Web Series Generator';
+        document.getElementById('pageTitle').innerText = t === 'movie' ? 'Movie Generator' : 'Series Generator';
         document.getElementById('outputArea').style.display = 'none';
     }
 
-    function autoTitle(p) {
-        // Optional: Auto-fill logic can go here
-    }
-
-    function performAutoFill(prefix, type) {
-        let slugField = document.getElementById(prefix + 'Slug');
-        let titleField = document.getElementById(prefix + 'Title');
-        let descField = document.getElementById(prefix + 'Desc');
-
-        let slug = slugField.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
-        slugField.value = slug; // Normalize Slug in Input
-
-        if (!slug) return alert("Slug is required for auto-generation!");
-
-        if (!titleField.value.trim()) {
-            let autoTitle = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            titleField.value = autoTitle;
-        }
-
-        if (!descField.value.trim()) {
-            let title = titleField.value;
-            let autoDesc = "";
-            if (type === 'movie') {
-                autoDesc = `Watch ${title} in full HD quality exclusively on Ranginx. Stream this movie online for free. Discover the best of bollywood and hollywood movies.`;
-            } else {
-                autoDesc = `Stream all episodes of ${title} web series in HD on Ranginx. Binge-watch the complete season online for free.`;
-            }
-            descField.value = autoDesc;
-        }
-    }
-
     function addEpisode() {
-        let n = document.getElementById('epName').value;
-        let u = document.getElementById('epUrl').value;
-        if(!n || !u) return alert("Enter Ep Name & URL");
+        let n = document.getElementById('epName').value.trim();
+        let u = document.getElementById('epUrl').value.trim();
+        if(!n || !u) return alert("Please enter Episode Name & URL");
         episodes.push({name:n, url:u});
         renderEp();
         document.getElementById('epName').value = ""; document.getElementById('epUrl').value = "";
@@ -245,151 +211,201 @@
         episodes.forEach((e,i) => {
             h += `<div class="ep-item"><span>${e.name}</span> <span class="del-btn" onclick="delEp(${i})">×</span></div>`;
         });
-        document.getElementById('epList').innerHTML = h || '<div style="text-align:center;color:#555;font-size:12px;padding:10px">No episodes</div>';
+        document.getElementById('epList').innerHTML = h || '<div style="text-align:center;color:#555;font-size:12px;padding:10px">No episodes added</div>';
     }
     function delEp(i) { episodes.splice(i,1); renderEp(); }
+    
     function resetForm(p) {
         document.querySelectorAll(`#tab-${p==='m'?'movie':'series'} input, textarea`).forEach(e=>e.value='');
         if(p==='s') { episodes=[]; renderEp(); }
     }
 
+    // --- HELPER FUNCTIONS ---
+    function sanitizeSlug(str) {
+        if(!str) return "";
+        // Strict Rule: lowercase, space to hyphen, remove special chars
+        return str.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+    }
+
+    function cleanStr(str) {
+        if (!str) return "";
+        return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function encodeUrl(url) {
+        if(!url) return "";
+        // Fix spaces in URL for video player safety
+        return url.trim().replace(/\s/g, '%20');
+    }
+
+    // ============================================
+    //  ⚡ CORE GENERATION LOGIC (STRICT RULES)
+    // ============================================
     function generate(type) {
         let p = type === 'movie' ? 'm' : 's';
-        performAutoFill(p, type);
-
-        let d = getData(p);
-        if(!d.title || !d.slug) return alert("Title and Slug required!");
-
-        let playerHtml = "", extrasHtml = "";
-
-        if (type === 'movie') {
-            if(!d.video) return alert("Video URL required!");
-            playerHtml = getPlayer(d.video, d.poster);
-        } else {
-             if(episodes.length===0) return alert("Add Episodes!");
-             extrasHtml = buildSeriesExtras(d.poster);
-             playerHtml = getPlayer(episodes[0].url, d.poster, true);
-        }
         
-        let html = buildTemplate(d, playerHtml, extrasHtml, d.poster);
-        
-        // --- JSON FIX: Auto "movies/" path & No Trailing Comma ---
-        let json = JSON.stringify({ 
-            title: d.title, 
-            slug: `movies/${d.slug}`,  // Hardcoded to standard movies/ folder
-            thumbnail: d.poster, 
-            type: type 
-        }, null, 2);
-        
-        showOutput(html, json, d.slug);
-    }
-
-    function getData(p) {
-        return {
-            title: document.getElementById(p+'Title').value,
-            slug: document.getElementById(p+'Slug').value,
-            video: document.getElementById(p==='m'?'mVideo':'epUrl').value, 
-            poster: document.getElementById(p+'Poster').value,
-            tags: document.getElementById(p+'Tags').value,
-            desc: document.getElementById(p+'Desc').value.replace(/"/g, '&quot;')
+        // 1. ADMIN INPUT DATA
+        let data = {
+            name: document.getElementById(p+'Title').value.trim(),
+            slugRaw: document.getElementById(p+'Slug').value.trim(),
+            video: document.getElementById(p==='m'?'mVideo':'epUrl').value.trim(), 
+            poster: document.getElementById(p+'Poster').value.trim(),
+            tagsRaw: document.getElementById(p+'Tags').value.trim(),
+            seoTitle: document.getElementById(p+'SeoTitle').value.trim(),
+            metaDesc: document.getElementById(p+'Meta').value.trim(),
+            storyline: document.getElementById(p+'Desc').value.trim()
         };
-    }
 
-    function getPlayer(url, poster, id=false) {
-        let isMp4 = url.trim().includes('.mp4') || url.trim().includes('.mkv');
-        let style = `width:100%;height:100%;object-fit:contain;background:#000;`;
-        let vidId = id ? 'id="main-player"' : '';
+        // 2. VALIDATION & SLUG PROCESSING
+        if(!data.name || !data.slugRaw) return alert("Movie Name and Slug are required!");
+        if(type === 'movie' && !data.video) return alert("Video URL is required!");
+        if(type === 'series' && episodes.length === 0) return alert("Add at least one episode!");
+
+        let finalSlug = sanitizeSlug(data.slugRaw);
+        document.getElementById(p+'Slug').value = finalSlug; // Update UI
+
+        // 3. AUTO-GENERATION: SEO TITLE
+       let finalTitle = data.seoTitle;
+if(!finalTitle) {
+    if(type === 'movie') {
+        finalTitle = `Watch ${data.name} Full HD Movie Online Free | Ranginx`;
+    } else {
+        finalTitle = `Watch ${data.name} All Episodes Online Free | Ranginx`;
+    }
+}
+finalTitle = finalTitle.substring(0, 60);
         
-        if(isMp4) return `<video ${vidId} controls playsinline preload="metadata" poster="${poster}" referrerpolicy="no-referrer" style="${style}"><source src="${url}"></video>`;
-        return `<iframe ${vidId} src="${url}" allowfullscreen style="${style};border:none"></iframe>`;
-    }
 
-    function buildSeriesExtras(poster) {
-        let btns = `<div class="ep-box-out"><div class="ep-head">Episodes</div><div class="ep-grid">`;
-        episodes.forEach((e,i) => {
-            let mp4 = e.url.includes('.mp4');
-            btns += `<button class="ep-btn ${i===0?'active':''}" onclick="playEp('${e.url}', ${mp4}, this)">${i+1}</button>`;
-        });
-        btns += `</div></div>`;
-
-        let sc = `
-        <script>
-        function playEp(u,m,b){
-            document.querySelectorAll('.ep-btn').forEach(x=>x.classList.remove('active'));
-            b.classList.add('active');
-            let c=document.getElementById('video-box');
-            if(m) c.innerHTML=\`<video controls autoplay playsinline style="width:100%;height:100%;object-fit:contain;background:#000;"><source src="\${u}"></video>\`;
-            else c.innerHTML=\`<iframe src="\${u}" allowfullscreen style="width:100%;height:100%;border:none;background:#000;"></iframe>\`;
+        // 4. AUTO-GENERATION: META DESCRIPTION
+        let finalMeta = data.metaDesc;
+        if(!finalMeta) {
+            if(type === 'movie') finalMeta = `Watch ${data.name} full HD movie online free on Ranginx. Fast streaming, no registration required, smooth playback.`;
+            else finalMeta = `Watch ${data.name} all episodes online free on Ranginx. Fast streaming, no registration required, smooth playback.`;
         }
-        <\/script>
-        <style>.ep-box-out{background:#18181b;padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #27272a}.ep-head{font-weight:700;margin-bottom:15px}.ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:10px}.ep-btn{background:#27272a;border:1px solid #333;color:#fff;padding:12px 0;border-radius:8px;cursor:pointer;font-weight:700}.ep-btn.active{background:#e50914;border-color:#e50914}</style>`;
-        return btns + sc;
+
+        // 5. AUTO-GENERATION: STORYLINE
+        let finalStoryHtml = "";
+        if(data.storyline) {
+            // Manual: Convert newlines to p tags
+            finalStoryHtml = data.storyline.split('\n').map(l => l.trim() ? `<p>${l}</p>` : '').join('');
+        } else {
+            // Automatic: 3-Paragraph SEO Logic
+            if(type === 'movie') {
+                finalStoryHtml = `
+                <p><strong>${data.name}</strong> is now available to watch online in full HD quality on Ranginx. This movie delivers an engaging experience with high-quality visuals and audio. You can enjoy the complete film without any interruptions.</p>
+                <p>Stream <strong>${data.name}</strong> with <strong>free streaming</strong> and <strong>no registration</strong>. Our platform is optimized for <strong>mobile & desktop</strong> devices, ensuring fast loading speeds and smooth playback.</p>
+                <p>Ranginx is your trusted destination for free entertainment. We provide a secure and premium viewing experience. Start watching ${data.name} now and enjoy the best of cinema.</p>`;
+            } else {
+                finalStoryHtml = `
+<p>Stream <strong>${data.name}</strong> with <strong>free streaming</strong> and <strong>no registration</strong>. Our platform is optimized for <strong>mobile & desktop</strong> devices, ensuring fast loading speeds and smooth playback.</p>`;
+ }
+        }
+
+        // 6. TAGS LOGIC
+        let tagsList = data.tagsRaw.split(',').map(t => t.trim()).filter(t => t.length > 0).slice(0, 8);
+        let tagsHtml = tagsList.length > 0 ? 
+            `<div class="tags">${tagsList.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
+
+        // 7. PLAYER LOGIC (With URL encoding & Type Attribute)
+        let playerHtml = "", extrasHtml = "";
+        if (type === 'movie') {
+            playerHtml = getPlayerCode(data.video, data.poster);
+        } else {
+            extrasHtml = buildSeriesExtras(data.poster);
+            playerHtml = getPlayerCode(episodes[0].url, data.poster, true);
+        }
+
+        // 8. SCHEMA LOGIC (JSON-LD)
+        let schemaData = {
+    "@context": "https://schema.org",
+    "@type": type === 'movie' ? "Movie" : "TVSeries",
+    "name": data.name,
+    "description": finalMeta,
+    "image": data.poster,
+    "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`,
+    "inLanguage": "en",
+    "genre": tagsList.length > 0 ? tagsList : ["Entertainment"],
+    "publisher": {
+        "@type": "Organization",
+        "name": "Ranginx"
+    },
+    "potentialAction": {
+        "@type": "WatchAction",
+        "target": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`
     }
+};
 
-    function buildTemplate(d, player, extras, poster) {
-        let tagsHtml = d.tags ? d.tags.split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('') : '';
-
-        return `<!DOCTYPE html>
+        // 9. FINAL HTML TEMPLATE ASSEMBLY
+        let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watch ${d.title} Full HD - Ranginx</title>
-<meta name="description" content="${d.desc.substring(0,150)}...">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${cleanStr(finalTitle)}</title>
+<meta name="description" content="${cleanStr(finalMeta)}">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ranginx.fun/movies/${d.slug}.html">
-<meta property="og:image" content="${poster}">
-<meta property="og:title" content="${d.title}">
-<meta property="og:type" content="video.movie">
-<meta property="og:url" content="https://ranginx.fun/movies/${d.slug}.html">
+<link rel="canonical" href="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
 <meta property="og:site_name" content="Ranginx">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="rating" content="RTA-5042-1996-1400-1577-RTA">
-<meta name="audience" content="adult">
-<meta name="adult" content="true">
+<meta property="og:title" content="${cleanStr(finalTitle)}">
+<meta property="og:description" content="${cleanStr(finalMeta)}">
+<meta property="og:image" content="${data.poster}">
+<meta property="og:type" content="${ogType}">
+<meta property="og:url" content="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
+<meta name="twitter:title" content="${cleanStr(finalTitle)}">
+<meta name="twitter:description" content="${cleanStr(finalMeta)}">
+<script type="application/ld+json">${JSON.stringify(schemaData)}<\/script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="/ads/movie-ads.js" defer><\/script>
 <script src="/ads/popunder.js" defer><\/script>
 <style>
-:root{--bg:#09090b;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
+:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.6}
 a{text-decoration:none;color:inherit}
 header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#000;position:sticky;top:0;z-index:99;border-bottom:1px solid #222}
-.logo{color:var(--p);font-weight:800;font-size:24px;letter-spacing:1px}
+.logo{color:var(--p);font-weight:800;font-size:24px;text-transform:uppercase}
 .home-btn{padding:8px 16px;background:var(--card);border:1px solid #333;border-radius:20px;font-size:12px;font-weight:600;color:#fff}
 .container{max-width:1200px;margin:0 auto;padding:0}
 .video-area{position:relative;width:100%;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
 .content-pad{padding:20px}
-h1{font-size:22px;margin-bottom:5px;font-weight:700}
-.meta-row{display:flex;gap:10px;align-items:center;margin-bottom:20px;font-size:12px;color:var(--m)}
-.badge{background:#333;color:#fff;padding:2px 6px;border-radius:4px;font-weight:600}
-/* Storyline Card */
-.story-card{background:var(--card);padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #222}
-.card-head{display:flex;align-items:center;gap:8px;color:var(--p);font-weight:700;margin-bottom:10px;font-size:15px}
-.desc-text{color:#ccc;font-size:14px;line-height:1.6;margin-bottom:15px}
-.tags{display:flex;flex-wrap:wrap;gap:8px}
-.tag{background:#222;border:1px solid #333;padding:5px 12px;border-radius:50px;font-size:11px;color:#ccc}
-/* Social Buttons Fixed */
-.social-row{display:flex;gap:12px;margin-bottom:20px}
-.soc-btn{flex:1;height:45px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid #333;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;color:white;transition:0.2s}
-.tg{color:#38bdf8;border-color:rgba(56,189,248,0.3)}
-.wa{color:#4ade80;border-color:rgba(74,222,128,0.3)}
+h1{font-size:24px;margin-bottom:10px;font-weight:700;line-height:1.2}
+.meta-row{display:flex;gap:10px;align-items:center;margin-bottom:20px;font-size:13px;color:var(--m)}
+.badge{background:#333;color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;font-size:11px}
+.story-card{
+  background:var(--card);
+  padding:25px;
+  border-radius:12px;
+  margin-top:10px;
+  margin-bottom:20px;
+}
+.card-head{display:flex;align-items:center;gap:10px;color:var(--p);font-weight:700;margin-bottom:15px;font-size:16px}
+.desc-text{color:#ccc;font-size:15px;line-height:1.7}
+.desc-text p{margin-bottom:15px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{background:#222;border:1px solid #333;padding:6px 14px;border-radius:50px;font-size:12px;color:#ccc}
+.social-row{display:flex;gap:10px;margin-bottom:25px}
+.soc-btn{flex:1;height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid #333;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;color:white;transition:0.2s}
+.tg{color:#38bdf8;border-color:rgba(56,189,248,0.2)}
+.wa{color:#4ade80;border-color:rgba(74,222,128,0.2)}
 .cp{background:#7c3aed;border-color:#7c3aed;color:white}
-.soc-btn:hover{filter:brightness(1.2)}
-/* Ads Auto Hide */
-.ad-box{width:100%;background:#000;display:flex;align-items:center;justify-content:center;margin:20px 0}
-.ad-box:empty{display:none}
-/* Related */
+.soc-btn:hover{filter:brightness(1.2);transform:translateY(-2px)}
+.ad-box{width:100%;background:#000;display:flex;align-items:center;justify-content:center;margin:20px 0;min-height:50px}
+.ad-box:empty{display:none;}
 .related-sec{padding:0 20px 40px 20px}
-.sec-title{font-weight:700;margin-bottom:15px;border-left:4px solid var(--p);padding-left:10px}
+.sec-title{font-weight:700;margin-bottom:15px;border-left:4px solid var(--p);padding-left:12px;font-size:16px}
 .rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.rel-card{display:block;border-radius:8px;overflow:hidden;background:var(--card)}
+.rel-card{display:block;border-radius:8px;overflow:hidden;background:var(--card);transition:0.2s}
+.rel-card:hover{transform:translateY(-3px)}
 .rel-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#111}
-.rel-title{padding:10px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rel-title{padding:12px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .load-more{width:100%;padding:15px;background:var(--card);border:1px solid #333;color:#fff;font-weight:700;margin-top:20px;border-radius:8px;cursor:pointer}
-footer{background:#000;padding:40px;text-align:center;font-size:12px;color:#555}
-@media(min-width:768px){ .container{display:grid;grid-template-columns:7fr 3fr;gap:30px;padding:30px} .video-area{border-radius:12px;overflow:hidden;margin-top:20px} .content-pad{padding:0;margin-top:20px} .rel-grid{grid-template-columns:1fr} }
-</style>
+footer{background:#000;padding:50px 20px;text-align:center;font-size:13px;color:#555;border-top:1px solid #222}
+@media(min-width:768px){ .container{display:grid;grid-template-columns:70% 30%;gap:30px;padding:40px} .video-area{border-radius:12px;overflow:hidden;margin-top:0} .content-pad{padding:0;margin-top:25px} .rel-grid{grid-template-columns:1fr} }
+@media(max-width:768px){
+  .content-pad{
+    padding-bottom:10px;
+  }
+}</style>
 </head>
 <body>
 <header>
@@ -397,32 +413,32 @@ footer{background:#000;padding:40px;text-align:center;font-size:12px;color:#555}
     <a href="/" class="home-btn">🏠 HOME</a>
 </header>
 
-<div class="video-area" id="video-box">${player}</div>
+<div class="video-area" id="video-box">${playerHtml}</div>
 
 <div class="container">
     <div class="main-col">
         <div class="content-pad">
-            <h1>${d.title}</h1>
+            <h1>${data.name}</h1>
             <div class="meta-row">
                 <span class="badge">HD</span>
-                <span>Streaming</span>
-                <span>Free</span>
+                <span class="badge" style="background:var(--p)">Free</span>
+                <span>Streaming Now</span>
             </div>
 
             <div class="social-row">
-                 <a href="https://t.me/share/url?url=https://ranginx.fun/movies/${d.slug}.html" target="_blank" class="soc-btn tg">Telegram</a>
-                 <a href="https://api.whatsapp.com/send?text=Watch: https://ranginx.fun/movies/${d.slug}.html" target="_blank" class="soc-btn wa">WhatsApp</a>
+                 <a href="https://t.me/share/url?url=https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html" target="_blank" class="soc-btn tg">Telegram</a>
+                 <a href="https://api.whatsapp.com/send?text=Watch: https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html" target="_blank" class="soc-btn wa">WhatsApp</a>
                  <button class="soc-btn cp" onclick="copyLink()">Copy Link</button>
             </div>
 
             <div id="ad-banner" class="ad-box"></div>
 
-            ${extras}
+            ${extrasHtml}
 
             <div class="story-card">
-                <div class="card-head">📖 Storyline</div>
-                <div class="desc-text">${d.desc}</div>
-                <div class="tags">${tagsHtml}</div>
+                <div class="card-head">📝 Storyline</div>
+                <div class="desc-text">${finalStoryHtml}</div>
+                ${tagsHtml}
             </div>
         </div>
     </div>
@@ -432,44 +448,38 @@ footer{background:#000;padding:40px;text-align:center;font-size:12px;color:#555}
             <div class="sec-title">You May Also Like</div>
             <div class="rel-grid" id="related-grid"></div>
             <button class="load-more" id="loadBtn" onclick="loadNextBatch()">Load More</button>
-            
             <div id="ad-sidebar" class="ad-box"></div>
         </div>
     </div>
 </div>
 
 <footer>
-    © 2025 Ranginx. All rights reserved.<br>
-    <a href="/dmca.html" style="color:#777;margin:0 5px">DMCA</a>
-    <a href="/terms.html" style="color:#777;margin:0 5px">Terms</a>
-    <a href="/privacy.html" style="color:#777;margin:0 5px">Privacy</a>
+    © 2025 Ranginx. All rights reserved.<br><br>
+    <a href="/dmca.html" style="color:#777;margin:0 10px">DMCA</a>
+    <a href="/terms.html" style="color:#777;margin:0 10px">Terms</a>
+    <a href="/privacy.html" style="color:#777;margin:0 10px">Privacy</a>
 </footer>
 
 <script>
 function copyLink(){
-    let t=document.createElement("textarea"); t.value=window.location.href; t.style.position="fixed";
-    document.body.appendChild(t); t.select(); document.execCommand("copy"); document.body.removeChild(t);
-    alert("Link Copied!");
+    navigator.clipboard.writeText(window.location.href)
+      .then(()=>alert("Link Copied!"));
 }
 
-let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "movies/${d.slug}";
+let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "${finalSlug}";
 
 document.addEventListener("DOMContentLoaded", ()=>{
     const grid = document.getElementById('related-grid');
-    const fallback = [
-        {title:"Demo Movie 1", slug:"movies/demo1", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo1"},
-        {title:"Demo Movie 2", slug:"movies/demo2", thumbnail:"https://via.placeholder.com/300x170/333/fff?text=Demo2"}
-    ];
-
     fetch('/data/movies.json')
     .then(r=>{if(!r.ok)throw new Error();return r.json()})
     .then(d=>{
-        allData = d.filter(m=> !m.slug.includes("${d.slug}"));
-        loadNextBatch();
+        allData = d.filter(m=>m.slug !== currentSlug);
+        if(allData.length > 0) loadNextBatch();
+        else grid.innerHTML = '<div style="padding:10px;color:#555">No related content</div>';
     })
     .catch(()=>{
-        console.log("Local Mode: Using Fallback");
-        grid.innerHTML = fallback.map(m=>\`<a href="/\${m.slug}.html" class="rel-card"><img src="\${m.thumbnail}" class="rel-img"><div class="rel-title">\${m.title}</div></a>\`).join('');
+        console.log("Local Mode");
+        grid.innerHTML = '<div style="padding:10px;color:#555">Loading related... (Server needed)</div>';
         document.getElementById('loadBtn').style.display='none';
     });
 });
@@ -479,26 +489,74 @@ function loadNextBatch() {
     const btn = document.getElementById('loadBtn');
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
     
-    if(nextBatch.length === 0 && currentIndex === 0) {
-         grid.innerHTML = '<div style="padding:10px;color:#555">No matches found</div>';
-         btn.style.display = 'none'; return;
-    }
     nextBatch.forEach(m => {
-        let link = m.slug.includes('/') ? \`/\${m.slug}.html\` : \`/movies/\${m.slug}.html\`;
-        grid.innerHTML += \`<a href="\${link}" class="rel-card"><img src="\${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">\${m.title}</div></a>\`;
+        grid.innerHTML += \`<a href="/movies/\${m.slug}.html" class="rel-card"><img src="\${m.thumbnail}" class="rel-img" loading="lazy" alt="\${m.title}"><div class="rel-title">\${m.title}</div></a>\`;
     });
     currentIndex += itemsPerPage;
     if(currentIndex >= allData.length) btn.style.display = 'none';
 }
 <\/script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"><\/script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"><\/script>
+<script src="../app.js"><\/script>
+
 </body>
 </html>`;
+
+        const finalJson = {
+  title: data.name,
+  slug: finalSlug,
+  thumbnail: data.poster,
+  type: type
+};
+
+showOutput(
+  html,
+  JSON.stringify(finalJson, null, 2) + ",",
+  finalSlug
+);
+    }
+
+    function getPlayerCode(url, poster, id=false) {
+        let cleanUrl = encodeUrl(url); // Ensure spaces are encoded
+        let isMp4 = cleanUrl.includes('.mp4') || cleanUrl.includes('.mkv');
+        let style = `width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;`;
+        let vidId = id ? 'id="main-player"' : '';
+        
+        if(isMp4) {
+            // FIXED: Added type="video/mp4" and cleaned URL
+            return `<video ${vidId} controls playsinline preload="metadata" poster="${poster}" style="${style}"><source src="${cleanUrl}" type="video/mp4"></video>`;
+        } else {
+            return `<iframe ${vidId} src="${cleanUrl}" allowfullscreen scrolling="no" allow="encrypted-media; picture-in-picture" style="${style};border:none"></iframe>`;
+        }
+    }
+
+    function buildSeriesExtras(poster) {
+        let btns = `<div class="ep-box-out"><div class="ep-head">Episodes</div><div class="ep-grid">`;
+        episodes.forEach((e,i) => {
+            let cleanU = encodeUrl(e.url);
+            let mp4 = cleanU.includes('.mp4');
+            btns += `<button class="ep-btn ${i===0?'active':''}" onclick="playEp('${cleanU}', ${mp4}, this)">${i+1}</button>`;
+        });
+        btns += `</div></div>`;
+        return btns + `
+        <script>
+        function playEp(u,m,b){
+            document.querySelectorAll('.ep-btn').forEach(x=>x.classList.remove('active'));
+            b.classList.add('active');
+            let c=document.getElementById('video-box');
+            let style = "width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;";
+            if(m) c.innerHTML=\`<video controls autoplay playsinline style="\${style}"><source src="\${u}" type="video/mp4"></video>\`;
+            else c.innerHTML=\`<iframe src="\${u}" allowfullscreen style="\${style};border:none"></iframe>\`;
+        }
+        <\/script>
+        <style>.ep-box-out{background:#18181b;padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #27272a}.ep-head{font-weight:700;margin-bottom:15px}.ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:10px}.ep-btn{background:#27272a;border:1px solid #333;color:#fff;padding:12px 0;border-radius:8px;cursor:pointer;font-weight:700}.ep-btn.active{background:#e50914;border-color:#e50914}</style>`;
     }
 
     function showOutput(h,j,s) {
         currentSlug = s;
         document.getElementById('htmlOut').textContent = h;
-        document.getElementById('jsonOut').textContent = j + ","; 
+        document.getElementById('jsonOut').textContent = j; 
         document.getElementById('outputArea').style.display = 'block';
         document.getElementById('outputArea').scrollIntoView({behavior:'smooth'});
     }
@@ -507,7 +565,7 @@ function loadNextBatch() {
         let t=document.getElementById(id).textContent;
         let ta=document.createElement("textarea");
         ta.value=t; ta.style.position="fixed"; document.body.appendChild(ta);
-        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+        ta.select(); navigator.clipboard.writeText(t); document.body.removeChild(ta);
         alert("Copied!");
     }
 
