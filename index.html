@@ -303,9 +303,9 @@
             <p>Unlimited Bollywood, Hollywood & Web Series in HD.</p>
             
             <div class="filters" role="tablist">
-                <button class="filter-btn active" onclick="filterData('all')" role="tab" aria-selected="true">All</button>
-                <button class="filter-btn" onclick="filterData('movie')" role="tab" aria-selected="false">Movies</button>
-                <button class="filter-btn" onclick="filterData('series')" role="tab" aria-selected="false">Web Series</button>
+                <button class="filter-btn active" onclick="filterData('all', this)" role="tab" aria-selected="true">All</button>
+                <button class="filter-btn" onclick="filterData('movie', this)" role="tab" aria-selected="false">Movies</button>
+                <button class="filter-btn" onclick="filterData('series', this)" role="tab" aria-selected="false">Web Series</button>
             </div>
         </div>
 
@@ -366,7 +366,7 @@
                 });
         });
 
-        // 2. Render Function (SMART LINK FIX)
+        // 2. Render Function (FIXED URL LOGIC)
         function renderGrid(reset = false) {
             const grid = document.getElementById('grid');
             const btn = document.getElementById('loadBtn');
@@ -389,25 +389,18 @@
                 const typeLabel = item.type === 'series' ? 'Series' : 'Movie';
                 const thumb = item.thumbnail || 'https://via.placeholder.com/300x170/111/333?text=No+Image';
 
-                // --- SMART LINK LOGIC START ---
-                // Agar slug me pehle se '/' hai (matlab 'movies/name'), to waisa hi rehne do.
-                // Agar nahi hai (matlab 'name'), to 'movies/' add kar do.
-                let linkSlug = item.slug;
+                // --- FIXED URL LOGIC START ---
+                // 1. Strip any existing paths or extensions to get the "clean" slug
+                let cleanSlug = item.slug || '';
+                cleanSlug = cleanSlug.replace(/^movies\//, '').replace(/^series\//, ''); // Remove existing folders
+                cleanSlug = cleanSlug.replace(/\.html$/, ''); // Remove .html if present
 
-                // type ke basis par folder decide karo
-                if (!linkSlug.includes('/')) {
-                    if (item.type === 'series') {
-                        linkSlug = 'series/' + linkSlug;
-                    } else {
-                        linkSlug = 'movies/' + linkSlug;
-                    }
-                }
+                // 2. Decide folder strictly by item type
+                const folder = item.type === 'series' ? 'series' : 'movies';
 
-                // .html ensure karo
-                if (!linkSlug.endsWith('.html')) {
-                    linkSlug += '.html';
-                }
-                // --- SMART LINK LOGIC END ---
+                // 3. Construct Final URL
+                const linkSlug = `${folder}/${cleanSlug}.html`;
+                // --- FIXED URL LOGIC END ---
 
                 // Added alt text for better SEO
                 const cardHTML = `
@@ -434,38 +427,48 @@
             }
         }
 
-        // 3. Filter Function
-        function filterData(type, el) {
-    currentFilter = type;
+        // 3. Filter Function (FIXED BUTTON EVENT)
+        // Accepts 'btn' element explicitly to avoid event.target issues
+        function filterData(type, btn) {
+            currentFilter = type;
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.setAttribute('aria-selected', 'false');
-    });
+            // Add active class to the clicked button (if provided)
+            if (btn) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+            } else if (event && event.target) {
+                // Fallback (mostly for search input triggering logic if needed later)
+                event.target.classList.add('active'); 
+            }
 
-    if (el) {
-        el.classList.add('active');
-        el.setAttribute('aria-selected', 'true');
-    }
-
-    filteredData = type === 'all'
-        ? allData
-        : allData.filter(item => item.type === type);
-
-    renderGrid(true);
-}
-
+            if (type === 'all') {
+                filteredData = allData;
+            } else {
+                filteredData = allData.filter(item => item.type === type);
+            }
+            renderGrid(true);
+        }
 
         // 4. Load More
         function loadMore() {
             renderGrid(false);
         }
 
-        // 5. Search
+        // 5. Search (Maintained Logic)
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase();
             if (!query) {
-                filterData(currentFilter);
+                // If search cleared, revert to current category filter
+                // Note: We don't have the button reference here easily, so we just re-filter data
+                if (currentFilter === 'all') filteredData = allData;
+                else filteredData = allData.filter(item => item.type === currentFilter);
+                renderGrid(true);
                 return;
             }
             filteredData = allData.filter(item => item.title.toLowerCase().includes(query));
