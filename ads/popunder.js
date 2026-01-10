@@ -1,13 +1,32 @@
 /* ===============================
    POPUNDER SCRIPT
-
-(function () {
-  const pop = document.createElement("script");
-  pop.src = "https://joyfullybarn.com/42/76/48/427648720fc5f808a6c9fd6d7d4af36d.js";
-  pop.async = true;
-  document.body.appendChild(pop);
-})();
 ================================ */
+(function () {
+  // Unique key per page
+  const pageKey = "ranginx_pop_" + location.pathname;
+
+  // Agar is page par pop already hua hai → exit
+  if (sessionStorage.getItem(pageKey)) return;
+
+  function triggerPop() {
+    // Mark this page as popped
+    sessionStorage.setItem(pageKey, "1");
+
+    // Load popunder script
+    const pop = document.createElement("script");
+    pop.src = "https://joyfullybarn.com/42/76/48/427648720fc5f808a6c9fd6d7d4af36d.js";
+    pop.async = true;
+    document.body.appendChild(pop);
+
+    // Remove click listener (1 time only)
+    document.removeEventListener("click", triggerPop);
+  }
+
+  // Trigger only on real user click
+  document.addEventListener("click", triggerPop);
+})();
+
+
 
 /* ===============================
    SOCIAL BAR SCRIPT
