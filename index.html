@@ -435,22 +435,26 @@
         }
 
         // 3. Filter Function
-        function filterData(type) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.setAttribute('aria-selected', 'false');
-            });
-            event.target.classList.add('active');
-            event.target.setAttribute('aria-selected', 'true');
+        function filterData(type, el) {
+    currentFilter = type;
 
-            if (type === 'all') {
-                filteredData = allData;
-            } else {
-                filteredData = allData.filter(item => item.type === type);
-            }
-            renderGrid(true);
-        }
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+    });
+
+    if (el) {
+        el.classList.add('active');
+        el.setAttribute('aria-selected', 'true');
+    }
+
+    filteredData = type === 'all'
+        ? allData
+        : allData.filter(item => item.type === type);
+
+    renderGrid(true);
+}
+
 
         // 4. Load More
         function loadMore() {
