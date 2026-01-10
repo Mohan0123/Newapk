@@ -4,19 +4,19 @@
 <link rel="icon" type="image/png" href="/favicon.ico">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Gift Atrangi Web Series (2025) | Quirky Love Story </title>
-<meta name="description" content="Birthday Gift is an atrangi romantic web series filled with surprises, emotions, fun moments and unexpected love.">
+<title>Watch Birthday gift Web Series</title>
+<meta name="description" content="Watch Birthday gift online free.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://ranginx.fun/series/birthday-gift.html">
 <meta property="og:site_name" content="Ranginx">
-<meta property="og:title" content="Birthday Gift Atrangi Web Series (2025) | Quirky Love Story ">
-<meta property="og:description" content="Birthday Gift is an atrangi romantic web series filled with surprises, emotions, fun moments and unexpected love.">
+<meta property="og:title" content="Watch Birthday gift Web Series">
+<meta property="og:description" content="Watch Birthday gift online free.">
 <meta property="og:image" content="https://redmaal.com/wp-content/uploads/2025/10/Birthday-Gift-Episode-3.webp">
 <meta property="og:type" content="video.tv_show">
 <meta property="og:url" content="https://ranginx.fun/series/birthday-gift.html">
-<meta name="twitter:title" content="Birthday Gift Atrangi Web Series (2025) | Quirky Love Story ">
-<meta name="twitter:description" content="Birthday Gift is an atrangi romantic web series filled with surprises, emotions, fun moments and unexpected love.">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"TVSeries","name":"Birthday Gift","description":"Birthday Gift is an atrangi romantic web series filled with surprises, emotions, fun moments and unexpected love.","image":"https://redmaal.com/wp-content/uploads/2025/10/Birthday-Gift-Episode-3.webp","url":"https://ranginx.fun/series/birthday-gift.html","inLanguage":"en","genre":["Romantic","webseries","HD"],"publisher":{"@type":"Organization","name":"Ranginx"},"potentialAction":{"@type":"WatchAction","target":"https://ranginx.fun/series/birthday-gift.html"}}</script>
+<meta name="twitter:title" content="Watch Birthday gift Web Series">
+<meta name="twitter:description" content="Watch Birthday gift online free.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TVSeries","name":"Birthday gift","url":"https://ranginx.fun/series/birthday-gift.html","image":"https://redmaal.com/wp-content/uploads/2025/10/Birthday-Gift-Episode-3.webp"}</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="/ads/movie-ads.js" defer></script>
 <script src="/ads/popunder.js" defer></script>
@@ -81,7 +81,7 @@ footer{background:#000;padding:50px 20px;text-align:center;font-size:13px;color:
 <div class="container">
     <div class="main-col">
         <div class="content-pad">
-            <h1>Birthday Gift</h1>
+            <h1>Birthday gift</h1>
             <div class="meta-row">
                 <span class="badge">HD</span>
                 <span class="badge" style="background:var(--p)">Free</span>
@@ -111,8 +111,8 @@ footer{background:#000;padding:50px 20px;text-align:center;font-size:13px;color:
 
             <div class="story-card">
                 <div class="card-head">📝 Storyline</div>
-                <div class="desc-text"><p>Birthday Gift You’re At The Right Place! Here, You Can Watch And Download All Episode Of Birthday Gift For Free. It Is A Atrangii Original Web Series, Released On October 17, 2025. Kainaat Arora, Riya Ganguly Is The Lead Actresses In This Series.</p><p>In Redmaal.com You Can Watch All Episodes Of Birthday Gift Web Series, Other Ullu Web Series And Hot Web Series.</p></div>
-                <div class="tags"><span class="tag">Romantic</span><span class="tag">webseries</span><span class="tag">HD</span></div>
+                <div class="desc-text"><p>Birthday gift is available to watch online. Stream now in high quality on Ranginx.</p></div>
+                <div class="tags"><span class="tag">Romantic</span><span class="tag">HD</span><span class="tag">Ullu</span><span class="tag">webseries</span></div>
             </div>
         </div>
     </div>
@@ -144,7 +144,8 @@ let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlu
 
 document.addEventListener("DOMContentLoaded", ()=>{
     const grid = document.getElementById('related-grid');
-    fetch('/data/movies.json')
+    // Version number added to prevent caching issues
+    fetch('/data/movies.json?v=' + new Date().getTime())
     .then(r=>{if(!r.ok)throw new Error();return r.json()})
     .then(d=>{
         allData = d.filter(m=>m.slug !== currentSlug);
@@ -152,7 +153,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
         else grid.innerHTML = '<div style="padding:10px;color:#555">No related content</div>';
     })
     .catch(()=>{
-        console.log("Local Mode");
+        console.log("Local Mode or Fetch Error");
         grid.innerHTML = '<div style="padding:10px;color:#555">Loading related... (Server needed)</div>';
         document.getElementById('loadBtn').style.display='none';
     });
@@ -163,13 +164,23 @@ function loadNextBatch() {
     const btn = document.getElementById('loadBtn');
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
     
+    let htmlBuffer = '';
     nextBatch.forEach(m => {
-        let folder = m.type === 'series' ? 'series' : 'movies';
-let url = `/${folder}/${m.slug}.html`;
-
-grid.innerHTML += `
-<a href="${url}" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}"><div class="rel-title">${m.title}</div></a>`;
+        // --- 🔴 FIXED LOGIC FOR LINKS 🔴 ---
+        let itemType = (m.type || 'movie').toLowerCase();
+        let folder = itemType === 'series' ? 'series' : 'movies';
+        let url = `/${folder}/${m.slug}.html`; 
+        
+        htmlBuffer += `<a href="${url}" class="rel-card">
+            <div style="position:relative">
+                <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
+                 <span style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.6);color:#fff;padding:2px 5px;border-radius:3px;font-size:10px;backdrop-filter:blur(2px)">${itemType.toUpperCase()}</span>
+            </div>
+            <div class="rel-title">${m.title}</div>
+        </a>`;
     });
+    
+    grid.innerHTML += htmlBuffer;
     currentIndex += itemsPerPage;
     if(currentIndex >= allData.length) btn.style.display = 'none';
 }
