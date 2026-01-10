@@ -1,30 +1,19 @@
 /* ===============================
-   POPUNDER AD
+   POPUNDER SCRIPT
 ================================ */
 (function () {
-  let popTriggered = false;
-
-  function openPop() {
-    if (popTriggered) return;
-    popTriggered = true;
-
-    window.open(
-      "https://YOUR_POPUNDER_AD_URL",
-      "_blank"
-    );
-
-    document.removeEventListener("click", openPop);
-  }
-
-  document.addEventListener("click", openPop);
+  const pop = document.createElement("script");
+  pop.src = "https://joyfullybarn.com/42/76/48/427648720fc5f808a6c9fd6d7d4af36d.js";
+  pop.async = true;
+  document.body.appendChild(pop);
 })();
 
 /* ===============================
-   SOCIAL BAR (EXTERNAL SCRIPT)
+   SOCIAL BAR SCRIPT
 ================================ */
 (function () {
-  const s = document.createElement("script");
-  s.src = "https://joyfullybarn.com/f5/76/ea/f576ea86d7e7c1a91485425829516236.js";
-  s.async = true;
-  document.body.appendChild(s);
+  const social = document.createElement("script");
+  social.src = "https://joyfullybarn.com/f5/76/ea/f576ea86d7e7c1a91485425829516236.js";
+  social.async = true;
+  document.body.appendChild(social);
 })();
