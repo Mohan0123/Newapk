@@ -166,19 +166,49 @@ function loadNextBatch() {
     
     let htmlBuffer = '';
     nextBatch.forEach(m => {
-        // --- 🔴 FIXED LOGIC FOR LINKS 🔴 ---
-        let itemType = (m.type || 'movie').toLowerCase();
-        let folder = itemType === 'series' ? 'series' : 'movies';
-        let url = `/${folder}/${m.slug}.html`; 
-        
-        htmlBuffer += `<a href="${url}" class="rel-card">
+
+    // normalize type very strictly
+    let rawType = (m.type || '').toString().toLowerCase();
+
+    let isSeries =
+        rawType === 'series' ||
+        rawType === 'webseries' ||
+        rawType === 'tvseries' ||
+        rawType === 'show';
+
+    let folder = isSeries ? 'series' : 'movies';
+
+    // sanitize slug again (double safety)
+    let cleanSlug = (m.slug || '')
+        .replace(/^movies\//, '')
+        .replace(/^series\//, '')
+        .replace(/\.html$/, '')
+        .replace(/^\//, '');
+
+    let url = `/${folder}/${cleanSlug}.html`;
+
+    htmlBuffer += `
+        <a href="${url}" class="rel-card">
             <div style="position:relative">
                 <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
-                 <span style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.6);color:#fff;padding:2px 5px;border-radius:3px;font-size:10px;backdrop-filter:blur(2px)">${itemType.toUpperCase()}</span>
+                <span style="
+                    position:absolute;
+                    top:5px;
+                    right:5px;
+                    background:rgba(0,0,0,0.6);
+                    color:#fff;
+                    padding:2px 5px;
+                    border-radius:3px;
+                    font-size:10px;
+                ">
+                    ${isSeries ? 'SERIES' : 'MOVIE'}
+                </span>
             </div>
             <div class="rel-title">${m.title}</div>
-        </a>`;
-    });
+        </a>
+    `;
+});
+
     
     grid.innerHTML += htmlBuffer;
     currentIndex += itemsPerPage;
