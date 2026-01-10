@@ -387,18 +387,19 @@
 
             nextBatch.forEach(m => {
 
-    // 🔒 STRICT & SAFE SERIES DETECTION
-    let rawType = String(m.type || '').toLowerCase();
+    // 🔒 FINAL SAFE LOGIC
+    // Agar current page series hai → series hi kholni hai
+    const isSeriesPage = window.location.pathname.startsWith('/series/');
 
-    let isSeries =
-        rawType === 'series' ||
-        rawType === 'webseries' ||
-        rawType === 'tvseries' ||
-        rawType === 'show';
+    let folder;
 
-    let folder = isSeries ? 'series' : 'movies';
+    if (isSeriesPage) {
+        folder = 'series';
+    } else {
+        folder = 'movies';
+    }
 
-    // slug safety
+    // slug clean
     let cleanSlug = String(m.slug || '')
         .replace(/^movies\//, '')
         .replace(/^series\//, '')
@@ -408,13 +409,26 @@
     let url = `/${folder}/${cleanSlug}.html`;
 
     htmlBuffer += `
-        <a href="${url}" class="card">
-            <img src="${m.thumbnail}" loading="lazy" alt="${m.title}">
-            <div class="title">${m.title}</div>
+        <a href="${url}" class="rel-card">
+            <div style="position:relative">
+                <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
+                <span style="
+                    position:absolute;
+                    top:5px;
+                    right:5px;
+                    background:rgba(0,0,0,0.7);
+                    color:#fff;
+                    padding:2px 6px;
+                    border-radius:3px;
+                    font-size:10px
+                ">
+                    ${folder.toUpperCase()}
+                </span>
+            </div>
+            <div class="rel-title">${m.title}</div>
         </a>
     `;
 });
-
 
         // 3. Filter Function (FIXED BUTTON EVENT)
         // Accepts 'btn' element explicitly to avoid event.target issues
