@@ -1,15 +1,21 @@
 
 [
   {
-  "title": "Jamai babu Episode 3",
-  "slug": "jamai-babu-episode-6",
-  "thumbnail": "https://redmaal.com/wp-content/uploads/2025/07/Jamai-Babu-Episode-6.webp",
+  "title": "Jamai babu Episode 1",
+  "slug": "jamai-babu-episode-1",
+  "thumbnail": "https://redmaal.com/wp-content/uploads/2025/07/Jamai-Babu-Episode-1.webp",
   "type": "movie"
 },
   {
-  "title": "Jamai babu Episode 4",
-  "slug": "jamai-babu-episode-4",
-  "thumbnail": "https://redmaal.com/wp-content/uploads/2025/07/Jamai-Babu-Episode-4.webp",
+  "title": "Jamai babu Episode 2",
+  "slug": "jamai-babu-episode-2",
+  "thumbnail": "https://redmaal.com/wp-content/uploads/2025/07/Jamai-Babu-Episode-2.webp",
+  "type": "movie"
+},
+  {
+  "title": "Jamai babu Episode 3",
+  "slug": "jamai-babu-episode-3",
+  "thumbnail": "https://redmaal.com/wp-content/uploads/2025/07/Jamai-Babu-Episode-3.webp",
   "type": "movie"
 },
   {
