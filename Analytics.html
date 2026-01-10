@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Analytics Dashboard</title>
+    <style>
+        :root {
+            --bg-body: #f4f6f9;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --primary: #3b82f6;
+            --border: #e2e8f0;
+            --movie-color: #8b5cf6;
+            --series-color: #10b981;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 50px; }
+
+        /* --- Layout & Header --- */
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 15px; }
+        h1 { font-size: 1.5rem; color: var(--text-main); }
+        
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg-card); cursor: pointer; border-radius: 6px; font-size: 0.9rem; transition: all 0.2s; }
+        .btn:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); }
+        .btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        input[type="date"] { padding: 7px; border: 1px solid var(--border); border-radius: 6px; }
+
+        /* --- Summary Cards --- */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: var(--bg-card); padding: 20px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        .card h3 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .card .value { font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+        .card .sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; }
+
+        /* --- Main Content Area --- */
+        .content-layout { display: grid; grid-template-columns: 350px 1fr; gap: 25px; }
+        
+        @media (max-width: 1024px) { .content-layout { grid-template-columns: 1fr; } }
+
+        /* --- Trending Section --- */
+        .trending-list { display: flex; flex-direction: column; gap: 15px; }
+        .trending-item { display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .trending-rank { font-size: 1.2rem; font-weight: bold; color: var(--text-muted); width: 20px; }
+        .trending-thumb { width: 60px; height: 80px; object-fit: cover; border-radius: 6px; background: #eee; }
+        .trending-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
+        .trending-stats { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* --- Data Table --- */
+        .table-container { background: var(--bg-card); border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        
+        .toolbar { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; background: #f8fafc; }
+        .search-input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; }
+        .filter-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #f8fafc; padding: 12px 15px; font-weight: 600; font-size: 0.85rem; color: var(--text-muted); position: sticky; top: 0; }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: middle; }
+        tr:hover { background: #fcfcfc; }
+
+        .thumb-cell { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+        .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        .badge.movie { background: #efe9fe; color: var(--movie-color); }
+        .badge.series { background: #d1fae5; color: var(--series-color); }
+        
+        .link-btn { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 0.85rem; }
+        .link-btn:hover { text-decoration: underline; }
+
+        /* --- Utilities --- */
+        .loading-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; justify-content:center; align-items:center; z-index: 1000; display: none; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div id="loader" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <div class="controls">
+                <button class="btn active" onclick="setDateRange('today')" id="btn-today">Today</button>
+                <button class="btn" onclick="setDateRange('yesterday')" id="btn-yesterday">Yesterday</button>
+                <button class="btn" onclick="setDateRange('last7')" id="btn-last7">Last 7 Days</button>
+                <span style="color:var(--text-muted)">|</span>
+                <input type="date" id="date-picker" onchange="setDateRange('custom')">
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>Total Content</h3>
+                <div class="value" id="stat-total-items">0</div>
+                <div class="sub">Movies: <span id="stat-movies">0</span> | Series: <span id="stat-series">0</span></div>
+            </div>
+            <div class="card">
+                <h3>Views (Selected Period)</h3>
+                <div class="value" style="color:var(--primary)" id="stat-views">0</div>
+            </div>
+            <div class="card">
+                <h3>Watch Time (Selected Period)</h3>
+                <div class="value" style="color:var(--series-color)" id="stat-time">0m</div>
+                <div class="sub">Total minutes watched</div>
+            </div>
+            <div class="card">
+                <h3>Top Performer</h3>
+                <div class="value" style="font-size: 1.2rem;" id="stat-top-name">-</div>
+                <div class="sub" id="stat-top-views">0 views</div>
+            </div>
+        </div>
+
+        <div class="content-layout">
+            <div>
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">Trending Top 10</h3>
+                    <div id="trending-container" class="trending-list">
+                        </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="toolbar">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search by title..." onkeyup="filterTable()">
+                    <select id="type-filter" class="filter-select" onchange="filterTable()">
+                        <option value="all">All Types</option>
+                        <option value="movie">Movies</option>
+                        <option value="series">Series</option>
+                    </select>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Img</th>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Views</th>
+                                <th>Watch Time</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // ==========================================
+        // 1. CONFIGURATION (REPLACE THIS!)
+        // ==========================================
+        const firebaseConfig = {
+    apiKey: "AIzaSyDqxDVOGJR1_i7HM0NtUlQ2vdVtEBTxQfc",
+    authDomain: "easyfind-hk5x6.firebaseapp.com",
+    databaseURL: "https://easyfind-hk5x6-default-rtdb.firebaseio.com",
+    projectId: "easyfind-hk5x6",
+    storageBucket: "easyfind-hk5x6.firebasestorage.app",
+    messagingSenderId: "45912638549",
+    appId: "1:45912638549:web:3e8732b2bd4d15f3a300dc"
+};
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db);
+
+        // ==========================================
+        // 2. STATE MANAGEMENT
+        // ==========================================
+        let state = {
+            allContent: [],     // Raw JSON data
+            analyticsMap: {},   // Merged analytics for current date range: { "movie-slug": {views: x, time: y} }
+            datesToFetch: [],   // Array of YYYY-MM-DD strings
+            loading: false
+        };
+
+        // ==========================================
+        // 3. CORE FUNCTIONS
+        // ==========================================
+
+        // Start Application
+        async function init() {
+            setLoading(true);
+            try {
+                // 1. Fetch Static Content JSON
+                const response = await fetch('/data/movies.json');
+                if (!response.ok) throw new Error("Could not load content.json");
+                state.allContent = await response.json();
+
+                // 2. Set default date (Today) and load data
+                window.setDateRange('today'); 
+            } catch (error) {
+                console.error("Init Error:", error);
+                alert("Error initializing dashboard: " + error.message);
+                setLoading(false);
+            }
+        }
+
+        // Fetch Analytics from Firebase
+        async function fetchAnalyticsData() {
+            setLoading(true);
+            state.analyticsMap = {}; // Reset current stats
+
+            try {
+                // We create a promise for every date in the range
+                const promises = state.datesToFetch.map(dateStr => 
+                    get(child(dbRef, `analytics/daily/${dateStr}`))
+                );
+
+                const snapshots = await Promise.all(promises);
+
+                // Process snapshots
+                snapshots.forEach(snapshot => {
+                    if (snapshot.exists()) {
+                        const dayData = snapshot.val(); 
+                        // Structure: { movie: { slug: { views: 1... } }, series: {...} }
+                        
+                        // Merge into flat map using a composite key (type + slug) or nested checking
+                        // We will map stats to the content items later, so let's aggregate into a temp structure
+                        
+                        ['movies', 'series'].forEach(type => {
+
+                            if (dayData[type]) {
+                                Object.keys(dayData[type]).forEach(slug => {
+                                    const key = `${type}-${slug}`; // Unique key
+                                    const stats = dayData[type][slug];
+
+                                    if (!state.analyticsMap[key]) {
+                                        state.analyticsMap[key] = { views: 0, totalTime: 0 };
+                                    }
+                                    
+                                    state.analyticsMap[key].views += (stats.views || 0);
+                                    state.analyticsMap[key].totalTime += (stats.totalTime || 0);
+                                });
+                            }
+                        });
+                    }
+                });
+
+                renderDashboard();
+            } catch (error) {
+                console.error("Firebase Error:", error);
+                alert("Error loading analytics data");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // ==========================================
+        // 4. RENDERING UI
+        // ==========================================
+
+        function renderDashboard() {
+            // 1. Merge Content with Analytics
+            const mergedData = state.allContent.map(item => {
+                const key = `${item.type}-${item.slug}`;
+                const stats = state.analyticsMap[key] || { views: 0, totalTime: 0 };
+                return {
+                    ...item,
+                    currentViews: stats.views,
+                    currentTime: stats.totalTime
+                };
+            });
+
+            // 2. Update Summary Cards
+            const totalMovies = mergedData.filter(i => i.type === 'movie').length;
+            const totalSeries = mergedData.filter(i => i.type === 'series').length;
+            const totalViews = mergedData.reduce((sum, item) => sum + item.currentViews, 0);
+            const totalTimeSec = mergedData.reduce((sum, item) => sum + item.currentTime, 0);
+
+            document.getElementById('stat-total-items').textContent = mergedData.length;
+            document.getElementById('stat-movies').textContent = totalMovies;
+            document.getElementById('stat-series').textContent = totalSeries;
+            document.getElementById('stat-views').textContent = totalViews.toLocaleString();
+            document.getElementById('stat-time').textContent = formatDuration(totalTimeSec);
+
+            // Top Performer
+            const sortedByViews = [...mergedData].sort((a, b) => b.currentViews - a.currentViews);
+            if(sortedByViews.length > 0 && sortedByViews[0].currentViews > 0) {
+                document.getElementById('stat-top-name').textContent = truncate(sortedByViews[0].title, 20);
+                document.getElementById('stat-top-views').textContent = sortedByViews[0].currentViews + " views";
+            } else {
+                document.getElementById('stat-top-name').textContent = "No Data";
+                document.getElementById('stat-top-views').textContent = "-";
+            }
+
+            // 3. Render Trending (Top 10)
+            const trendingContainer = document.getElementById('trending-container');
+            trendingContainer.innerHTML = '';
+            
+            // Only show items with views > 0 for trending
+            const activeItems = sortedByViews.filter(i => i.currentViews > 0).slice(0, 10);
+            
+            if (activeItems.length === 0) {
+                trendingContainer.innerHTML = '<div style="padding:10px; color:#aaa; text-align:center;">No views for this period</div>';
+            } else {
+                activeItems.forEach((item, index) => {
+                    const html = `
+                        <div class="trending-item">
+                            <div class="trending-rank">#${index + 1}</div>
+                            <img src="${item.thumbnail}" class="trending-thumb" alt="thumb">
+                            <div class="trending-info">
+                                <h4>${item.title}</h4>
+                                <div class="trending-stats">
+                                    <span class="badge ${item.type}">${item.type}</span> 
+                                    • <strong>${item.currentViews}</strong> views
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    trendingContainer.insertAdjacentHTML('beforeend', html);
+                });
+            }
+
+            // 4. Render Table (Store merged data globally for filtering)
+            window.currentTableData = sortedByViews; // Save for filter function
+            filterTable(); // Calls renderTableRows internally
+        }
+
+        // Render just the table rows (called by filter)
+        window.renderTableRows = function(data) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            data.forEach(item => {
+                const linkPath = item.type === 'movie' ? `/movies/${item.slug}.html` : `/series/${item.slug}.html`;
+                
+                const row = `
+                    <tr>
+                        <td><img src="${item.thumbnail}" class="thumb-cell" loading="lazy"></td>
+                        <td><strong>${item.title}</strong><br><span style="font-size:0.8em;color:#999">${item.slug}</span></td>
+                        <td><span class="badge ${item.type}">${item.type}</span></td>
+                        <td>${item.currentViews}</td>
+                        <td>${formatDuration(item.currentTime)}</td>
+                        <td><a href="${linkPath}" target="_blank" class="link-btn">View Page →</a></td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        // ==========================================
+        // 5. EVENT HANDLERS & UTILS
+        // ==========================================
+
+        window.setDateRange = function(rangeType) {
+            // UI Toggle
+            document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
+            if(rangeType !== 'custom') document.getElementById('btn-' + rangeType).classList.add('active');
+
+            const today = new Date();
+            state.datesToFetch = [];
+
+            if (rangeType === 'today') {
+                state.datesToFetch.push(formatDate(today));
+                document.getElementById('date-picker').value = formatDate(today);
+            } 
+            else if (rangeType === 'yesterday') {
+                const yest = new Date(today);
+                yest.setDate(yest.getDate() - 1);
+                state.datesToFetch.push(formatDate(yest));
+                document.getElementById('date-picker').value = formatDate(yest);
+            }
+            else if (rangeType === 'last7') {
+                for(let i=0; i<7; i++) {
+                    const d = new Date(today);
+                    d.setDate(d.getDate() - i);
+                    state.datesToFetch.push(formatDate(d));
+                }
+                document.getElementById('date-picker').value = ''; // Clear picker on range
+            }
+            else if (rangeType === 'custom') {
+                const val = document.getElementById('date-picker').value;
+                if(val) state.datesToFetch.push(val);
+            }
+
+            console.log("Fetching dates:", state.datesToFetch);
+            fetchAnalyticsData();
+        };
+
+        window.filterTable = function() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const type = document.getElementById('type-filter').value;
+            
+            if (!window.currentTableData) return;
+
+            const filtered = window.currentTableData.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(search) || item.slug.toLowerCase().includes(search);
+                const matchesType = type === 'all' || item.type === type;
+                return matchesSearch && matchesType;
+            });
+
+            window.renderTableRows(filtered);
+        };
+
+        // Utilities
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function formatDuration(seconds) {
+            const m = Math.floor(seconds / 60);
+            if (m < 60) return `${m}m`;
+            const h = (m / 60).toFixed(1);
+            return `${h}h`;
+        }
+
+        function truncate(str, n) {
+            return (str.length > n) ? str.substr(0, n-1) + '&hellip;' : str;
+        }
+
+        function setLoading(isLoading) {
+            const el = document.getElementById('loader');
+            if(isLoading) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+        }
+
+        // Initialize on Load
+        init();
+
+    </script>
+</body>
+</html>
