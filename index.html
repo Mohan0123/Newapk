@@ -447,7 +447,10 @@
 
                 // --- FIXED LINK LOGIC START ---
                 // Using the helper function to guarantee deterministic URLs
-                const linkSlug = buildIndexUrl(item);
+                // --- FIXED LINK LOGIC START ---
+                // Using the helper function to guarantee deterministic URLs
+                const linkSlug = getCorrectLink(item); <-- YE SAHI HAI
+                // --- FIXED LINK LOGIC END ---
                 // --- FIXED LINK LOGIC END ---
 
                 // Added alt text for better SEO
