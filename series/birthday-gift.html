@@ -159,27 +159,18 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
 });
 
-function loadNextBatch() {
-    const grid = document.getElementById('related-grid');
-    const btn = document.getElementById('loadBtn');
-    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-    
-    let htmlBuffer = '';
-    nextBatch.forEach(m => {
+nextBatch.forEach(m => {
 
-    // normalize type very strictly
-    let rawType = (m.type || '').toString().toLowerCase();
+    // 🔒 FINAL LOCKED LOGIC (movies.json SAFE)
+    let rawType = String(m.type || '').trim().toLowerCase();
 
-    let isSeries =
-        rawType === 'series' ||
-        rawType === 'webseries' ||
-        rawType === 'tvseries' ||
-        rawType === 'show';
+    // ONLY series goes to /series/, everything else movies
+    let folder = rawType === 'series'
+        ? 'series'
+        : 'movies';
 
-    let folder = isSeries ? 'series' : 'movies';
-
-    // sanitize slug again (double safety)
-    let cleanSlug = (m.slug || '')
+    // extra safety for slug
+    let cleanSlug = String(m.slug || '')
         .replace(/^movies\//, '')
         .replace(/^series\//, '')
         .replace(/\.html$/, '')
@@ -199,9 +190,9 @@ function loadNextBatch() {
                     color:#fff;
                     padding:2px 5px;
                     border-radius:3px;
-                    font-size:10px;
+                    font-size:10px
                 ">
-                    ${isSeries ? 'SERIES' : 'MOVIE'}
+                    ${folder.toUpperCase()}
                 </span>
             </div>
             <div class="rel-title">${m.title}</div>
@@ -209,11 +200,6 @@ function loadNextBatch() {
     `;
 });
 
-    
-    grid.innerHTML += htmlBuffer;
-    currentIndex += itemsPerPage;
-    if(currentIndex >= allData.length) btn.style.display = 'none';
-}
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
