@@ -161,17 +161,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 nextBatch.forEach(m => {
 
-    // 🔒 STRONG TYPE DETECTION (ALL CASES HANDLED)
+    // 🔒 CONTEXT-AWARE LOGIC (FINAL FIX)
     let rawType = String(m.type || '').toLowerCase();
 
     let isSeries =
-        rawType.includes('series') ||   // series, webseries, tvseries
-        rawType.includes('season') ||
-        rawType.includes('episode');
+        CURRENT_PAGE_TYPE === 'series'
+            ? true                 // 🔥 current page is series → series link
+            : rawType.includes('series');
 
     let folder = isSeries ? 'series' : 'movies';
 
-    // CLEAN SLUG SAFELY
     let cleanSlug = String(m.slug || '')
         .replace(/^movies\//, '')
         .replace(/^series\//, '')
@@ -192,16 +191,15 @@ nextBatch.forEach(m => {
                     color:#fff;
                     padding:2px 6px;
                     border-radius:3px;
-                    font-size:10px;
+                    font-size:10px
                 ">
-                    ${isSeries ? 'SERIES' : 'MOVIE'}
+                    ${folder.toUpperCase()}
                 </span>
             </div>
             <div class="rel-title">${m.title}</div>
         </a>
     `;
 });
-
 
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
