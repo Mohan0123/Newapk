@@ -385,47 +385,36 @@
 
             const nextBatch = filteredData.slice(currentIndex, currentIndex + itemsPerPage);
 
-            nextBatch.forEach(item => {
-                const typeLabel = item.type === 'series' ? 'Series' : 'Movie';
-                const thumb = item.thumbnail || 'https://via.placeholder.com/300x170/111/333?text=No+Image';
+            nextBatch.forEach(m => {
 
-                // --- FIXED URL LOGIC START ---
-                // 1. Strip any existing paths or extensions to get the "clean" slug
-                let cleanSlug = item.slug || '';
-                cleanSlug = cleanSlug.replace(/^movies\//, '').replace(/^series\//, ''); // Remove existing folders
-                cleanSlug = cleanSlug.replace(/\.html$/, ''); // Remove .html if present
+    // 🔒 STRICT & SAFE SERIES DETECTION
+    let rawType = String(m.type || '').toLowerCase();
 
-                // 2. Decide folder strictly by item type
-                const folder = item.type === 'series' ? 'series' : 'movies';
+    let isSeries =
+        rawType === 'series' ||
+        rawType === 'webseries' ||
+        rawType === 'tvseries' ||
+        rawType === 'show';
 
-                // 3. Construct Final URL
-                const linkSlug = `${folder}/${cleanSlug}.html`;
-                // --- FIXED URL LOGIC END ---
+    let folder = isSeries ? 'series' : 'movies';
 
-                // Added alt text for better SEO
-                const cardHTML = `
-                    <a href="${linkSlug}" class="card" title="Watch ${item.title}">
-                        <div class="thumb-box">
-                            <img src="${thumb}" alt="Watch ${item.title} Full Movie HD" class="thumb-img" loading="lazy" width="300" height="169">
-                        </div>
-                        <div class="card-info">
-                            <div class="title">${item.title}</div>
-                            <div class="meta">
-                                <span>${typeLabel}</span>
-                                <span class="badge">HD</span>
-                            </div>
-                        </div>
-                    </a>
-                `;
-                grid.innerHTML += cardHTML;
-            });
+    // slug safety
+    let cleanSlug = String(m.slug || '')
+        .replace(/^movies\//, '')
+        .replace(/^series\//, '')
+        .replace(/\.html$/, '')
+        .replace(/^\//, '');
 
-            currentIndex += itemsPerPage;
+    let url = `/${folder}/${cleanSlug}.html`;
 
-            if (currentIndex >= filteredData.length) {
-                btn.style.display = 'none';
-            }
-        }
+    htmlBuffer += `
+        <a href="${url}" class="card">
+            <img src="${m.thumbnail}" loading="lazy" alt="${m.title}">
+            <div class="title">${m.title}</div>
+        </a>
+    `;
+});
+
 
         // 3. Filter Function (FIXED BUTTON EVENT)
         // Accepts 'btn' element explicitly to avoid event.target issues
