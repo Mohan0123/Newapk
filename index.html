@@ -336,6 +336,33 @@
     </footer>
 
     <script>
+        function getCorrectLink(item) {
+    // Data ko safe clean karein
+    const type = String(item.type || '').toLowerCase();
+    const slug = String(item.slug || '').toLowerCase();
+    const title = String(item.title || '').toLowerCase();
+
+    // Check karein: Kya ye Series hai?
+    // Agar type me 'series' hai, YA slug me 'series/' hai, YA title me 'Season' hai
+    const isSeries = 
+        type.includes('series') || 
+        slug.includes('series/') || 
+        title.includes('season');
+
+    // Slug saaf karein (taaki purana path hat jaye)
+    let cleanSlug = slug
+        .replace('movies/', '')
+        .replace('series/', '')
+        .replace('.html', '')
+        .replace(/^\//, ''); // Shuru ka slash hatana
+
+    // Sahi URL return karein
+    if (isSeries) {
+        return `/series/${cleanSlug}.html`;
+    } else {
+        return `/movies/${cleanSlug}.html`;
+    }
+}
         let allData = [];
         let filteredData = [];
         let currentIndex = 0;
