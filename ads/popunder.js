@@ -1,12 +1,13 @@
 /* ===============================
    POPUNDER SCRIPT
-================================ */
+
 (function () {
   const pop = document.createElement("script");
   pop.src = "https://joyfullybarn.com/42/76/48/427648720fc5f808a6c9fd6d7d4af36d.js";
   pop.async = true;
   document.body.appendChild(pop);
 })();
+================================ */
 
 /* ===============================
    SOCIAL BAR SCRIPT
