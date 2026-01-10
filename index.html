@@ -336,68 +336,12 @@
     </footer>
 
     <script>
-        function getCorrectLink(item) {
-    // Data ko safe clean karein
-    const type = String(item.type || '').toLowerCase();
-    const slug = String(item.slug || '').toLowerCase();
-    const title = String(item.title || '').toLowerCase();
-
-    // Check karein: Kya ye Series hai?
-    // Agar type me 'series' hai, YA slug me 'series/' hai, YA title me 'Season' hai
-    const isSeries = 
-        type.includes('series') || 
-        slug.includes('series/') || 
-        title.includes('season');
-
-    // Slug saaf karein (taaki purana path hat jaye)
-    let cleanSlug = slug
-        .replace('movies/', '')
-        .replace('series/', '')
-        .replace('.html', '')
-        .replace(/^\//, ''); // Shuru ka slash hatana
-
-    // Sahi URL return karein
-    if (isSeries) {
-        return `/series/${cleanSlug}.html`;
-    } else {
-        return `/movies/${cleanSlug}.html`;
-    }
-}
         let allData = [];
         let filteredData = [];
         let currentIndex = 0;
         const itemsPerPage = 12; 
         let currentFilter = 'all';
 
-        // --- HELPER FUNCTION FOR URL GENERATION ---
-        // --- HELPER FUNCTION FOR URL GENERATION (UPDATED) ---
-        function buildIndexUrl(item) {
-            // 1. Check Data Properties
-            const rawType = String(item.type || '').toLowerCase();
-            const rawSlug = String(item.slug || '').toLowerCase();
-
-            // 2. Logic: Series tab maanenge jab 'type' series ho YA slug me 'series/' ho
-            const isSeries =
-                rawType === 'series' ||
-                rawType === 'webseries' ||
-                rawType === 'web series' ||
-                rawType === 'tvseries' ||
-                rawType === 'show' ||
-                rawSlug.includes('series/') ||  // Aggressive check: Agar link me series hai to series hai
-                rawSlug.includes('season');
-
-            // 3. Slug Cleaning (Faltu path hatana)
-            let cleanSlug = String(item.slug || '')
-                .replace(/^movies\//, '')
-                .replace(/^series\//, '')
-                .replace(/\.html$/, '')
-                .replace(/^\//, '');
-
-            // 4. Folder decide karna
-            const folder = isSeries ? 'series' : 'movies';
-            
-            return `/${folder}/${cleanSlug}.html`;
-        }
         // 1. Fetch Data
         document.addEventListener("DOMContentLoaded", () => {
             fetch('data/movies.json')
@@ -422,7 +366,7 @@
                 });
         });
 
-        // 2. Render Function (FIXED)
+        // 2. Render Function (SMART LINK FIX)
         function renderGrid(reset = false) {
             const grid = document.getElementById('grid');
             const btn = document.getElementById('loadBtn');
@@ -445,13 +389,25 @@
                 const typeLabel = item.type === 'series' ? 'Series' : 'Movie';
                 const thumb = item.thumbnail || 'https://via.placeholder.com/300x170/111/333?text=No+Image';
 
-                // --- FIXED LINK LOGIC START ---
-                // Using the helper function to guarantee deterministic URLs
-                // --- FIXED LINK LOGIC START ---
-                // Using the helper function to guarantee deterministic URLs
-                const linkSlug = getCorrectLink(item); <-- YE SAHI HAI
-                // --- FIXED LINK LOGIC END ---
-                // --- FIXED LINK LOGIC END ---
+                // --- SMART LINK LOGIC START ---
+                // Agar slug me pehle se '/' hai (matlab 'movies/name'), to waisa hi rehne do.
+                // Agar nahi hai (matlab 'name'), to 'movies/' add kar do.
+                let linkSlug = item.slug;
+
+                // type ke basis par folder decide karo
+                if (!linkSlug.includes('/')) {
+                    if (item.type === 'series') {
+                        linkSlug = 'series/' + linkSlug;
+                    } else {
+                        linkSlug = 'movies/' + linkSlug;
+                    }
+                }
+
+                // .html ensure karo
+                if (!linkSlug.endsWith('.html')) {
+                    linkSlug += '.html';
+                }
+                // --- SMART LINK LOGIC END ---
 
                 // Added alt text for better SEO
                 const cardHTML = `
