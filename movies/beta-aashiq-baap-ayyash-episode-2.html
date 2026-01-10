@@ -156,8 +156,22 @@ function loadNextBatch() {
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
     
     nextBatch.forEach(m => {
-        grid.innerHTML += `<a href="/movies/${m.slug}.html" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}"><div class="rel-title">${m.title}</div></a>`;
+        // --- 🔴 YAHAN CHANGE KIYA HAI ---
+        // Pehle check karo item ka type kya hai
+        let itemType = (m.type || 'movie').toLowerCase().trim();
+        
+        // Agar type 'series' hai to folder 'series' hoga, warna 'movies'
+        let folder = itemType === 'series' ? 'series' : 'movies';
+        
+        // Ab URL folder ke hisab se banega
+        let finalUrl = `/${folder}/${m.slug}.html`;
+
+        grid.innerHTML += `<a href="${finalUrl}" class="rel-card">
+            <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
+            <div class="rel-title">${m.title}</div>
+        </a>`;
     });
+    
     currentIndex += itemsPerPage;
     if(currentIndex >= allData.length) btn.style.display = 'none';
 }
