@@ -343,26 +343,34 @@
         let currentFilter = 'all';
 
         // --- HELPER FUNCTION FOR URL GENERATION ---
+        // --- HELPER FUNCTION FOR URL GENERATION (UPDATED) ---
         function buildIndexUrl(item) {
+            // 1. Check Data Properties
             const rawType = String(item.type || '').toLowerCase();
+            const rawSlug = String(item.slug || '').toLowerCase();
 
+            // 2. Logic: Series tab maanenge jab 'type' series ho YA slug me 'series/' ho
             const isSeries =
                 rawType === 'series' ||
                 rawType === 'webseries' ||
                 rawType === 'web series' ||
                 rawType === 'tvseries' ||
-                rawType === 'show';
+                rawType === 'show' ||
+                rawSlug.includes('series/') ||  // Aggressive check: Agar link me series hai to series hai
+                rawSlug.includes('season');
 
+            // 3. Slug Cleaning (Faltu path hatana)
             let cleanSlug = String(item.slug || '')
                 .replace(/^movies\//, '')
                 .replace(/^series\//, '')
                 .replace(/\.html$/, '')
                 .replace(/^\//, '');
 
+            // 4. Folder decide karna
             const folder = isSeries ? 'series' : 'movies';
+            
             return `/${folder}/${cleanSlug}.html`;
         }
-
         // 1. Fetch Data
         document.addEventListener("DOMContentLoaded", () => {
             fetch('data/movies.json')
