@@ -316,14 +316,14 @@
             playerHtml = getPlayerCode(episodes[0].url, data.poster, true);
         }
 
-        // 8. SCHEMA LOGIC
+        // 8. SCHEMA LOGIC (URL CLEANED)
         let schemaData = {
             "@context": "https://schema.org",
             "@type": type === 'movie' ? "Movie" : "TVSeries",
             "name": data.name,
             "description": finalMeta,
             "image": data.poster,
-            "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`,
+            "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}`,
             "inLanguage": "en",
             "genre": tagsList.length > 0 ? tagsList : ["Entertainment"],
             "publisher": {
@@ -332,11 +332,11 @@
             },
             "potentialAction": {
                 "@type": "WatchAction",
-                "target": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`
+                "target": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}`
             }
         };
 
-        // 9. FINAL HTML TEMPLATE ASSEMBLY
+        // 9. FINAL HTML TEMPLATE ASSEMBLY (URLS CLEANED)
         // SAFETY NOTE: All closing script tags are escaped as <\/script> to prevent parsing errors.
         let html = `<!DOCTYPE html>
 <html lang="en">
@@ -347,13 +347,13 @@
 <title>${cleanStr(finalTitle)}</title>
 <meta name="description" content="${cleanStr(finalMeta)}">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
+<link rel="canonical" href="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}">
 <meta property="og:site_name" content="Ranginx">
 <meta property="og:title" content="${cleanStr(finalTitle)}">
 <meta property="og:description" content="${cleanStr(finalMeta)}">
 <meta property="og:image" content="${data.poster}">
 <meta property="og:type" content="${type === 'movie' ? 'video.movie' : 'video.tv_show'}">
-<meta property="og:url" content="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
+<meta property="og:url" content="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}">
 <meta name="twitter:title" content="${cleanStr(finalTitle)}">
 <meta name="twitter:description" content="${cleanStr(finalMeta)}">
 <script type="application/ld+json">${JSON.stringify(schemaData)}<\/script>
@@ -429,8 +429,8 @@ footer{background:#000;padding:50px 20px;text-align:center;font-size:13px;color:
             </div>
 
             <div class="social-row">
-                 <a href="https://t.me/share/url?url=https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html" target="_blank" class="soc-btn tg">Telegram</a>
-                 <a href="https://api.whatsapp.com/send?text=Watch: https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html" target="_blank" class="soc-btn wa">WhatsApp</a>
+                 <a href="https://t.me/share/url?url=https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}" target="_blank" class="soc-btn tg">Telegram</a>
+                 <a href="https://api.whatsapp.com/send?text=Watch: https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}" target="_blank" class="soc-btn wa">WhatsApp</a>
                  <button class="soc-btn cp" onclick="copyLink()">Copy Link</button>
             </div>
 
@@ -493,7 +493,7 @@ function loadNextBatch() {
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
     
     nextBatch.forEach(m => {
-        grid.innerHTML += \`<a href="/movies/\${m.slug}.html" class="rel-card"><img src="\${m.thumbnail}" class="rel-img" loading="lazy" alt="\${m.title}"><div class="rel-title">\${m.title}</div></a>\`;
+        grid.innerHTML += \`<a href="/movies/\${m.slug}" class="rel-card"><img src="\${m.thumbnail}" class="rel-img" loading="lazy" alt="\${m.title}"><div class="rel-title">\${m.title}</div></a>\`;
     });
     currentIndex += itemsPerPage;
     if(currentIndex >= allData.length) btn.style.display = 'none';
