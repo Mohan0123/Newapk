@@ -245,6 +245,9 @@
     // ============================================
     //  ⚡ CORE GENERATION LOGIC (FIXED & SAFE)
     // ============================================
+   // ============================================
+    //  ⚡ FIXED GENERATE FUNCTION (Paste in admin.html)
+    // ============================================
     function generate(type) {
         let p = type === 'movie' ? 'm' : 's';
         
@@ -260,54 +263,20 @@
             storyline: document.getElementById(p+'Desc').value.trim()
         };
 
-        // 2. VALIDATION
-        if(!data.name || !data.slugRaw) return alert("Movie Name and Slug are required!");
-        if(type === 'movie' && !data.video) return alert("Video URL is required!");
-        if(type === 'series' && episodes.length === 0) return alert("Add at least one episode!");
-
+        // VALIDATION
+        if(!data.name || !data.slugRaw) return alert("Title & Slug required!");
         let finalSlug = sanitizeSlug(data.slugRaw);
         document.getElementById(p+'Slug').value = finalSlug; 
 
-        // 3. AUTO-GENERATION: SEO TITLE
-        let finalTitle = data.seoTitle;
-        if(!finalTitle) {
-            if(type === 'movie') {
-                finalTitle = `Watch ${data.name} Full HD Movie Online Free | Ranginx`;
-            } else {
-                finalTitle = `Watch ${data.name} All Episodes Online Free | Ranginx`;
-            }
-        }
-        finalTitle = finalTitle.substring(0, 60);
-
-        // 4. AUTO-GENERATION: META DESCRIPTION
-        let finalMeta = data.metaDesc;
-        if(!finalMeta) {
-            if(type === 'movie') finalMeta = `Watch ${data.name} full HD movie online free on Ranginx. Fast streaming, no registration required, smooth playback.`;
-            else finalMeta = `Watch ${data.name} all episodes online free on Ranginx. Fast streaming, no registration required, smooth playback.`;
-        }
-
-        // 5. AUTO-GENERATION: STORYLINE
-        let finalStoryHtml = "";
-        if(data.storyline) {
-            finalStoryHtml = data.storyline.split('\n').map(l => l.trim() ? `<p>${l}</p>` : '').join('');
-        } else {
-            if(type === 'movie') {
-                finalStoryHtml = `
-                <p><strong>${data.name}</strong> is now available to watch online in full HD quality on Ranginx. This movie delivers an engaging experience with high-quality visuals and audio. You can enjoy the complete film without any interruptions.</p>
-                <p>Stream <strong>${data.name}</strong> with <strong>free streaming</strong> and <strong>no registration</strong>. Our platform is optimized for <strong>mobile & desktop</strong> devices, ensuring fast loading speeds and smooth playback.</p>
-                <p>Ranginx is your trusted destination for free entertainment. We provide a secure and premium viewing experience. Start watching ${data.name} now and enjoy the best of cinema.</p>`;
-            } else {
-                finalStoryHtml = `
-<p>Stream <strong>${data.name}</strong> with <strong>free streaming</strong> and <strong>no registration</strong>. Our platform is optimized for <strong>mobile & desktop</strong> devices, ensuring fast loading speeds and smooth playback.</p>`;
-            }
-        }
-
-        // 6. TAGS LOGIC
+        // AUTO-GENERATION
+        let finalTitle = data.seoTitle || (type === 'movie' ? `Watch ${data.name} Full Movie` : `Watch ${data.name} Web Series`);
+        let finalMeta = data.metaDesc || `Watch ${data.name} online free.`;
+        
+        // Tags
         let tagsList = data.tagsRaw.split(',').map(t => t.trim()).filter(t => t.length > 0).slice(0, 8);
-        let tagsHtml = tagsList.length > 0 ? 
-            `<div class="tags">${tagsList.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
+        let tagsHtml = tagsList.length > 0 ? `<div class="tags">${tagsList.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
 
-        // 7. PLAYER LOGIC
+        // Player & Extras
         let playerHtml = "", extrasHtml = "";
         if (type === 'movie') {
             playerHtml = getPlayerCode(data.video, data.poster);
@@ -316,26 +285,133 @@
             playerHtml = getPlayerCode(episodes[0].url, data.poster, true);
         }
 
-        // 8. SCHEMA LOGIC (URL CLEANED)
         let schemaData = {
             "@context": "https://schema.org",
             "@type": type === 'movie' ? "Movie" : "TVSeries",
             "name": data.name,
-            "description": finalMeta,
-            "image": data.poster,
-            "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}`,
-            "inLanguage": "en",
-            "genre": tagsList.length > 0 ? tagsList : ["Entertainment"],
-            "publisher": {
-                "@type": "Organization",
-                "name": "Ranginx"
-            },
-            "potentialAction": {
-                "@type": "WatchAction",
-                "target": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}`
-            }
+            "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`,
+            "image": data.poster
         };
 
+        // --- ⚡ HTML TEMPLATE WITH INTELLIGENT LINK LOGIC ⚡ ---
+        let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${cleanStr(finalTitle)}</title>
+<meta name="description" content="${cleanStr(finalMeta)}">
+<link rel="canonical" href="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
+<meta property="og:url" content="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
+<script type="application/ld+json">${JSON.stringify(schemaData)}<\/script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t)}
+a{text-decoration:none; color:inherit;} /* Global Link Reset */
+header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#000;border-bottom:1px solid #222}
+.logo{color:var(--p);font-weight:800;font-size:24px}
+.home-btn{padding:8px 16px;background:var(--card);border:1px solid #333;border-radius:20px;font-size:12px;color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+.video-area{width:100%;aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center}
+h1{font-size:24px;margin:20px 0 10px;font-weight:700}
+.story-card{background:var(--card);padding:20px;border-radius:12px;margin:20px 0;line-height:1.6;color:#ccc}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{background:#222;padding:5px 12px;border-radius:50px;font-size:12px;color:#ccc}
+.rel-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:15px;margin-top:20px}
+.rel-card{display:block;background:var(--card);border-radius:8px;overflow:hidden;color:#fff; transition:0.2s;}
+.rel-card:hover{transform:translateY(-5px);}
+.rel-img{width:100%;aspect-ratio:2/3;object-fit:cover}
+.rel-title{padding:10px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.load-more{width:100%;padding:15px;background:var(--card);border:1px solid #333;color:#fff;margin-top:20px;cursor:pointer}
+@media(min-width:768px){ .container{display:grid;grid-template-columns:70% 30%;gap:30px} .video-area{border-radius:12px} }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo">RANGINX</div>
+    <a href="/" class="home-btn">🏠 HOME</a>
+</header>
+
+<div class="video-area" id="video-box">${playerHtml}</div>
+
+<div class="container">
+    <div class="main-col">
+        <h1>${data.name}</h1>
+        ${extrasHtml}
+        <div class="story-card">
+             <h3>Storyline</h3>
+             ${finalStoryHtml || data.name + ' is available to watch online.'}
+             ${tagsHtml}
+        </div>
+    </div>
+
+    <div class="side-col">
+        <h3>You May Also Like</h3>
+        <div class="rel-grid" id="related-grid"></div>
+        <button class="load-more" id="loadBtn" onclick="loadNextBatch()">Load More</button>
+    </div>
+</div>
+
+<script>
+let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "${finalSlug}";
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    const grid = document.getElementById('related-grid');
+    // Version added to force fresh data load
+    fetch('/data/movies.json?v=' + new Date().getTime())
+    .then(r=>{if(!r.ok)throw new Error();return r.json()})
+    .then(d=>{
+        allData = d.filter(m=>m.slug !== currentSlug);
+        if(allData.length > 0) loadNextBatch();
+        else grid.innerHTML = '<div style="padding:10px;color:#555">No related content</div>';
+    })
+    .catch(e=>console.log(e));
+});
+
+function loadNextBatch() {
+    const grid = document.getElementById('related-grid');
+    const btn = document.getElementById('loadBtn');
+    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
+    
+    let htmlBuffer = '';
+    nextBatch.forEach(m => {
+        // --- 🔴 THE FIX IS HERE 🔴 ---
+        // Hum check kar rahe hain ki related item ka type kya hai
+        let itemType = (m.type || 'movie').toLowerCase();
+        let folder = itemType === 'series' ? 'series' : 'movies';
+        
+        // Link banate waqt folder dynamic hoga
+        let url = \`/\${folder}/\${m.slug}.html\`; 
+        
+        htmlBuffer += \`<a href="\${url}" class="rel-card">
+            <div style="position:relative">
+                <img src="\${m.thumbnail}" class="rel-img" loading="lazy" alt="\${m.title}">
+                <span style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.8);padding:2px 5px;border-radius:3px;font-size:10px">\${itemType.toUpperCase()}</span>
+            </div>
+            <div class="rel-title">\${m.title}</div>
+        </a>\`;
+    });
+    
+    grid.innerHTML += htmlBuffer;
+    currentIndex += itemsPerPage;
+    if(currentIndex >= allData.length) btn.style.display = 'none';
+}
+<\/script>
+${buildSeriesExtras(data.poster).includes('<script>') ? '' : '<script src="../app.js"><\/script>'} 
+</body>
+</html>`;
+
+        const finalJson = {
+          title: data.name,
+          slug: finalSlug,
+          thumbnail: data.poster,
+          type: type
+        };
+
+        showOutput(html, JSON.stringify(finalJson, null, 2) + ",", finalSlug);
+    }
         // 9. FINAL HTML TEMPLATE ASSEMBLY (URLS CLEANED)
         // SAFETY NOTE: All closing script tags are escaped as <\/script> to prevent parsing errors.
         let html = `<!DOCTYPE html>
