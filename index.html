@@ -342,6 +342,27 @@
         const itemsPerPage = 12; 
         let currentFilter = 'all';
 
+        // --- HELPER FUNCTION FOR URL GENERATION ---
+        function buildIndexUrl(item) {
+            const rawType = String(item.type || '').toLowerCase();
+
+            const isSeries =
+                rawType === 'series' ||
+                rawType === 'webseries' ||
+                rawType === 'web series' ||
+                rawType === 'tvseries' ||
+                rawType === 'show';
+
+            let cleanSlug = String(item.slug || '')
+                .replace(/^movies\//, '')
+                .replace(/^series\//, '')
+                .replace(/\.html$/, '')
+                .replace(/^\//, '');
+
+            const folder = isSeries ? 'series' : 'movies';
+            return `/${folder}/${cleanSlug}.html`;
+        }
+
         // 1. Fetch Data
         document.addEventListener("DOMContentLoaded", () => {
             fetch('data/movies.json')
@@ -366,7 +387,7 @@
                 });
         });
 
-        // 2. Render Function (SMART LINK FIX)
+        // 2. Render Function (FIXED)
         function renderGrid(reset = false) {
             const grid = document.getElementById('grid');
             const btn = document.getElementById('loadBtn');
@@ -389,25 +410,10 @@
                 const typeLabel = item.type === 'series' ? 'Series' : 'Movie';
                 const thumb = item.thumbnail || 'https://via.placeholder.com/300x170/111/333?text=No+Image';
 
-                // --- SMART LINK LOGIC START ---
-                // Agar slug me pehle se '/' hai (matlab 'movies/name'), to waisa hi rehne do.
-                // Agar nahi hai (matlab 'name'), to 'movies/' add kar do.
-                let linkSlug = item.slug;
-
-                // type ke basis par folder decide karo
-                if (!linkSlug.includes('/')) {
-                    if (item.type === 'series') {
-                        linkSlug = 'series/' + linkSlug;
-                    } else {
-                        linkSlug = 'movies/' + linkSlug;
-                    }
-                }
-
-                // .html ensure karo
-                if (!linkSlug.endsWith('.html')) {
-                    linkSlug += '.html';
-                }
-                // --- SMART LINK LOGIC END ---
+                // --- FIXED LINK LOGIC START ---
+                // Using the helper function to guarantee deterministic URLs
+                const linkSlug = buildIndexUrl(item);
+                // --- FIXED LINK LOGIC END ---
 
                 // Added alt text for better SEO
                 const cardHTML = `
