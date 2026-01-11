@@ -3,143 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranginx Series Studio - Visual Edition</title>
+    <title>Ranginx Series Creator - SEO Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- THEME & COLORS --- */
-        :root { 
-            --bg: #09090b; --surf: #18181b; --border: #27272a; 
-            --primary: #e50914; --text: #e4e4e7; --muted: #a1a1aa; 
-            --green: #22c55e; --blue: #3b82f6; --yellow: #eab308;
-        }
+        /* --- THEME --- */
+        :root { --bg: #09090b; --surf: #18181b; --border: #27272a; --primary: #e50914; --text: #e4e4e7; }
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
         
         /* SIDEBAR */
         .sidebar { width: 260px; background: #000; border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
-        .brand { color: var(--primary); font-size: 22px; font-weight: 800; margin-bottom: 30px; letter-spacing: 1px; }
-        .menu-item { padding: 12px; background: var(--surf); color: #fff; border-radius: 8px; font-weight: 600; font-size: 14px; border-left: 3px solid var(--primary); display: flex; align-items: center; gap: 10px; }
+        .brand { color: var(--primary); font-size: 22px; font-weight: 800; margin-bottom: 30px; }
+        .menu-item { padding: 12px; background: var(--surf); color: #fff; border-radius: 8px; font-weight: 600; border-left: 3px solid var(--primary); }
 
-        /* MAIN CONTENT */
+        /* MAIN */
         .main { flex: 1; display: flex; flex-direction: column; }
-        .top-bar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; font-weight: 700; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); justify-content: space-between; }
+        .top-bar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; font-weight: 700; justify-content: space-between; }
         .scroll-view { flex: 1; overflow-y: auto; padding: 30px; }
         .container { max-width: 900px; margin: 0 auto; }
         
         /* FORMS */
         .card { background: var(--surf); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 25px; }
-        .sec-title { font-size: 12px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full { grid-column: span 2; }
         label { display: block; margin-bottom: 8px; font-size: 13px; color: #ccc; font-weight: 600; }
-        input, textarea { width: 100%; background: #09090b; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 6px; font-family: inherit; transition: 0.3s; font-size: 14px; }
-        input:focus, textarea:focus { border-color: var(--primary); }
+        input, textarea { width: 100%; background: #09090b; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 6px; }
         textarea { height: 80px; resize: vertical; }
         
-        /* EPISODE MANAGER (UPDATED) */
+        /* EPISODES */
         .ep-box { background: #000; padding: 15px; border-radius: 8px; border: 1px dashed var(--border); }
-        .ep-inputs { display: grid; grid-template-columns: 1fr 2fr 2fr auto; gap: 10px; align-items: center; }
-        .ep-list { margin-top: 15px; max-height: 200px; overflow-y: auto; }
-        .ep-item { display: flex; justify-content: space-between; background: var(--surf); padding: 10px; margin-bottom: 5px; border-radius: 4px; font-size: 13px; align-items: center; border: 1px solid var(--border); }
-        .ep-thumb-preview { width: 40px; height: 25px; object-fit: cover; border-radius: 3px; margin-right: 10px; background: #333; }
-        .del-btn { color: #ef4444; cursor: pointer; font-weight: bold; padding: 5px; }
-
-        /* OUTPUT AREAS */
+        .ep-inputs { display: grid; grid-template-columns: 1fr 2fr 2fr auto; gap: 10px; }
+        .ep-item { display: flex; justify-content: space-between; background: var(--surf); padding: 10px; margin-bottom: 5px; border-radius: 4px; border: 1px solid var(--border); font-size: 13px; align-items: center; }
+        .ep-thumb-prev { width: 40px; height: 25px; object-fit: cover; border-radius: 3px; margin-right: 10px; background: #333; }
+        
+        /* OUTPUT */
         .output-area { display: none; margin-top: 40px; border-top: 1px dashed var(--border); padding-top: 30px; }
         .code-box { background: #000; border-radius: 8px; margin-bottom: 25px; overflow: hidden; border-left: 5px solid #333; }
-        
-        .box-green { border-left-color: var(--green); }
-        .box-blue { border-left-color: var(--blue); }
-        .box-yellow { border-left-color: var(--yellow); }
-
+        .box-green { border-left-color: #22c55e; } .box-blue { border-left-color: #3b82f6; } .box-yellow { border-left-color: #eab308; }
         .box-head { background: #111; padding: 10px 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .box-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .copy-btn { background: var(--surf); color: #fff; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border); cursor: pointer; font-size: 11px; font-weight: 700; }
+        pre { padding: 15px; color: #ccc; overflow-x: auto; font-family: monospace; font-size: 12px; max-height: 300px; white-space: pre-wrap; }
+
+        .btn-primary { background: var(--primary); color: #fff; padding: 14px; width: 100%; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .btn-add { background: var(--primary); color: #fff; padding: 0 20px; border-radius: 6px; font-weight: 700; cursor: pointer; border: none; }
         
-        pre { padding: 15px; color: #ccc; overflow-x: auto; font-family: monospace; font-size: 12px; max-height: 300px; white-space: pre-wrap; line-height: 1.5; }
-        
-        @media (max-width: 768px) { 
-            .sidebar{width:70px;padding:15px 10px} .brand span, .menu-item span{display:none} 
-            .ep-inputs { grid-template-columns: 1fr; }
-            .grid{grid-template-columns:1fr} 
-        }
+        @media (max-width: 768px) { .sidebar{display:none} .grid{grid-template-columns:1fr} .ep-inputs{grid-template-columns:1fr} }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div class="brand">RANGINX <span>VISUAL</span></div>
-    <div class="menu-item">📺 <span>Series Generator</span></div>
+    <div class="brand">RANGINX <span>PRO</span></div>
+    <div class="menu-item">📺 Series Generator</div>
 </div>
 
 <div class="main">
     <div class="top-bar">
-        <span id="pageTitle">Series Generator (Visual List Mode)</span>
-        <a href="/" class="btn-secondary" style="padding:8px 15px; border-radius:4px; font-size:12px; text-decoration:none; color:white;">🏠 GO HOME</a>
+        <span>Series Generator (SEO + Footer Fix)</span>
+        <a href="/" style="color:#fff;text-decoration:none;font-size:13px">🏠 HOME</a>
     </div>
     
     <div class="scroll-view">
         <div class="container">
             
             <div class="card">
-                <div class="sec-title">Series Details</div>
                 <div class="grid">
-                    <div class="full"><label>Slug (Main Page)</label><input type="text" id="sSlug" placeholder="e.g. aao-kare-gutur-gu"></div>
-                    <div class="full"><label>Series Title</label><input type="text" id="sTitle" placeholder="Aao Kare Gutur Gu"></div>
-                    <div><label>Main Poster URL</label><input type="text" id="sPoster" placeholder="Vertical Poster"></div>
-                    <div><label>Tags</label><input type="text" id="sTags"></div>
+                    <div class="full"><label>Series Slug (e.g. khoj)</label><input type="text" id="sSlug" placeholder="khoj"></div>
+                    <div class="full"><label>Series Name</label><input type="text" id="sTitle" placeholder="Khoj"></div>
+                    <div><label>Poster URL (Vertical)</label><input type="text" id="sPoster"></div>
+                    <div><label>Tags (Comma separated)</label><input type="text" id="sTags" placeholder="Drama, Romance, Web Series"></div>
                     
                     <div class="full ep-box">
-                        <label style="margin-bottom:10px">Episode Manager (Visual List)</label>
+                        <label style="margin-bottom:10px">Episodes</label>
                         <div class="ep-inputs">
                             <input type="text" id="epName" placeholder="Ep 1">
                             <input type="text" id="epUrl" placeholder="Video URL">
-                            <input type="text" id="epThumb" placeholder="Thumbnail URL (Optional)">
+                            <input type="text" id="epThumb" placeholder="Thumbnail URL">
                             <button class="btn-add" onclick="addEpisode()">ADD</button>
                         </div>
-                        <div id="epList" class="ep-list"></div>
+                        <div id="epList" style="margin-top:15px"></div>
                     </div>
 
-                    <div class="full"><label>SEO Title</label><input type="text" id="sSeoTitle"></div>
                     <div class="full"><label>Meta Description</label><textarea id="sMeta"></textarea></div>
-                    <div class="full"><label>Storyline</label><textarea id="sDesc" class="desc-box"></textarea></div>
+                    <div class="full"><label>Storyline</label><textarea id="sDesc"></textarea></div>
                 </div>
-                <div class="btn-row">
-                    <button class="btn btn-primary" onclick="generateSeries()">GENERATE VISUAL CODE</button>
-                    <button class="btn btn-secondary" onclick="resetForm()">RESET</button>
+                <div style="margin-top:20px; display:flex; gap:10px">
+                    <button class="btn-primary" onclick="generate()">GENERATE ALL CODE</button>
+                    <button class="btn-primary" style="background:#333" onclick="resetForm()">RESET</button>
                 </div>
             </div>
 
             <div id="outputArea" class="output-area">
-                
                 <div class="code-box box-green">
-                    <div class="box-head">
-                        <span class="box-title" style="color:var(--green)">1. JSON DATA</span>
-                        <button class="copy-btn" onclick="copyText('jsonOut')">📋 COPY JSON</button>
-                    </div>
+                    <div class="box-head"><span>1. JSON DATA</span><button class="copy-btn" onclick="copyText('jsonOut')">COPY JSON</button></div>
                     <pre id="jsonOut"></pre>
                 </div>
-
                 <div class="code-box box-blue">
-                    <div class="box-head">
-                        <span class="box-title" style="color:var(--blue)">2. MAIN PAGE HTML (Visual List)</span>
-                        <div style="display:flex; gap:10px">
-                            <button class="copy-btn" onclick="copyText('htmlOut')">📋 COPY HTML</button>
-                            <button class="copy-btn" onclick="downloadMain()">⬇ DOWNLOAD</button>
-                        </div>
-                    </div>
+                    <div class="box-head"><span>2. MAIN PAGE HTML</span><button class="copy-btn" onclick="copyText('htmlOut')">COPY HTML</button></div>
                     <pre id="htmlOut"></pre>
                 </div>
-
                 <div class="code-box box-yellow">
-                    <div class="box-head">
-                        <span class="box-title" style="color:var(--yellow)">3. EPISODE PAGES HTML</span>
-                        <button class="copy-btn" onclick="copyText('epOut')">📋 COPY ALL EPISODES</button>
-                    </div>
-                    <pre id="epOut" style="color:#fef08a"></pre>
+                    <div class="box-head"><span>3. EPISODE PAGES HTML</span><button class="copy-btn" onclick="copyText('epOut')">COPY ALL EPISODES</button></div>
+                    <pre id="epOut"></pre>
                 </div>
-
             </div>
+
         </div>
     </div>
 </div>
@@ -148,304 +116,234 @@
     let episodes = [];
     let currentSlug = "";
 
-    // --- EPISODE LOGIC ---
     function addEpisode() {
         let n = document.getElementById('epName').value.trim();
         let u = document.getElementById('epUrl').value.trim();
-        let t = document.getElementById('epThumb').value.trim(); // New Thumbnail Input
-        
-        if(!n || !u) return alert("Name aur URL jaruri hai!");
-        
-        // Agar thumbnail nahi diya to main poster use karenge (logic inside generator)
+        let t = document.getElementById('epThumb').value.trim();
+        if(!n || !u) return alert("Name & URL required");
         episodes.push({name:n, url:u, thumb:t});
         renderEp();
-        
-        document.getElementById('epName').value=""; 
-        document.getElementById('epUrl').value="";
-        document.getElementById('epThumb').value="";
+        document.getElementById('epName').value=""; document.getElementById('epUrl').value=""; document.getElementById('epThumb').value="";
     }
 
     function renderEp() {
         let h = "";
         episodes.forEach((e,i) => {
-            let imgDisplay = e.thumb ? `<img src="${e.thumb}" class="ep-thumb-preview">` : `<span class="ep-thumb-preview" style="display:inline-block;background:#333"></span>`;
-            h += `<div class="ep-item">
-                    <div style="display:flex;align-items:center">${imgDisplay} <span>${e.name}</span></div> 
-                    <span class="del-btn" onclick="delEp(${i})">×</span>
-                  </div>`;
+            let img = e.thumb ? `<img src="${e.thumb}" class="ep-thumb-prev">` : '';
+            h += `<div class="ep-item"><div>${img} <b>${e.name}</b></div> <span style="color:#f00;cursor:pointer" onclick="delEp(${i})">✖</span></div>`;
         });
-        document.getElementById('epList').innerHTML = h || '<div style="padding:10px;text-align:center;color:#555">No episodes added</div>';
+        document.getElementById('epList').innerHTML = h || '<div style="color:#555;text-align:center;padding:10px">No episodes</div>';
     }
-    function delEp(i) { episodes.splice(i,1); renderEp(); }
+    function delEp(i){ episodes.splice(i,1); renderEp(); }
     
-    function resetForm() {
-        document.querySelectorAll(`input, textarea`).forEach(e=>e.value='');
+    function resetForm(){
+        document.querySelectorAll('input, textarea').forEach(e=>e.value='');
         episodes=[]; renderEp();
-        document.getElementById('outputArea').style.display = 'none';
+        document.getElementById('outputArea').style.display='none';
     }
 
     // --- HELPER FUNCTIONS ---
-    function sanitizeSlug(str) { return str ? str.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-') : ""; }
-    function cleanStr(str) { return str ? str.replace(/"/g, '&quot;').replace(/'/g, '&#39;') : ""; }
-    function encodeUrl(u) { return u ? u.trim().replace(/\s/g, '%20') : ""; }
+    function sanitize(s) { return s.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-'); }
+    function clean(s) { return s.replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
-    // ============================================
-    //  ⚡ SERIES GENERATOR LOGIC
-    // ============================================
-    function generateSeries() {
-        let data = {
+    // --- GENERATOR ---
+    function generate() {
+        let d = {
             name: document.getElementById('sTitle').value.trim(),
             slugRaw: document.getElementById('sSlug').value.trim(),
             poster: document.getElementById('sPoster').value.trim(),
-            tagsRaw: document.getElementById('sTags').value.trim(),
-            seoTitle: document.getElementById('sSeoTitle').value.trim(),
-            metaDesc: document.getElementById('sMeta').value.trim(),
-            storyline: document.getElementById('sDesc').value.trim()
+            tags: document.getElementById('sTags').value.trim(),
+            meta: document.getElementById('sMeta').value.trim(),
+            story: document.getElementById('sDesc').value.trim()
         };
 
-        if(!data.name || !data.slugRaw) return alert("Title aur Slug dalna jaruri hai!");
-        let finalSlug = sanitizeSlug(data.slugRaw);
-        document.getElementById('sSlug').value = finalSlug; 
-        currentSlug = finalSlug;
+        if(!d.name || !d.slugRaw || episodes.length===0) return alert("Fill required fields!");
+        let slug = sanitize(d.slugRaw);
+        document.getElementById('sSlug').value = slug;
 
-        if(episodes.length === 0) return alert("Kam se kam 1 Episode add karein!");
-
-        let finalTitle = data.seoTitle || `Watch ${data.name} Web Series`;
-        let finalMeta = data.metaDesc || `Stream ${data.name} online in HD.`;
-        let tagsList = data.tagsRaw.split(',').map(t=>t.trim()).filter(t=>t.length>0).slice(0,8);
-        let tagsHtml = tagsList.length > 0 ? `<div class="tags">${tagsList.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '';
-        let storyHtml = `<p>${data.storyline ? cleanStr(data.storyline) : data.name + ' is available to stream online.'}</p>`;
+        // TAGS PROCESSING
+        let tagsArr = d.tags.split(',').map(t=>t.trim()).filter(t=>t);
+        let tagsHtml = tagsArr.length ? `<div class="tags">${tagsArr.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '';
 
         // 1. JSON
-        let jsonObj = { title: data.name, slug: finalSlug, thumbnail: data.poster, type: "series" };
-        let jsonCode = JSON.stringify(jsonObj, null, 2) + ",";
+        let json = JSON.stringify({title:d.name, slug:slug, thumbnail:d.poster, type:"series"}, null, 2) + ",";
 
-        // 2. MAIN HTML (Visual List)
-        let visualListHtml = buildVisualList(finalSlug, data.poster, data.name);
-        
-        let mainHtml = buildHtmlTemplate({
-            slug: finalSlug,
-            title: finalTitle,
-            meta: finalMeta,
-            poster: data.poster,
-            name: data.name,
-            listHtml: visualListHtml,
-            story: storyHtml,
-            tags: tagsHtml
-        });
-
-        // 3. EPISODES HTML
-        let epCodeBlock = "";
-        episodes.forEach((ep, idx) => {
-            let epNum = idx + 1;
-            let epSlug = `${finalSlug}-episode-${epNum}`;
-            let epFileName = `${epSlug}.html`;
-            let epPage = buildEpisodePage(data, ep, idx, episodes.length, finalSlug);
-            
-            epCodeBlock += `\n`;
-            epCodeBlock += epPage + "\n\n" + "=".repeat(40) + "\n\n";
-        });
-
-        // Render Outputs
-        document.getElementById('jsonOut').textContent = jsonCode;
-        document.getElementById('htmlOut').textContent = mainHtml;
-        document.getElementById('epOut').textContent = epCodeBlock;
-        document.getElementById('outputArea').style.display = 'block';
-        document.getElementById('outputArea').scrollIntoView({behavior:'smooth'});
-    }
-
-    // ============================================
-    //  TEMPLATE: MAIN PAGE (Visual List Style)
-    // ============================================
-    function buildHtmlTemplate(d) {
-        return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${cleanStr(d.title)}</title>
-<meta name="description" content="${cleanStr(d.meta)}">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ranginx.fun/series/${d.slug}.html">
-<meta property="og:type" content="video.tv_show">
-<meta property="og:url" content="https://ranginx.fun/series/${d.slug}.html">
-<meta property="og:title" content="${cleanStr(d.title)}">
-<meta property="og:image" content="${d.poster}">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="/ads/popunder.js" defer><\/script>
-<style>
-:root{--bg:#050505;--c:#121212;--p:#e50914;--t:#fff}
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t)}
-a{text-decoration:none;color:inherit}
-header{padding:15px 20px;background:#000;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center}
-.logo{color:var(--p);font-weight:800;font-size:24px}.home{background:#222;padding:5px 15px;border-radius:20px;font-size:12px}
-
-.con{max-width:800px;margin:0 auto;padding:20px}
-.main-head{margin-bottom:20px;border-bottom:1px solid #222;padding-bottom:20px}
-h1{font-size:22px;margin-bottom:10px}
-.meta{font-size:13px;color:#aaa}
-
-/* VISUAL LIST STYLES (MATCHING SCREENSHOT) */
-.ep-list-visual{display:flex;flex-direction:column;gap:15px}
-.ep-card{display:block;background:var(--c);border-radius:8px;overflow:hidden;border:1px solid #222;transition:0.2s}
-.ep-card:hover{border-color:var(--p);transform:translateY(-2px)}
-.thumb-wrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden}
-.ep-thumb{width:100%;height:100%;object-fit:cover;transition:0.3s}
-.ep-card:hover .ep-thumb{transform:scale(1.05)}
-.ep-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to top, rgba(0,0,0,0.8), transparent)}
-.ep-num-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.7);color:#fff;padding:2px 8px;font-size:11px;border-radius:4px}
-.ep-dur-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.7);color:#fff;padding:2px 6px;font-size:11px;border-radius:4px}
-.ep-info{padding:12px}
-.ep-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px}
-
-footer{text-align:center;padding:40px;color:#555;font-size:12px;border-top:1px solid #222}
-</style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"TVSeries","name":"${d.name}","image":"${d.poster}"}<\/script>
-</head>
-<body>
-<header><div class="logo">RANGINX</div><a href="/" class="home">🏠 HOME</a></header>
-
-<div class="con">
-    <div class="main-head">
-        <h1>${d.name}</h1>
-        <div class="meta">Web Series • Free Streaming</div>
-        <div style="margin-top:10px;font-size:14px;color:#ccc">${d.story}</div>
-        ${d.tags}
-    </div>
-
-    <h3 style="margin-bottom:15px;color:#aaa;text-transform:uppercase;font-size:12px;letter-spacing:1px">Episodes</h3>
-    
-    ${d.listHtml}
-
-</div>
-<footer>© 2025 Ranginx. <a href="/dmca.html">DMCA</a></footer>
-</body>
-</html>`;
-    }
-
-    // ============================================
-    //  HELPER: BUILD VISUAL LIST
-    // ============================================
-    function buildVisualList(slug, mainPoster, seriesName) {
-        let html = `<div class="ep-list-visual">`;
+        // 2. MAIN PAGE
+        let visualList = `<div class="ep-list-visual">`;
         episodes.forEach((e, i) => {
-            let epNum = i + 1;
-            let link = `/series/${slug}-episode-${epNum}.html`;
-            // Use specific episode thumb if available, else main poster
-            let thumb = e.thumb || mainPoster; 
-            
-            html += `
-            <a href="${link}" class="ep-card">
-                <div class="thumb-wrap">
-                    <img src="${thumb}" class="ep-thumb" alt="${e.name}">
-                    <div class="ep-overlay"></div>
-                    <span class="ep-dur-badge">HD</span>
-                    <span class="ep-num-badge">Episode ${epNum}</span>
-                </div>
-                <div class="ep-info">
-                    <div class="ep-title">${seriesName} - ${e.name}</div>
-                    <div style="font-size:12px;color:#777">Click to play this episode</div>
-                </div>
+            let num = i+1;
+            let thumb = e.thumb || d.poster;
+            visualList += `
+            <a href="/series/${slug}-episode-${num}.html" class="ep-card">
+                <div class="thumb-wrap"><img src="${thumb}" class="ep-img"><div class="ep-ov"></div><span class="badge ep-bad">Ep ${num}</span></div>
+                <div class="ep-inf"><div class="ep-tit">${d.name} - ${e.name}</div><div class="ep-sub">Click to play</div></div>
             </a>`;
         });
-        html += `</div>`;
-        return html;
-    }
+        visualList += `</div>`;
 
-    // ============================================
-    //  TEMPLATE: EPISODE PAGE (Player)
-    // ============================================
-    function buildEpisodePage(sData, epData, idx, total, sSlug) {
-        let epNum = idx + 1;
-        let epTitle = `${sData.name} - Episode ${epNum}`;
-        let epSlug = `${sSlug}-episode-${epNum}`;
-        let player = getPlayerCode(epData.url, sData.poster);
-        let prev = idx === 0 ? `/series/${sSlug}.html` : `/series/${sSlug}-episode-${idx}.html`;
-        let next = idx === total - 1 ? "#" : `/series/${sSlug}-episode-${epNum+1}.html`;
-
-        return `<!DOCTYPE html>
+        let mainHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watch ${cleanStr(epTitle)}</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch ${clean(d.name)} Full HD - Ranginx</title>
+<meta name="description" content="${clean(d.meta)}">
+<meta name="keywords" content="${clean(d.tags)}">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ranginx.fun/series/${epSlug}.html">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://ranginx.fun/series/${slug}.html">
+<meta property="og:type" content="video.tv_show">
+<meta property="og:url" content="https://ranginx.fun/series/${slug}.html">
+<meta property="og:title" content="${clean(d.name)}">
+<meta property="og:image" content="${d.poster}">
+<meta property="og:site_name" content="Ranginx">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="/ads/popunder.js" defer><\/script>
-<style>
-:root{--bg:#050505;--c:#121212;--p:#e50914;--t:#fff}
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t)}
-a{text-decoration:none;color:inherit}
-.head{padding:15px;background:#000;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center}
-.logo{color:var(--p);font-weight:800}.back{font-size:12px;color:#aaa}
-.vb{width:100%;aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center}
-.con{max-width:800px;margin:0 auto;padding:20px}
-.nav{display:flex;gap:10px;margin:20px 0}
-.btn{background:#222;padding:10px 20px;border-radius:5px;font-weight:600;border:1px solid #333}
-.nxt{background:var(--p);border:none}
-</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "TVEpisode",
-  "episodeNumber": "${epNum}",
-  "name": "${epTitle}",
-  "partOfSeries": { "@type": "TVSeries", "name": "${sData.name}" }
+  "@type": "TVSeries",
+  "name": "${clean(d.name)}",
+  "image": "${d.poster}",
+  "description": "${clean(d.meta)}",
+  "provider": { "@type": "Organization", "name": "Ranginx", "url": "https://ranginx.fun" }
 }
 <\/script>
+<style>
+:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
+a{text-decoration:none;color:inherit;transition:0.2s} a:hover{color:var(--p)}
+header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#000;border-bottom:1px solid #222}
+.logo{color:var(--p);font-weight:800;font-size:24px}.home-btn{padding:8px 16px;background:var(--card);border:1px solid #333;border-radius:20px;font-size:12px;color:#fff}
+.container{max-width:1100px;margin:0 auto;padding:20px;display:grid;grid-template-columns:7fr 3fr;gap:30px}
+@media(max-width:768px){.container{grid-template-columns:1fr}}
+.hero-sec{width:100%;aspect-ratio:16/9;background:url('${d.poster}') no-repeat center/cover;position:relative;display:flex;align-items:center;justify-content:center}
+.play-main{background:var(--p);color:#fff;padding:12px 30px;border-radius:50px;font-weight:700;display:flex;align-items:center;gap:10px;text-transform:uppercase;font-size:14px;box-shadow:0 10px 20px rgba(229,9,20,0.3)}
+.play-main:hover{transform:scale(1.05)}
+h1{font-size:24px;margin-bottom:5px}.meta-row{display:flex;gap:10px;font-size:12px;color:var(--m);margin-bottom:20px}
+.story-card{background:var(--card);padding:20px;border-radius:12px;border:1px solid #222;margin-bottom:20px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.tag{background:#222;border:1px solid #333;padding:5px 12px;border-radius:50px;font-size:11px;color:#ccc}
+.ep-list-visual{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.ep-card{display:flex;background:var(--card);border:1px solid #222;border-radius:8px;overflow:hidden;align-items:center}
+.ep-card:hover{border-color:var(--p)}
+.thumb-wrap{width:120px;aspect-ratio:16/9;position:relative;flex-shrink:0}
+.ep-img{width:100%;height:100%;object-fit:cover}
+.ep-bad{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,0.8);font-size:9px;padding:2px 5px;border-radius:3px}
+.ep-inf{padding:10px;flex:1}
+.ep-tit{font-size:13px;font-weight:600;margin-bottom:3px;color:#fff}
+.ep-sub{font-size:11px;color:#777}
+.sec-title{font-weight:700;margin-bottom:15px;border-left:4px solid var(--p);padding-left:10px}
+.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rel-card{background:#111;border-radius:6px;overflow:hidden}.rel-img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.rel-title{padding:8px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+footer{background:#000;padding:40px;text-align:center;font-size:13px;color:#555;border-top:1px solid #222;margin-top:40px}
+.f-link{color:#777;margin:0 8px;text-decoration:none}.f-link:hover{color:var(--p)}
+</style>
 </head>
 <body>
-<div class="head">
-    <div class="logo">RANGINX</div>
-    <a href="/series/${sSlug}.html" class="back">← Back to Series</a>
-</div>
-<div class="vb">${player}</div>
-<div class="con">
-    <h1>${epTitle}</h1>
-    <div class="nav">
-        <a href="${prev}" class="btn">← Prev</a>
-        ${idx < total-1 ? `<a href="${next}" class="btn nxt">Next Episode →</a>` : ''}
+<header><div class="logo">RANGINX</div><a href="/" class="home-btn">🏠 HOME</a></header>
+<div class="hero-sec">
+    <div style="background:rgba(0,0,0,0.5);width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+        <a href="/series/${slug}-episode-1.html" class="play-main">▶ Start Watching</a>
     </div>
-    <p style="color:#777;font-size:13px">Streaming Episode ${epNum} of ${sData.name}.</p>
 </div>
+<div class="container">
+    <div class="main-col">
+        <h1>${clean(d.name)}</h1>
+        <div class="meta-row"><span>HD</span><span>Web Series</span><span>Free</span></div>
+        <div class="story-card">
+            <h3 style="margin-bottom:10px;font-size:16px;color:var(--p)">Storyline</h3>
+            <div style="font-size:14px;color:#ccc;line-height:1.6">${clean(d.story)}</div>
+            ${tagsHtml}
+        </div>
+        <h3 style="margin:30px 0 15px;font-size:16px">Episodes</h3>
+        ${visualList}
+    </div>
+    <div class="side-col">
+        <div class="sec-title">You May Also Like</div>
+        <div class="rel-grid" id="rel"></div>
+    </div>
+</div>
+<footer>
+    <div style="margin-bottom:10px">© 2025 Ranginx. All rights reserved.</div>
+    <div><a href="/dmca.html" class="f-link">DMCA</a>•<a href="/terms.html" class="f-link">Terms</a>•<a href="/privacy.html" class="f-link">Privacy</a></div>
+</footer>
+<script>
+fetch('/data/movies.json').then(r=>r.json()).then(d=>{
+    let c="${slug}", h='', j=d.filter(m=>m.slug!==c).slice(0,8);
+    j.forEach(m=>{
+        let l=m.type==='series'?'/series/':'/movies/', s=m.slug.replace(/^(movies|series)\\//,'').replace('.html','');
+        h+=\`<a href="\${l}\${s}.html" class="rel-card"><img src="\${m.thumbnail}" class="rel-img"><div class="rel-title">\${m.title}</div></a>\`;
+    });
+    document.getElementById('rel').innerHTML=h;
+});
+<\/script>
 </body>
 </html>`;
-    }
 
-    function getPlayerCode(url, poster) {
-        let u = encodeUrl(url); 
-        let isMp4 = u.includes('.mp4') || u.includes('.mkv');
-        let s = `width:100%;height:100%;object-fit:contain;background:#000;border-radius:0px;`;
-        if(isMp4) return `<video controls playsinline preload="metadata" poster="${poster}" style="${s}"><source src="${u}" type="video/mp4"></video>`;
-        return `<iframe src="${u}" allowfullscreen scrolling="no" style="${s};border:none"></iframe>`;
+        // 3. EPISODE PAGES
+        let epHtmlBlock = "";
+        episodes.forEach((e, idx) => {
+            let num = idx+1;
+            let epSlug = `${slug}-episode-${num}`;
+            let prev = idx===0 ? `/series/${slug}.html` : `/series/${slug}-episode-${idx}.html`;
+            let next = idx===episodes.length-1 ? '#' : `/series/${slug}-episode-${num+1}.html`;
+            
+            let isMp4 = e.url.includes('.mp4');
+            let player = isMp4 
+                ? `<video controls playsinline poster="${d.poster}" style="width:100%;height:100%;object-fit:contain;background:#000"><source src="${e.url}"></video>`
+                : `<iframe src="${e.url}" allowfullscreen style="width:100%;height:100%;border:none"></iframe>`;
+
+            epHtmlBlock += `\n<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${clean(d.name)} - Episode ${num}</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://ranginx.fun/series/${epSlug}.html">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+<script src="/ads/popunder.js" defer><\/script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TVEpisode","episodeNumber":"${num}","name":"${clean(d.name)} Ep ${num}","partOfSeries":{"@type":"TVSeries","name":"${clean(d.name)}"}}<\/script>
+<style>
+body{background:#050505;color:#fff;font-family:'Outfit',sans-serif;margin:0}
+a{text-decoration:none;color:inherit}
+.head{padding:15px;background:#000;border-bottom:1px solid #333;display:flex;justify-content:space-between;align-items:center}
+.vid{width:100%;aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center}
+.con{max-width:800px;margin:0 auto;padding:20px}
+.nav{display:flex;gap:10px;margin:20px 0}
+.btn{background:#222;padding:10px 20px;border-radius:5px;border:1px solid #333;font-weight:600}
+.nxt{background:#e50914;border:none}
+footer{text-align:center;padding:30px;color:#555;font-size:12px;border-top:1px solid #222;margin-top:30px}
+.f-link{color:#777;margin:0 5px}
+</style>
+</head>
+<body>
+<div class="head"><div style="color:#e50914;font-weight:800;font-size:20px">RANGINX</div><a href="/series/${slug}.html" style="font-size:12px;color:#aaa">← Back to Series</a></div>
+<div class="vid">${player}</div>
+<div class="con">
+    <h1 style="font-size:20px">${clean(d.name)} - Episode ${num}</h1>
+    <div class="nav">
+        <a href="${prev}" class="btn">← Prev</a>
+        ${idx < episodes.length-1 ? `<a href="${next}" class="btn nxt">Next Episode →</a>` : ''}
+    </div>
+    <div style="font-size:13px;color:#aaa">You are watching episode ${num}. <a href="/series/${slug}.html" style="color:#e50914">View all episodes</a></div>
+</div>
+<footer>
+    <div>© 2025 Ranginx</div>
+    <div style="margin-top:5px"><a href="/dmca.html" class="f-link">DMCA</a> <a href="/privacy.html" class="f-link">Privacy</a></div>
+</footer>
+</body>
+</html>\n\n` + "=".repeat(30) + "\n\n";
+        });
+
+        document.getElementById('jsonOut').textContent = json;
+        document.getElementById('htmlOut').textContent = mainHtml;
+        document.getElementById('epOut').textContent = epHtmlBlock;
+        document.getElementById('outputArea').style.display = 'block';
     }
 
     function copyText(id) {
-        let text = document.getElementById(id).innerText;
-        let textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed"; 
-        textArea.style.left = "-9999px"; 
-        document.body.appendChild(textArea);
-        textArea.select();
-        try { document.execCommand('copy'); alert("Copied! ✅"); } catch (err) { console.error(err); }
-        document.body.removeChild(textArea);
-    }
-
-    function downloadMain() {
-        if(!currentSlug) return alert("Pehle Generate karein!");
-        downloadFile(currentSlug + ".html", document.getElementById('htmlOut').textContent);
-    }
-
-    function downloadFile(filename, content) {
-        let b = new Blob([content], {type:'text/html'});
-        let a = document.createElement('a');
-        a.href = URL.createObjectURL(b);
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        let t = document.getElementById(id).innerText;
+        let a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); document.body.removeChild(a); alert("Copied!");
     }
 </script>
 </body>
