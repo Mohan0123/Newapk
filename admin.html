@@ -44,132 +44,125 @@
         pre { padding: 15px; color: #4cd137; overflow-x: auto; font-family: monospace; font-size: 12px; max-height: 300px; }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
-        
-        /* New Checkbox Style */
-        .checkbox-wrapper { background: #111; padding: 12px; border-radius: 6px; border: 1px solid #333; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .checkbox-wrapper input { width: auto; margin: 0; }
-        
         @media (max-width: 768px) { .sidebar{width:70px;padding:15px 10px} .brand span, .menu-btn span{display:none} .brand{margin-bottom:20px;font-size:18px} .grid{grid-template-columns:1fr} }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div class="brand">RANGINX <span>SEO+</span></div>
-    <div class="menu-btn active" onclick="switchTab(event,'movie')">
-        🎬 <span>Movie</span>
+    <div class="brand">RANGINX <span>CREATOR</span></div>
+    
+    <div class="menu-btn active" onclick="switchTab(event,'series-main')">
+        📺 <span>Series Home</span>
     </div>
 
-    <div class="menu-btn" onclick="switchTab(event,'series')">
-        📺 <span>Series</span>
+    <div class="menu-btn" onclick="switchTab(event,'series-ep')">
+        🎞 <span>Episode Page</span>
     </div>
 </div>
 
 <div class="main">
     <div class="top-bar">
-        <span id="pageTitle">Movie Generator</span>
-        <a href="/" class="btn-secondary" style="padding:8px 15px; border-radius:4px; font-size:12px; text-decoration:none; color:white;">🏠 HOME</a>
+        <span id="pageTitle">Series Main Generator</span>
+        <a href="/" class="btn-secondary" style="padding:8px 15px; border-radius:4px; font-size:12px; text-decoration:none; color:white;">🏠 DASHBOARD</a>
     </div>
     
     <div class="scroll-view">
         <div class="container">
             
-            <div id="tab-movie" class="tab-panel active">
+            <div id="tab-series-main" class="tab-panel active">
                 <div class="card">
-                    <div class="sec-title">Movie Input (Admin)</div>
+                    <div class="sec-title">Series Landing Page Data</div>
                     <div class="grid">
                         <div class="full">
-                            <label>Slug (Example: spicy-malkin)</label>
-                            <input type="text" id="mSlug" placeholder="spicy-malkin" style="color:var(--primary); font-weight:bold;">
+                            <label>Series Slug (Example: farzi-season-1)</label>
+                            <input type="text" id="mSlug" placeholder="farzi-season-1" style="color:var(--primary); font-weight:bold;">
                         </div>
                         <div class="full">
-                            <label>Movie Name (Required)</label>
-                            <input type="text" id="mTitle" placeholder="Movie Name">
-                        </div>
-                        <div class="full">
-                            <label>Video URL (MP4 / Embed)</label>
-                            <input type="text" id="mVideo" placeholder="https://example.com/video.mp4">
+                            <label>Series Name</label>
+                            <input type="text" id="mTitle" placeholder="Farzi Season 1">
                         </div>
                         <div>
-                            <label>Poster URL</label>
-                            <input type="text" id="mPoster" placeholder="https://example.com/poster.jpg">
+                            <label>Poster / Thumbnail URL</label>
+                            <input type="text" id="mPoster" placeholder="https://...">
                         </div>
                         <div>
-                            <label>Tags (Comma separated, Max 8)</label>
-                            <input type="text" id="mTags" placeholder="Drama, Romance">
+                            <label>Genre / Tags</label>
+                            <input type="text" id="mTags" placeholder="Crime, Thriller, Drama">
+                        </div>
+                        
+                        <div class="full ep-box">
+                            <label style="margin-bottom:10px">Episode List Builder (For Landing Page Display)</label>
+                            <div class="grid" style="grid-template-columns: 0.5fr 1fr 1fr 0.5fr;">
+                                <input type="number" id="listEpNum" placeholder="Ep No.">
+                                <input type="text" id="listEpTitle" placeholder="Title (e.g. The Beginning)">
+                                <input type="text" id="listEpThumb" placeholder="Thumbnail URL">
+                                <input type="text" id="listEpDur" placeholder="18:00">
+                            </div>
+                            <button class="btn-add" style="width:100%; margin-top:10px;" onclick="addToList()">ADD EPISODE TO LIST</button>
+                            <div id="epListDisplay" class="ep-list"></div>
+                        </div>
+
+                        <div class="full">
+                            <label>Short Description (Optional)</label>
+                            <textarea id="mDesc" class="desc-box" placeholder="Auto-generated if empty"></textarea>
                         </div>
                         <div class="full">
-                            <label>SEO Title (Optional - Leave empty for Auto)</label>
+                            <label>SEO Title (Optional)</label>
                             <input type="text" id="mSeoTitle" placeholder="Auto-generated if empty">
                         </div>
                         <div class="full">
-                            <label>Meta Description (Optional - Leave empty for Auto)</label>
+                            <label>Meta Description (Optional)</label>
                             <textarea id="mMeta" placeholder="Auto-generated if empty"></textarea>
-                        </div>
-                        <div class="full">
-                            <label>Storyline (Optional - Leave empty for Auto)</label>
-                            <textarea id="mDesc" class="desc-box" placeholder="Auto-generated if empty"></textarea>
                         </div>
                     </div>
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="generate('movie')">Generate HTML Code</button>
-                        <button class="btn btn-secondary" onclick="resetForm('m')">Reset</button>
+                        <button class="btn btn-primary" onclick="generateSeriesMain()">Generate Landing Page</button>
+                        <button class="btn btn-secondary" onclick="resetForm('main')">Reset</button>
                     </div>
                 </div>
             </div>
 
-            <div id="tab-series" class="tab-panel">
+            <div id="tab-series-ep" class="tab-panel">
                 <div class="card">
-                    <div class="sec-title">Series Input (Admin)</div>
+                    <div class="sec-title">Individual Episode Generator</div>
                     <div class="grid">
                          <div class="full">
-                            <label>Slug (Example: farzi-season-1)</label>
-                            <input type="text" id="sSlug" placeholder="farzi-season-1" style="color:var(--primary); font-weight:bold;">
+                            <label>Parent Series Slug (To link Back button)</label>
+                            <input type="text" id="eSeriesSlug" placeholder="farzi-season-1" style="color:var(--primary); font-weight:bold;">
+                        </div>
+                        <div style="grid-column: span 1">
+                            <label>Episode Number</label>
+                            <input type="number" id="eNum" placeholder="1">
+                        </div>
+                        <div style="grid-column: span 1">
+                            <label>Release Date</label>
+                            <input type="text" id="eDate" placeholder="12 Oct 2024">
                         </div>
                         <div class="full">
-                            <label>Series Name</label>
-                            <input type="text" id="sTitle" placeholder="Series Name">
+                            <label>Episode Title</label>
+                            <input type="text" id="eTitle" placeholder="The Pilot Episode">
                         </div>
-                        <div>
-                            <label>Poster URL</label>
-                            <input type="text" id="sPoster" placeholder="https://...">
+                        <div class="full">
+                            <label>Video URL (MP4 / Iframe)</label>
+                            <input type="text" id="eVideo" placeholder="https://...">
                         </div>
-                        <div>
-                            <label>Tags (Max 8)</label>
-                            <input type="text" id="sTags" placeholder="Thriller, Web Series">
+                        <div class="full">
+                            <label>Episode Thumbnail</label>
+                            <input type="text" id="eThumb" placeholder="https://...">
                         </div>
-                        
-                        <div class="full checkbox-wrapper">
-                            <input type="checkbox" id="sGenEpisodes" checked>
-                            <label for="sGenEpisodes" style="margin:0; cursor:pointer; color:#fff;">Generate separate page for each episode (Best for SEO)</label>
-                        </div>
-
-                        <div class="full ep-box">
-                            <label style="margin-bottom:10px">Episode Manager</label>
-                            <div style="display:flex; gap:10px;">
-                                <input type="text" id="epName" placeholder="Ep 1" style="width:30%">
-                                <input type="text" id="epUrl" placeholder="Video URL">
-                                <button class="btn-add" onclick="addEpisode()">ADD</button>
-                            </div>
-                            <div id="epList" class="ep-list"></div>
-                        </div>
-
                         <div class="full">
                             <label>SEO Title (Optional)</label>
-                            <input type="text" id="sSeoTitle" placeholder="Auto-generated if empty">
+                            <input type="text" id="eSeoTitle" placeholder="Auto-generated if empty">
                         </div>
                         <div class="full">
                             <label>Meta Description (Optional)</label>
-                            <textarea id="sMeta" placeholder="Auto-generated if empty"></textarea>
-                        </div>
-                        <div class="full">
-                            <label>Storyline (Optional)</label>
-                            <textarea id="sDesc" class="desc-box" placeholder="Auto-generated if empty"></textarea>
+                            <textarea id="eMeta" placeholder="Auto-generated if empty"></textarea>
                         </div>
                     </div>
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="generate('series')">Generate HTML Code</button>
-                        <button class="btn btn-secondary" onclick="resetForm('s')">Reset</button>
+                        <button class="btn btn-primary" onclick="generateEpisodePage()">Generate Episode Page</button>
+                        <button class="btn btn-secondary" onclick="resetForm('ep')">Reset</button>
                     </div>
                 </div>
             </div>
@@ -177,7 +170,7 @@
             <div id="outputArea" class="output-area">
                 <div class="code-box">
                     <div class="box-head">
-                        <span>JSON Data (Add to /data/movies.json)</span>
+                        <span>JSON Data (For Database)</span>
                         <button class="copy-btn" onclick="copyText('jsonOut')">COPY JSON</button>
                     </div>
                     <pre id="jsonOut"></pre>
@@ -185,9 +178,10 @@
 
                 <div class="code-box">
                     <div class="box-head">
-                        <span>HTML Code (Main + Episodes)</span>
+                        <span>HTML Code (Ready to Publish)</span>
                         <div style="display:flex; gap:10px">
-                            <button class="copy-btn" onclick="copyText('htmlOut')">COPY ALL</button>
+                            <button class="copy-btn" onclick="copyText('htmlOut')">COPY HTML</button>
+                            <button class="copy-btn" style="background:var(--primary);border:none" onclick="downloadHtml()">DOWNLOAD</button>
                         </div>
                     </div>
                     <pre id="htmlOut"></pre>
@@ -199,449 +193,327 @@
 </div>
 
 <script>
-    let episodes = [];
+    let mainListEpisodes = [];
     let currentSlug = "";
+    let currentType = "";
 
     function switchTab(e, t) {
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
         e.currentTarget.classList.add('active');
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.getElementById('tab-'+t).classList.add('active');
-        document.getElementById('pageTitle').innerText = t === 'movie' ? 'Movie Generator' : 'Series Generator';
+        
+        if(t === 'series-main') document.getElementById('pageTitle').innerText = 'Series Main Generator';
+        if(t === 'series-ep') document.getElementById('pageTitle').innerText = 'Episode Page Generator';
+        
         document.getElementById('outputArea').style.display = 'none';
     }
 
-    function addEpisode() {
-        let n = document.getElementById('epName').value.trim();
-        let u = document.getElementById('epUrl').value.trim();
-        if(!n || !u) return alert("Please enter Episode Name & URL");
-        episodes.push({name:n, url:u});
-        renderEp();
-        document.getElementById('epName').value = ""; document.getElementById('epUrl').value = "";
+    // --- LIST BUILDER LOGIC (FOR MAIN PAGE) ---
+    function addToList() {
+        let n = document.getElementById('listEpNum').value.trim();
+        let t = document.getElementById('listEpTitle').value.trim();
+        let th = document.getElementById('listEpThumb').value.trim();
+        let d = document.getElementById('listEpDur').value.trim();
+        
+        if(!n || !t) return alert("Num and Title required!");
+        
+        mainListEpisodes.push({ num: n, title: t, thumb: th, duration: d });
+        renderList();
+        document.getElementById('listEpNum').value = "";
+        document.getElementById('listEpTitle').value = "";
+        document.getElementById('listEpThumb').value = "";
+        document.getElementById('listEpDur').value = "";
     }
 
-    function renderEp() {
+    function renderList() {
         let h = "";
-        episodes.forEach((e,i) => {
-            h += `<div class="ep-item"><span>${e.name}</span> <span class="del-btn" onclick="delEp(${i})">×</span></div>`;
+        mainListEpisodes.forEach((e,i) => {
+            h += `<div class="ep-item">
+                <span><b>Ep ${e.num}:</b> ${e.title}</span> 
+                <span class="del-btn" onclick="delFromList(${i})">×</span>
+            </div>`;
         });
-        document.getElementById('epList').innerHTML = h || '<div style="text-align:center;color:#555;font-size:12px;padding:10px">No episodes added</div>';
+        document.getElementById('epListDisplay').innerHTML = h || '<div style="text-align:center;color:#555;font-size:12px;padding:10px">No episodes added</div>';
     }
-    function delEp(i) { episodes.splice(i,1); renderEp(); }
+
+    function delFromList(i) { mainListEpisodes.splice(i,1); renderList(); }
     
-    function resetForm(p) {
-        document.querySelectorAll(`#tab-${p==='m'?'movie':'series'} input, textarea`).forEach(e=>e.value='');
-        if(p==='s') { episodes=[]; renderEp(); }
-    }
-
-    // --- HELPER FUNCTIONS ---
-    function sanitizeSlug(str) {
-        if(!str) return "";
-        return str.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
-    }
-
-    function cleanStr(str) {
-        if (!str) return "";
-        return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
-
-    function encodeUrl(url) {
-        if(!url) return "";
-        return url.trim().replace(/\s/g, '%20');
-    }
-
-    // ============================================
-    //  ⚡ MAIN GENERATOR FUNCTION
-    // ============================================
-    function generate(type) {
-        let p = type === 'movie' ? 'm' : 's';
-        
-        // 1. GATHER DATA
-        let data = {
-            name: document.getElementById(p+'Title').value.trim(),
-            slugRaw: document.getElementById(p+'Slug').value.trim(),
-            video: p === 'm' ? document.getElementById('mVideo').value.trim() : '', 
-            poster: document.getElementById(p+'Poster').value.trim(),
-            tagsRaw: document.getElementById(p+'Tags').value.trim(),
-            seoTitle: document.getElementById(p+'SeoTitle').value.trim(),
-            metaDesc: document.getElementById(p+'Meta').value.trim(),
-            storyline: document.getElementById(p+'Desc').value.trim()
-        };
-
-        if(!data.name || !data.slugRaw) return alert("Title & Slug required!");
-        let finalSlug = sanitizeSlug(data.slugRaw);
-        document.getElementById(p+'Slug').value = finalSlug; 
-
-        // 2. CHECK SETTINGS (Is Separate Page Mode ON?)
-        let separateEpisodes = false;
-        if(type === 'series') {
-            separateEpisodes = document.getElementById('sGenEpisodes').checked;
-            if(episodes.length === 0) return alert("Please add at least one episode.");
-        }
-
-        // 3. PREPARE COMMON VARS
-        let finalTitle = data.seoTitle || (type === 'movie' ? `Watch ${data.name} Full Movie` : `Watch ${data.name} Web Series`);
-        let finalMeta = data.metaDesc || `Watch ${data.name} online free.`;
-        
-        let tagsList = data.tagsRaw.split(',').map(t => t.trim()).filter(t => t.length > 0).slice(0, 8);
-        let tagsHtml = tagsList.length > 0 ? `<div class="tags">${tagsList.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
-        let finalStoryHtml = data.storyline ? `<p>${cleanStr(data.storyline)}</p>` : `<p>${data.name} is available to watch online in HD.</p>`;
-
-        // 4. GENERATE MAIN PAGE CONTENT
-        let playerHtml = "", extrasHtml = "";
-        
-        if (type === 'movie') {
-            playerHtml = getPlayerCode(data.video, data.poster);
+    function resetForm(type) {
+        if(type === 'main') {
+             document.querySelectorAll('#tab-series-main input, #tab-series-main textarea').forEach(e=>e.value='');
+             mainListEpisodes = []; renderList();
         } else {
-            // SERIES LOGIC
-            if(separateEpisodes) {
-                // Feature ON: Extras are LINKS to other files
-                extrasHtml = buildSeriesLinks(finalSlug);
-                // Main page plays Episode 1 by default
-                playerHtml = getPlayerCode(episodes[0].url, data.poster, true);
-            } else {
-                // Feature OFF: Extras are BUTTONS (JS Switcher)
-                extrasHtml = buildSeriesSwitcher(data.poster);
-                playerHtml = getPlayerCode(episodes[0].url, data.poster, true);
-            }
+             document.querySelectorAll('#tab-series-ep input, #tab-series-ep textarea').forEach(e=>e.value='');
         }
+    }
 
-        let schemaData = {
-            "@context": "https://schema.org",
-            "@type": type === 'movie' ? "Movie" : "TVSeries",
-            "name": data.name,
-            "url": `https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html`,
-            "image": data.poster
+    // --- HELPERS ---
+    function sanitizeSlug(str) { return str ? str.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-') : ""; }
+    function cleanStr(str) { return str ? str.replace(/"/g, '&quot;') : ""; }
+    function cleanUrl(url) { return url ? url.trim().replace(/\s/g, '%20') : ""; }
+
+    // ============================================
+    //  Generate MAIN SERIES PAGE (Landing)
+    // ============================================
+    function generateSeriesMain() {
+        let data = {
+            slug: sanitizeSlug(document.getElementById('mSlug').value),
+            title: document.getElementById('mTitle').value,
+            poster: cleanUrl(document.getElementById('mPoster').value),
+            tags: document.getElementById('mTags').value,
+            desc: document.getElementById('mDesc').value,
+            seo: document.getElementById('mSeoTitle').value,
+            meta: document.getElementById('mMeta').value
         };
 
-        // --- MAIN PAGE TEMPLATE ---
-        let mainHtml = `<!DOCTYPE html>
+        if(!data.title || !data.slug) return alert("Slug and Title are required!");
+
+        let finalTitle = data.seo || `Watch ${data.title} All Episodes Online Free`;
+        let finalMeta = data.meta || `Stream ${data.title} full web series in HD. All episodes available.`;
+        
+        // BUILD EPISODE HTML LIST (OTT STYLE)
+        let epHtml = "";
+        mainListEpisodes.sort((a,b)=>a.num - b.num).forEach(ep => {
+            let epLink = `/series/${data.slug}/episode-${ep.num}.html`;
+            epHtml += `
+            <a href="${epLink}" class="ep-card">
+                <div class="ep-thumb">
+                    <img src="${ep.thumb || data.poster}" alt="Ep ${ep.num}" loading="lazy">
+                    <div class="duration">${ep.duration || '20:00'}</div>
+                    <div class="play-icon">▶</div>
+                </div>
+                <div class="ep-info">
+                    <div class="ep-num">Episode ${ep.num}</div>
+                    <div class="ep-title">${ep.title}</div>
+                    <div class="ep-date">Streaming Now</div>
+                </div>
+            </a>`;
+        });
+
+        // JSON DATA STRUCTURE
+        let jsonDb = {
+            type: "series",
+            seriesSlug: data.slug,
+            title: data.title,
+            thumbnail: data.poster,
+            episodes: mainListEpisodes.map(e => ({
+                episode: parseInt(e.num),
+                title: e.title,
+                duration: e.duration,
+                slug: `episode-${e.num}`,
+                thumbnail: e.thumb,
+                video: "Generate in Ep Generator"
+            }))
+        };
+
+        let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/png" href="/favicon.ico">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${cleanStr(finalTitle)}</title>
-<meta name="description" content="${cleanStr(finalMeta)}">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
-<meta property="og:site_name" content="Ranginx">
-<meta property="og:title" content="${cleanStr(finalTitle)}">
-<meta property="og:description" content="${cleanStr(finalMeta)}">
-<meta property="og:image" content="${data.poster}">
-<meta property="og:type" content="${type === 'movie' ? 'video.movie' : 'video.tv_show'}">
-<meta property="og:url" content="https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html">
-<meta name="twitter:title" content="${cleanStr(finalTitle)}">
-<meta name="twitter:description" content="${cleanStr(finalMeta)}">
-<script type="application/ld+json">${JSON.stringify(schemaData)}<\/script>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="/ads/movie-ads.js" defer><\/script>
-<script src="/ads/popunder.js" defer><\/script>
-<style>
-:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.6}
-a{text-decoration:none;color:inherit}
-header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#000;position:sticky;top:0;z-index:99;border-bottom:1px solid #222}
-.logo{color:var(--p);font-weight:800;font-size:24px;text-transform:uppercase}
-.home-btn{padding:8px 16px;background:var(--card);border:1px solid #333;border-radius:20px;font-size:12px;font-weight:600;color:#fff}
-.container{max-width:1200px;margin:0 auto;padding:0}
-.video-area{position:relative;width:100%;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
-.content-pad{padding:20px}
-h1{font-size:24px;margin-bottom:10px;font-weight:700;line-height:1.2}
-.meta-row{display:flex;gap:10px;align-items:center;margin-bottom:20px;font-size:13px;color:var(--m)}
-.badge{background:#333;color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;font-size:11px}
-.story-card{background:var(--card);padding:25px;border-radius:12px;margin-top:10px;margin-bottom:20px}
-.card-head{display:flex;align-items:center;gap:10px;color:var(--p);font-weight:700;margin-bottom:15px;font-size:16px}
-.desc-text{color:#ccc;font-size:15px;line-height:1.7}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.tag{background:#222;border:1px solid #333;padding:6px 14px;border-radius:50px;font-size:12px;color:#ccc}
-.social-row{display:flex;gap:10px;margin-bottom:25px}
-.soc-btn{flex:1;height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid #333;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;color:white;transition:0.2s}
-.tg{color:#38bdf8;border-color:rgba(56,189,248,0.2)}
-.wa{color:#4ade80;border-color:rgba(74,222,128,0.2)}
-.cp{background:#7c3aed;border-color:#7c3aed;color:white}
-.soc-btn:hover{filter:brightness(1.2);transform:translateY(-2px)}
-.ad-box{width:100%;background:#000;display:flex;align-items:center;justify-content:center;margin:20px 0;min-height:50px}
-.ad-box:empty{display:none;}
-.related-sec{padding:0 20px 40px 20px}
-.sec-title{font-weight:700;margin-bottom:15px;border-left:4px solid var(--p);padding-left:12px;font-size:16px}
-.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.rel-card{display:block;border-radius:8px;overflow:hidden;background:var(--card);transition:0.2s}
-.rel-card:hover{transform:translateY(-3px)}
-.rel-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#111}
-.rel-title{padding:12px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.load-more{width:100%;padding:15px;background:var(--card);border:1px solid #333;color:#fff;font-weight:700;margin-top:20px;border-radius:8px;cursor:pointer}
-footer{background:#000;padding:50px 20px;text-align:center;font-size:13px;color:#555;border-top:1px solid #222}
-@media(min-width:768px){ .container{display:grid;grid-template-columns:70% 30%;gap:30px;padding:40px} .video-area{border-radius:12px;overflow:hidden;margin-top:0} .content-pad{padding:0;margin-top:25px} .rel-grid{grid-template-columns:1fr} }
-/* Styles for Series List */
-.ep-box-out{background:#18181b;padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #27272a}
-.ep-head{font-weight:700;margin-bottom:15px}
-.ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:10px}
-.ep-btn{background:#27272a;border:1px solid #333;color:#fff;padding:12px 0;border-radius:8px;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.ep-btn:hover, .ep-btn.active{background:#e50914;border-color:#e50914}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${cleanStr(finalTitle)}</title>
+    <meta name="description" content="${cleanStr(finalMeta)}">
+    <link rel="canonical" href="https://ranginx.fun/series/${data.slug}.html">
+    <meta property="og:type" content="video.tv_show">
+    <meta property="og:image" content="${data.poster}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#0f0f0f;--card:#1f1f1f;--p:#e50914;--t:#fff;}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);color:var(--t);font-family:'Outfit',sans-serif;padding-bottom:50px}
+        a{text-decoration:none;color:inherit}
+        .hero{position:relative;height:50vh;width:100%;overflow:hidden}
+        .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg, var(--bg) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.4) 100%)}
+        .hero-img{width:100%;height:100%;object-fit:cover}
+        .hero-content{position:absolute;bottom:0;left:0;width:100%;padding:20px;z-index:2}
+        h1{font-size:32px;font-weight:800;margin-bottom:10px;text-transform:uppercase;line-height:1.1}
+        .tags{display:flex;gap:10px;font-size:12px;color:#ccc;margin-bottom:15px}
+        .tag{background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:4px}
+        .desc{font-size:14px;color:#bbb;line-height:1.5;max-width:600px;margin-bottom:20px}
+        .container{max-width:800px;margin:0 auto;padding:20px}
+        .sec-head{font-size:18px;font-weight:700;margin-bottom:20px;border-left:4px solid var(--p);padding-left:10px}
+        
+        /* OTT CARD STYLE */
+        .ep-list{display:flex;flex-direction:column;gap:15px}
+        .ep-card{display:flex;background:var(--card);border-radius:8px;overflow:hidden;transition:0.2s;align-items:center;border:1px solid #333}
+        .ep-card:hover{transform:translateX(5px);border-color:var(--p)}
+        .ep-thumb{width:140px;aspect-ratio:16/9;position:relative;flex-shrink:0}
+        .ep-thumb img{width:100%;height:100%;object-fit:cover}
+        .duration{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,0.8);font-size:10px;padding:2px 4px;border-radius:2px}
+        .play-icon{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.3);font-size:20px;opacity:0;transition:0.2s}
+        .ep-card:hover .play-icon{opacity:1}
+        .ep-info{padding:15px;flex:1}
+        .ep-num{font-size:12px;color:var(--p);font-weight:700;text-transform:uppercase;margin-bottom:4px}
+        .ep-title{font-size:15px;font-weight:600;margin-bottom:5px;line-height:1.2}
+        .ep-date{font-size:11px;color:#777}
+        
+        @media(max-width:600px){ .hero{height:40vh} h1{font-size:24px} .ep-thumb{width:110px} }
+    </style>
 </head>
 <body>
-<header>
-    <div class="logo">RANGINX</div>
-    <a href="/" class="home-btn">🏠 HOME</a>
-</header>
 
-<div class="video-area" id="video-box">${playerHtml}</div>
-
-<div class="container">
-    <div class="main-col">
-        <div class="content-pad">
-            <h1>${data.name}</h1>
-            <div class="meta-row">
-                <span class="badge">HD</span>
-                <span class="badge" style="background:var(--p)">Free</span>
-                <span>Streaming Now</span>
-            </div>
-
-            <div class="social-row">
-                 <a href="https://t.me/share/url?url=https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html" target="_blank" class="soc-btn tg">Telegram</a>
-                 <a href="https://api.whatsapp.com/send?text=Watch: https://ranginx.fun/${type==='movie'?'movies':'series'}/${finalSlug}.html" target="_blank" class="soc-btn wa">WhatsApp</a>
-                 <button class="soc-btn cp" onclick="copyLink()">Copy Link</button>
-            </div>
-
-            <div id="ad-banner" class="ad-box"></div>
-
-            ${extrasHtml}
-
-            <div class="story-card">
-                <div class="card-head">📝 Storyline</div>
-                <div class="desc-text">${finalStoryHtml}</div>
-                ${tagsHtml}
-            </div>
+<div class="hero">
+    <img src="${data.poster}" class="hero-img" alt="${cleanStr(data.title)}">
+    <div class="hero-content">
+        <h1>${data.title}</h1>
+        <div class="tags">
+            ${data.tags.split(',').map(t=>`<span class="tag">${t.trim()}</span>`).join('')}
         </div>
-    </div>
-
-    <div class="side-col">
-        <div class="related-sec">
-            <div class="sec-title">You May Also Like</div>
-            <div class="rel-grid" id="related-grid"></div>
-            <button class="load-more" id="loadBtn" onclick="loadNextBatch()">Load More</button>
-            <div id="ad-sidebar" class="ad-box"></div>
-        </div>
+        <p class="desc">${data.desc || 'Watch full episodes online now.'}</p>
     </div>
 </div>
 
-<footer>
-    © 2025 Ranginx. All rights reserved.<br><br>
-    <a href="/dmca.html" style="color:#777;margin:0 10px">DMCA</a>
-    <a href="/terms.html" style="color:#777;margin:0 10px">Terms</a>
-    <a href="/privacy.html" style="color:#777;margin:0 10px">Privacy</a>
-</footer>
+<div class="container">
+    <div class="sec-head">All Episodes</div>
+    <div class="ep-list">
+        ${epHtml}
+    </div>
+</div>
 
-<script>
-function copyLink(){
-    navigator.clipboard.writeText(window.location.href).then(()=>alert("Link Copied!"));
-}
-
-let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "${finalSlug}";
-
-// --- DYNAMIC FOLDER LOGIC (CRITICAL FIX) ---
-function getCorrectLink(item) {
-    const type = String(item.type || '').toLowerCase();
-    const slug = String(item.slug || '').toLowerCase();
-    const isSeries = type.includes('series') || slug.includes('series/') || slug.includes('season');
-    let cleanSlug = slug.replace('movies/', '').replace('series/', '').replace('.html', '').replace(/^\\//, '');
-    return isSeries ? \`/series/\${cleanSlug}.html\` : \`/movies/\${cleanSlug}.html\`;
-}
-
-document.addEventListener("DOMContentLoaded", ()=>{
-    const grid = document.getElementById('related-grid');
-    fetch('/data/movies.json')
-    .then(r=>{if(!r.ok)throw new Error();return r.json()})
-    .then(d=>{
-        allData = d.filter(m=>m.slug !== currentSlug);
-        if(allData.length > 0) loadNextBatch();
-        else grid.innerHTML = '<div style="padding:10px;color:#555">No related content</div>';
-    })
-    .catch(()=>{
-        console.log("Local/Offline Mode");
-        grid.innerHTML = '<div style="padding:10px;color:#555">Related content not available</div>';
-        document.getElementById('loadBtn').style.display='none';
-    });
-});
-
-function loadNextBatch() {
-    const grid = document.getElementById('related-grid');
-    const btn = document.getElementById('loadBtn');
-    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-    
-    nextBatch.forEach(m => {
-        let link = getCorrectLink(m);
-        let thumb = m.thumbnail || 'https://via.placeholder.com/300x170';
-        grid.innerHTML += \`<a href="\${link}" class="rel-card"><img src="\${thumb}" class="rel-img" loading="lazy" alt="\${m.title}"><div class="rel-title">\${m.title}</div></a>\`;
-    });
-    currentIndex += itemsPerPage;
-    if(currentIndex >= allData.length) btn.style.display = 'none';
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TVSeries",
+  "name": "${cleanStr(data.title)}",
+  "image": "${data.poster}",
+  "numberOfEpisodes": "${mainListEpisodes.length}"
 }
 <\/script>
 </body>
 </html>`;
 
-        // 5. ASSEMBLE OUTPUT
-        let outputText = "";
+        showOutput(html, JSON.stringify(jsonDb, null, 2), data.slug + "-main");
+    }
 
-        // Only create JSON for the Main Entity (Database Constraint)
-        const finalJson = {
-          title: data.name,
-          slug: finalSlug,
-          thumbnail: data.poster,
-          type: type
+
+    // ============================================
+    //  Generate INDIVIDUAL EPISODE PAGE
+    // ============================================
+    function generateEpisodePage() {
+        let data = {
+            parentSlug: sanitizeSlug(document.getElementById('eSeriesSlug').value),
+            num: document.getElementById('eNum').value,
+            date: document.getElementById('eDate').value,
+            title: document.getElementById('eTitle').value,
+            video: cleanUrl(document.getElementById('eVideo').value),
+            thumb: cleanUrl(document.getElementById('eThumb').value),
+            seo: document.getElementById('eSeoTitle').value,
+            meta: document.getElementById('eMeta').value
         };
 
-        if (type === 'movie' || !separateEpisodes) {
-            // Standard Output
-            outputText = mainHtml;
-        } else {
-            // MULTI-FILE OUTPUT for Separate Episodes
-            outputText += `\n`;
-            outputText += mainHtml;
-            outputText += `\n\n\n`;
+        if(!data.parentSlug || !data.num || !data.video) return alert("Series Slug, Ep Num & Video URL required!");
 
-            // GENERATE EPISODE PAGES
-            episodes.forEach((ep, index) => {
-                let epNum = index + 1;
-                let epSlug = `${finalSlug}-episode-${epNum}`;
-                let epHtml = buildEpisodePage(data, ep, index, episodes.length, finalSlug);
-                
-                outputText += `\n`;
-                outputText += epHtml;
-                outputText += `\n\n\n`;
-            });
+        let slug = `episode-${data.num}`;
+        let fullTitle = data.seo || `${data.title} - Episode ${data.num}`;
+        let playerCode = "";
+        
+        if(data.video.includes('.mp4') || data.video.includes('.mkv')) {
+            playerCode = `<video controls playsinline poster="${data.thumb}" class="player"><source src="${data.video}" type="video/mp4"></video>`;
+        } else {
+            playerCode = `<iframe src="${data.video}" allowfullscreen class="player"></iframe>`;
         }
 
-        showOutput(outputText, JSON.stringify(finalJson, null, 2) + ",", finalSlug);
-    }
+        let jsonDb = {
+            type: "episode",
+            series: data.parentSlug,
+            episode: parseInt(data.num),
+            title: data.title,
+            video: data.video
+        };
 
-    // ============================================
-    //  🎥 NEW: EPISODE PAGE GENERATOR
-    // ============================================
-    function buildEpisodePage(seriesData, epData, index, total, seriesSlug) {
-        let epNum = index + 1;
-        let epTitle = `${seriesData.name} - Episode ${epNum}`;
-        let epSlug = `${seriesSlug}-episode-${epNum}`;
-        let playerCode = getPlayerCode(epData.url, seriesData.poster);
-
-        // Calculate Next/Prev
-        let prevLink = index === 0 ? `/series/${seriesSlug}.html` : `/series/${seriesSlug}-episode-${index}.html`;
-        let nextLink = index === total - 1 ? "#" : `/series/${seriesSlug}-episode-${epNum + 1}.html`;
-        let navHtml = `
-            <div style="display:flex;gap:10px;margin-bottom:20px;">
-                <a href="${prevLink}" class="nav-btn">← Back</a>
-                ${index < total - 1 ? `<a href="${nextLink}" class="nav-btn" style="background:#e50914;border:none">Next Episode →</a>` : ''}
-            </div>
-        `;
-
-        return `<!DOCTYPE html>
+        let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watch ${cleanStr(epTitle)} Online Free</title>
-<meta name="description" content="Stream ${cleanStr(seriesData.name)} Episode ${epNum} online in HD.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ranginx.fun/series/${epSlug}.html">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="/ads/popunder.js" defer><\/script>
-<style>
-:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.6}
-a{text-decoration:none;color:inherit}
-.header{padding:15px;background:#000;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:800;color:var(--p);font-size:20px}
-.vid-box{width:100%;aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center}
-.container{max-width:800px;margin:0 auto;padding:20px}
-.nav-btn{padding:10px 20px;background:#222;border-radius:6px;border:1px solid #333;font-weight:600;font-size:14px;display:inline-block}
-h1{font-size:22px;margin-bottom:10px}
-.ad-box{width:100%;height:60px;background:#111;margin:20px 0;display:flex;align-items:center;justify-content:center;color:#444;font-size:12px;border:1px dashed #333}
-.ad-box:empty{display:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${cleanStr(fullTitle)}</title>
+    <meta name="description" content="${cleanStr(data.meta)}">
+    <link rel="canonical" href="https://ranginx.fun/series/${data.parentSlug}/${slug}.html">
+    <meta property="og:type" content="video.episode">
+    <meta property="og:image" content="${data.thumb}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#0f0f0f;--card:#1f1f1f;--p:#e50914;--t:#fff;}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);color:var(--t);font-family:'Outfit',sans-serif;}
+        a{text-decoration:none;color:inherit}
+        .header{padding:15px;background:#000;border-bottom:1px solid #222;display:flex;align-items:center;gap:10px}
+        .back-btn{padding:8px 15px;background:var(--card);border-radius:4px;font-size:12px;font-weight:700}
+        .main-stage{width:100%;max-width:1100px;margin:0 auto;}
+        .video-box{width:100%;aspect-ratio:16/9;background:#000;}
+        .player{width:100%;height:100%;border:none;object-fit:contain}
+        .info-sec{padding:20px;}
+        h1{font-size:22px;margin-bottom:5px;}
+        .meta{color:#888;font-size:13px;margin-bottom:20px}
+        .ep-nav{display:flex;justify-content:space-between;margin-top:20px;padding-top:20px;border-top:1px solid #333}
+        .nav-btn{background:var(--card);padding:10px 20px;border-radius:5px;font-weight:600}
+        @media(max-width:768px){ h1{font-size:18px} }
+    </style>
 </head>
 <body>
+
 <div class="header">
-    <div class="logo">RANGINX</div>
-    <a href="/series/${seriesSlug}.html" style="font-size:12px;color:#aaa">View Series Info</a>
+    <a href="../${data.parentSlug}.html" class="back-btn">⬅ Back to Series</a>
+    <div style="font-weight:700;color:var(--p)">RANGINX</div>
 </div>
 
-<div class="vid-box">${playerCode}</div>
-
-<div class="container">
-    <div id="ad-top" class="ad-box"></div>
-    <h1>${epTitle}</h1>
-    ${navHtml}
-    <p style="color:#aaa;font-size:14px">You are watching Episode ${epNum}. <a href="/series/${seriesSlug}.html" style="color:var(--p)">Click here for full episode list.</a></p>
-    <div id="ad-bottom" class="ad-box"></div>
+<div class="main-stage">
+    <div class="video-box">
+        ${playerCode}
+    </div>
+    <div class="info-sec">
+        <h1>Episode ${data.num}: ${data.title}</h1>
+        <div class="meta">Released: ${data.date}</div>
+        
+        <div class="ep-nav">
+             <a href="../${data.parentSlug}.html" class="nav-btn" style="width:100%;text-align:center">All Episodes</a>
+        </div>
+    </div>
 </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TVEpisode",
+  "episodeNumber": "${data.num}",
+  "name": "${cleanStr(data.title)}",
+  "image": "${data.thumb}",
+  "partOfSeries": {
+    "@type": "TVSeries",
+    "name": "${data.parentSlug}"
+  }
+}
+<\/script>
 </body>
 </html>`;
+
+        showOutput(html, JSON.stringify(jsonDb, null, 2), `${data.parentSlug}-ep${data.num}`);
     }
 
-    // --- HELPER: Build Link Grid (Feature ON) ---
-    function buildSeriesLinks(slug) {
-        let btns = `<div class="ep-box-out"><div class="ep-head">Select Episode</div><div class="ep-grid">`;
-        episodes.forEach((e,i) => {
-            let epSlug = i === 0 ? `/series/${slug}.html` : `/series/${slug}-episode-${i+1}.html`;
-            btns += `<a href="${epSlug}" class="ep-btn">${i+1}</a>`;
-        });
-        btns += `</div></div>`;
-        return btns;
-    }
-
-    // --- HELPER: Build JS Switcher (Feature OFF - Old Way) ---
-    function buildSeriesSwitcher(poster) {
-        let btns = `<div class="ep-box-out"><div class="ep-head">Episodes</div><div class="ep-grid">`;
-        episodes.forEach((e,i) => {
-            let cleanU = encodeUrl(e.url);
-            let mp4 = cleanU.includes('.mp4');
-            btns += `<button class="ep-btn ${i===0?'active':''}" onclick="playEp('${cleanU}', ${mp4}, this)">${i+1}</button>`;
-        });
-        btns += `</div></div>`;
-        return btns + `<script>
-        function playEp(u,m,b){
-            document.querySelectorAll('.ep-btn').forEach(x=>x.classList.remove('active'));
-            b.classList.add('active');
-            let c=document.getElementById('video-box');
-            let s="width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;";
-            if(m)c.innerHTML=\`<video controls autoplay playsinline style="\${s}"><source src="\${u}" type="video/mp4"></video>\`;
-            else c.innerHTML=\`<iframe src="\${u}" allowfullscreen style="\${s};border:none"></iframe>\`;
-        }
-        <\/script>`;
-    }
-
-    function getPlayerCode(url, poster, id=false) {
-        let cleanUrl = encodeUrl(url); 
-        let isMp4 = cleanUrl.includes('.mp4') || cleanUrl.includes('.mkv');
-        let style = `width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;`;
-        let vidId = id ? 'id="main-player"' : '';
-        
-        if(isMp4) {
-            return `<video ${vidId} controls playsinline preload="metadata" poster="${poster}" style="${style}"><source src="${cleanUrl}" type="video/mp4"></video>`;
-        } else {
-            return `<iframe ${vidId} src="${cleanUrl}" allowfullscreen scrolling="no" allow="encrypted-media; picture-in-picture" style="${style};border:none"></iframe>`;
-        }
-    }
-
-    function showOutput(h,j,s) {
+    // --- OUTPUT UTILS ---
+    function showOutput(h, j, s) {
         currentSlug = s;
         document.getElementById('htmlOut').textContent = h;
-        document.getElementById('jsonOut').textContent = j; 
+        document.getElementById('jsonOut').textContent = j;
         document.getElementById('outputArea').style.display = 'block';
         document.getElementById('outputArea').scrollIntoView({behavior:'smooth'});
     }
 
     function copyText(id){
         let t=document.getElementById(id).textContent;
-        let ta=document.createElement("textarea");
-        ta.value=t; ta.style.position="fixed"; document.body.appendChild(ta);
-        ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
-        alert("Copied!");
+        navigator.clipboard.writeText(t).then(()=>alert("Copied!"));
+    }
+
+    function downloadHtml(){
+        if(!currentSlug) return alert("Generate first!");
+        let b=new Blob([document.getElementById('htmlOut').textContent],{type:'text/html'});
+        let a=document.createElement('a');
+        a.href=URL.createObjectURL(b);
+        a.download=currentSlug+".html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 </script>
 </body>
