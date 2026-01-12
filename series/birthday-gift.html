@@ -159,47 +159,65 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
 });
 
-nextBatch.forEach(m => {
+function loadNextBatch() {
+    const grid = document.getElementById('related-grid');
+    const btn = document.getElementById('loadBtn');
 
-    // 🔒 CONTEXT-AWARE LOGIC (FINAL FIX)
-    let rawType = String(m.type || '').toLowerCase();
+    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
 
-    let isSeries =
-        CURRENT_PAGE_TYPE === 'series'
-            ? true                 // 🔥 current page is series → series link
-            : rawType.includes('series');
+    nextBatch.forEach(m => {
 
-    let folder = isSeries ? 'series' : 'movies';
+        // 🔑 TYPE BASED LOGIC (NO GUESS)
+        let type = (m.type || 'movie').toLowerCase();
+        let folder = 'movies';
+        let badge = 'MOVIE';
 
-    let cleanSlug = String(m.slug || '')
-        .replace(/^movies\//, '')
-        .replace(/^series\//, '')
-        .replace(/\.html$/, '')
-        .replace(/^\//, '');
+        if (type === 'series') {
+            folder = 'series';
+            badge = 'SERIES';
+        }
+        if (type === 'episode') {
+            folder = 'series';
+            badge = 'EPISODE';
+        }
 
-    let url = `/${folder}/${cleanSlug}.html`;
+        // 🔧 CLEAN SLUG
+        let cleanSlug = String(m.slug || '')
+            .replace(/^movies\//, '')
+            .replace(/^series\//, '')
+            .replace(/\.html$/, '')
+            .replace(/^\//, '');
 
-    htmlBuffer += `
-        <a href="${url}" class="rel-card">
-            <div style="position:relative">
-                <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
-                <span style="
-                    position:absolute;
-                    top:5px;
-                    right:5px;
-                    background:rgba(0,0,0,0.7);
-                    color:#fff;
-                    padding:2px 6px;
-                    border-radius:3px;
-                    font-size:10px
-                ">
-                    ${folder.toUpperCase()}
-                </span>
-            </div>
-            <div class="rel-title">${m.title}</div>
-        </a>
-    `;
-});
+        let finalUrl =
+            type === 'episode'
+                ? `/series/${cleanSlug}.html`
+                : `/${folder}/${cleanSlug}.html`;
+
+        grid.innerHTML += `
+            <a href="${finalUrl}" class="rel-card">
+                <div style="position:relative">
+                    <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
+                    <span style="
+                        position:absolute;
+                        top:5px;
+                        right:5px;
+                        background:rgba(0,0,0,0.7);
+                        color:#fff;
+                        padding:2px 6px;
+                        border-radius:3px;
+                        font-size:10px
+                    ">
+                        ${badge}
+                    </span>
+                </div>
+                <div class="rel-title">${m.title}</div>
+            </a>
+        `;
+    });
+
+    currentIndex += itemsPerPage;
+    if (currentIndex >= allData.length) btn.style.display = 'none';
+}
 
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
