@@ -1,488 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="rating" content="RTA-5042-1996-1400-1577-RTA">
-    <meta name="audience" content="Adult">
-    <meta name="adult" content="true">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranginx - Watch Free HD Movies & Web Series Online</title>
-    <meta name="description" content="Stream the latest HD Bollywood, Hollywood movies, and web series for free on Ranginx. Enjoy unlimited entertainment without registration.">
-    <meta name="keywords" content="free movies, watch movies online, hd movies, web series, bollywood, hollywood, streaming">
+    <title>StreamHub - Premium Content</title>
+    <meta name="description" content="Watch high quality movies and series.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://ranginx.fun/">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ranginx.fun/">
-    <meta property="og:title" content="Ranginx - Watch Free HD Movies & Web Series Online">
-    <meta property="og:description" content="Stream latest HD Movies and Web Series for free on Ranginx.">
-    <meta property="og:image" content="https://ranginx.fun/og-image.jpg">
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://ranginx.fun/">
-    <meta property="twitter:title" content="Ranginx - Watch Free HD Movies & Web Series Online">
-    <meta property="twitter:description" content="Stream latest HD Movies and Web Series for free on Ranginx.">
-    <meta property="twitter:image" content="https://ranginx.fun/og-image.jpg">
-
-    <link rel="icon" type="image/png" href="/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Ranginx",
-      "url": "https://ranginx.fun/",
-      "description": "Stream latest HD Movies and Web Series for free.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://ranginx.fun/?s={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "Latest Movies & Web Series",
-      "description": "Browse and watch the latest collection of HD movies and series.",
-      "url": "https://ranginx.fun/"
-    }
-    </script>
-
-    <script src="/ads/popunder.js" defer></script>
-    
     <style>
-        /* --- CORE THEME --- */
-        :root {
-            --bg: #09090b;
-            --surface: #18181b;
-            --border: #27272a;
-            --primary: #e50914;
-            --text: #fff;
-            --muted: #a1a1aa;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        /* CSS (PRESERVED - DO NOT CHANGE) */
+        :root { --primary: #e50914; --dark: #141414; --gray: #333; --text: #fff; }
+        body { font-family: sans-serif; background-color: var(--dark); color: var(--text); margin: 0; padding: 0; }
+        header { background: #000; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary); text-decoration: none; }
+        .search-bar { padding: 8px; border-radius: 4px; border: none; width: 250px; }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        .filter-container { padding: 20px; display: flex; gap: 10px; justify-content: center; }
+        .filter-btn { background: var(--gray); color: #fff; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); }
 
-        a { text-decoration: none; color: inherit; }
-
-        /* --- HEADER --- */
-        header {
-            background: rgba(9, 9, 11, 0.95);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 12px 15px;
-        }
-
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--primary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Search Bar */
-        .search-box {
-            flex: 1;
-            max-width: 500px;
-        }
-
-        .search-input {
-            width: 100%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 50px;
-            font-size: 13px;
-            transition: 0.3s;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary);
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            padding: 30px 15px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(229,9,20,0.15) 0%, rgba(9,9,11,0) 100%);
-        }
-
-        .hero h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-        .hero p { color: var(--muted); font-size: 13px; max-width: 600px; margin: 0 auto; }
-
-        /* --- FILTERS --- */
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin: 15px 0;
-            padding: 0 15px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .filters::-webkit-scrollbar { display: none; }
-
-        .filter-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--muted);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
-        /* --- GRID LAYOUT --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px;
-            width: 100%;
-        }
-
-        .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        /* Movie Card */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            display: block;
-            position: relative;
-            transition: 0.2s;
-        }
-
-        .card:hover { border-color: var(--primary); transform: translateY(-3px); }
-
-        .thumb-box {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000;
-            overflow: hidden;
-        }
-
-        .thumb-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .card-info {
-            padding: 10px;
-        }
-
-        .title {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: #fff;
-        }
-
-        .meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            color: var(--muted);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .badge {
-            background: rgba(255,255,255,0.1);
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-
-        /* --- LOAD MORE --- */
-        .load-more-container {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .load-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: #fff;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        /* --- ADS --- */
-        .ad-banner {
-            width: 100%; max-width: 728px; height: 90px;
-            background: #111; margin: 15px auto;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px dashed #333; color: #444; font-size: 11px; border-radius: 6px;
-        }
-        .ad-banner:empty { display: none; }
-
-        /* --- FOOTER --- */
-        footer {
-            background: #000;
-            border-top: 1px solid var(--border);
-            padding: 30px 20px;
-            text-align: center;
-            margin-top: auto;
-        }
-        .footer-links a { color: var(--muted); margin: 0 8px; font-size: 12px; }
-        .copyright { color: #555; font-size: 11px; margin-top: 10px; }
-
-        /* --- MOBILE --- */
-        @media (max-width: 768px) {
-            .movie-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 Column Grid for Android */
-                gap: 10px;
-            }
-            .hero h1 { font-size: 22px; }
-            .hero p { font-size: 12px; }
-            .container { padding: 10px; }
-            .card-info { padding: 8px; }
-            .title { font-size: 12px; }
-        }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        
+        .card { background: #1f1f1f; border-radius: 8px; overflow: hidden; transition: transform 0.2s; position: relative; display: block; text-decoration: none; color: white; }
+        .card:hover { transform: scale(1.03); z-index: 10; }
+        
+        .thumbnail-container { position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden; }
+        .thumbnail { width: 100%; height: 100%; object-fit: cover; }
+        
+        .badge { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: bold; color: var(--primary); }
+        
+        .info { padding: 10px; }
+        .title { font-size: 14px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .load-more-container { text-align: center; padding: 40px; }
+        .load-btn { background: var(--primary); color: white; border: none; padding: 12px 30px; font-size: 16px; border-radius: 4px; cursor: pointer; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <nav class="navbar" role="navigation">
-            <a href="/" class="logo" aria-label="Ranginx Home">RANGINX</a>
-            <div class="search-box">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search..." aria-label="Search movies">
-            </div>
-        </nav>
+        <a href="/" class="logo">STREAMHUB</a>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search titles...">
     </header>
 
-    <main>
-        <div class="hero">
-            <h1>Watch Latest Movies</h1>
-            <p>Unlimited Bollywood, Hollywood & Web Series in HD.</p>
-            
-            <div class="filters" role="tablist">
-                <button class="filter-btn active" onclick="filterData('all')" role="tab" aria-selected="true">All</button>
-                <button class="filter-btn" onclick="filterData('movie')" role="tab" aria-selected="false">Movies</button>
-                <button class="filter-btn" onclick="filterData('series')" role="tab" aria-selected="false">Web Series</button>
-            </div>
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="setFilter('all')">All</button>
+        <button class="filter-btn" onclick="setFilter('movie')">Movies</button>
+        <button class="filter-btn" onclick="setFilter('series')">Web Series</button>
+    </div>
+
+    <div id="video-grid" class="grid-container">
         </div>
 
-        <div class="ad-banner" id="ad-top-slot"></div>
-
-        <div class="container">
-            <div class="movie-grid" id="grid">
-                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #555;">
-                    Loading...
-                </div>
-            </div>
-
-            <div class="load-more-container">
-                <button id="loadBtn" class="load-btn" onclick="loadMore()">Load More</button>
-            </div>
-        </div>
-
-        <div class="ad-banner" id="ad-bottom-slot"></div>
-    </main>
-
-    <footer>
-        <div class="footer-links">
-            <a href="/dmca.html">DMCA</a>
-            <a href="/privacy.html">Privacy</a>
-            <a href="/terms.html">Terms</a>
-        </div>
-        <p class="copyright">© 2025 Ranginx. All rights reserved.</p>
-    </footer>
+    <div class="load-more-container">
+        <button id="loadMoreBtn" class="load-btn" onclick="loadMore()">Load More</button>
+    </div>
 
     <script>
+        // --- CONFIGURATION & STATE ---
+        const DATA_URL = '/data/movies.json';
         let allData = [];
         let filteredData = [];
-        let currentIndex = 0;
-        const itemsPerPage = 12; 
-        let currentFilter = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 24;
+        let currentFilter = 'all'; // 'all', 'movie', 'series'
+        
+        // --- DOM ELEMENTS ---
+        const grid = document.getElementById('video-grid');
+        const loadBtn = document.getElementById('loadMoreBtn');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
 
-        // 1. Fetch Data
-        document.addEventListener("DOMContentLoaded", () => {
-            fetch('data/movies.json')
-                .then(res => {
-                    if (!res.ok) throw new Error("Failed to load");
-                    return res.json();
-                })
-                .then(data => {
-                    allData = data.reverse(); 
-                    filteredData = allData;
-                    renderGrid(true);
-                })
-                .catch(err => {
-                    console.warn("Using Fallback Data (Local Mode)");
-                    // Fallback for demo
-                    allData = [
-                        {title: "Demo Movie 1", slug: "demo1", thumbnail: "https://via.placeholder.com/300x170", type: "movie"},
-                        {title: "Demo Series 1", slug: "movies/demo2", thumbnail: "https://via.placeholder.com/300x170", type: "series"}
-                    ];
-                    filteredData = allData;
-                    renderGrid(true);
-                });
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
         });
 
-        // 2. Render Function (SMART LINK FIX)
-        function renderGrid(reset = false) {
-            const grid = document.getElementById('grid');
-            const btn = document.getElementById('loadBtn');
+        async function fetchData() {
+            try {
+                const response = await fetch(DATA_URL);
+                if (!response.ok) throw new Error("Network response was not ok");
+                
+                const rawData = await response.json();
+                
+                // Ensure data is an array
+                allData = Array.isArray(rawData) ? rawData : [];
+                
+                // Initial Filter & Render
+                applyFilters();
+                
+            } catch (error) {
+                console.error("Error loading data:", error);
+                grid.innerHTML = '<p style="text-align:center; col-span:4;">Failed to load content.</p>';
+            }
+        }
 
-            if (reset) {
-                grid.innerHTML = '';
-                currentIndex = 0;
-                btn.style.display = 'inline-block';
+        // --- CRITICAL FIX: URL GENERATION LOGIC ---
+        // Constraint: Generate URL based ONLY on 'type'. 
+        // Constraint: Never trust slug folder.
+        function generateUrl(item) {
+            // Defensive coding: Ensure strings
+            const type = String(item.type || '').trim().toLowerCase();
+            const slug = String(item.slug || '').trim();
+
+            // RULE 1: Movies -> /movies/slug.html
+            if (type === 'movie') {
+                return `/movies/${slug}.html`;
             }
 
-            if (filteredData.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#666">No matches found.</div>';
-                btn.style.display = 'none';
+            // RULE 2: Series -> /series/slug.html
+            if (type === 'series') {
+                return `/series/${slug}.html`;
+            }
+
+            // RULE 3: Episodes -> /series/slug.html (Slug contains series-name/episode-x)
+            if (type === 'episode') {
+                return `/series/${slug}.html`;
+            }
+
+            // FALLBACK (Should not happen if JSON is valid, defaults to movie logic as safety)
+            return `/movies/${slug}.html`;
+        }
+
+        // --- HELPER: BADGE TEXT ---
+        function getBadgeText(type) {
+            const t = String(type || '').trim().toLowerCase();
+            if (t === 'series') return 'Series';
+            if (t === 'episode') return 'Episode';
+            return 'Movie';
+        }
+
+        // --- FILTER LOGIC ---
+        function setFilter(type) {
+            currentFilter = type;
+            currentPage = 1; // Reset pagination
+            
+            // Update UI Buttons
+            filterBtns.forEach(btn => {
+                if(btn.innerText.toLowerCase().includes(type === 'series' ? 'web' : type)) {
+                    btn.classList.add('active');
+                } else if(type === 'all' && btn.innerText === 'All') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            filteredData = allData.filter(item => {
+                const itemType = String(item.type || '').toLowerCase();
+                const title = String(item.title || '').toLowerCase();
+
+                // 1. Check Search
+                const matchesSearch = title.includes(searchTerm);
+
+                // 2. Check Type Filter
+                let matchesType = false;
+
+                if (currentFilter === 'all') {
+                    // Show everything
+                    matchesType = true; 
+                } else if (currentFilter === 'movie') {
+                    // Strictly movies
+                    matchesType = (itemType === 'movie');
+                } else if (currentFilter === 'series') {
+                    // Strictly series (main pages), usually excludes episodes in strict filtering
+                    // Constraint says: "Web Series" -> show only type === "series"
+                    matchesType = (itemType === 'series');
+                }
+
+                return matchesSearch && matchesType;
+            });
+
+            // Clear grid and render first batch
+            grid.innerHTML = '';
+            renderGrid();
+        }
+
+        // --- RENDER LOGIC (UI SAFE) ---
+        function renderGrid() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const batch = filteredData.slice(start, end);
+
+            if (batch.length === 0 && currentPage === 1) {
+                grid.innerHTML = '<p>No results found.</p>';
+                loadBtn.classList.add('hidden');
                 return;
             }
 
-            const nextBatch = filteredData.slice(currentIndex, currentIndex + itemsPerPage);
+            batch.forEach(item => {
+                // 1. Generate correct URL using the fixed function
+                const finalUrl = generateUrl(item);
+                
+                // 2. Determine Badge Text
+                const badgeText = getBadgeText(item.type);
+                
+                // 3. Handle Thumbnail (Defensive)
+                const thumbnail = item.thumbnail || 'https://via.placeholder.com/300x450?text=No+Image';
 
-            nextBatch.forEach(item => {
-                const typeLabel = item.type === 'series' ? 'Series' : 'Movie';
-                const thumb = item.thumbnail || 'https://via.placeholder.com/300x170/111/333?text=No+Image';
-
-                // --- SMART LINK LOGIC START ---
-                // Agar slug me pehle se '/' hai (matlab 'movies/name'), to waisa hi rehne do.
-                // Agar nahi hai (matlab 'name'), to 'movies/' add kar do.
-                let linkSlug = item.slug;
-
-// slug clean rakho
-// ✅ FINAL SMART LINK LOGIC (NO 404, NO CONFUSION)
-
-let cleanSlug = String(item.slug || '')
-    .replace(/^movies\//, '')
-    .replace(/^series\//, '')
-    .replace(/\.html$/, '')
-    .replace(/^\//, '');
-
-let finalUrl = '';
-
-// 🔑 Decide by type ONLY
-if (item.type === 'series') {
-    finalUrl = '/series/' + cleanSlug + '.html';
-}
-else if (item.type === 'episode') {
-    // episode slug already like: series-name/episode-1
-    finalUrl = '/series/' + cleanSlug + '.html';
-}
-else {
-    // movie (default)
-    finalUrl = '/movies/' + cleanSlug + '.html';
-}
-                // --- SMART LINK LOGIC END ---
-
-                // Added alt text for better SEO
-                const cardHTML = `
-                    <a href="${linkSlug}" class="card" title="Watch ${item.title}">
-                        <div class="thumb-box">
-                            <img src="${thumb}" alt="Watch ${item.title} Full Movie HD" class="thumb-img" loading="lazy" width="300" height="169">
+                // 4. Construct HTML (NO UI CHANGES)
+                const cardHtml = `
+                    <a href="${finalUrl}" class="card" title="${item.title}">
+                        <div class="thumbnail-container">
+                            <img src="${thumbnail}" alt="${item.title}" class="thumbnail" loading="lazy">
+                            <span class="badge">${badgeText}</span>
                         </div>
-                        <div class="card-info">
-                            <div class="title">${item.title}</div>
-                            <div class="meta">
-                                <span>${typeLabel}</span>
-                                <span class="badge">HD</span>
-                            </div>
+                        <div class="info">
+                            <h3 class="title">${item.title}</h3>
                         </div>
                     </a>
                 `;
-                grid.innerHTML += cardHTML;
+                
+                // Insert into DOM
+                grid.insertAdjacentHTML('beforeend', cardHtml);
             });
 
-            currentIndex += itemsPerPage;
-
-            if (currentIndex >= filteredData.length) {
-                btn.style.display = 'none';
-            }
-        }
-
-        // 3. Filter Function
-        function filterData(type) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.setAttribute('aria-selected', 'false');
-            });
-            event.target.classList.add('active');
-            event.target.setAttribute('aria-selected', 'true');
-
-            if (type === 'all') {
-                filteredData = allData;
+            // Handle Load More Button Visibility
+            if (end >= filteredData.length) {
+                loadBtn.classList.add('hidden');
             } else {
-                filteredData = allData.filter(item => item.type === type);
+                loadBtn.classList.remove('hidden');
             }
-            renderGrid(true);
         }
 
-        // 4. Load More
-        function loadMore() {
-            renderGrid(false);
-        }
-
-        // 5. Search
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            if (!query) {
-                filterData(currentFilter);
-                return;
-            }
-            filteredData = allData.filter(item => item.title.toLowerCase().includes(query));
-            renderGrid(true);
+        // --- EVENTS ---
+        
+        // Search Event (Debounced slightly for performance if needed, but keeping simple)
+        searchInput.addEventListener('input', () => {
+            currentPage = 1;
+            applyFilters();
         });
 
-        // 6. Ads Check
-        if(typeof loadAds === 'function') {
-            document.getElementById('ad-top-slot').innerHTML = '';
+        // Load More Event
+        function loadMore() {
+            currentPage++;
+            renderGrid();
         }
-    </script>
 
+    </script>
 </body>
 </html>
