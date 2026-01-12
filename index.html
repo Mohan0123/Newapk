@@ -395,17 +395,28 @@
                 let linkSlug = item.slug;
 
 // slug clean rakho
-linkSlug = linkSlug.replace('.html','');
+// ✅ FINAL SMART LINK LOGIC (NO 404, NO CONFUSION)
 
-// FINAL RULE
+let cleanSlug = String(item.slug || '')
+    .replace(/^movies\//, '')
+    .replace(/^series\//, '')
+    .replace(/\.html$/, '')
+    .replace(/^\//, '');
+
+let finalUrl = '';
+
+// 🔑 Decide by type ONLY
 if (item.type === 'series') {
-    linkSlug = 'series/' + linkSlug;
-} else {
-    linkSlug = 'movies/' + linkSlug;
+    finalUrl = '/series/' + cleanSlug + '.html';
 }
-
-// html ensure
-linkSlug += '.html';
+else if (item.type === 'episode') {
+    // episode slug already like: series-name/episode-1
+    finalUrl = '/series/' + cleanSlug + '.html';
+}
+else {
+    // movie (default)
+    finalUrl = '/movies/' + cleanSlug + '.html';
+}
                 // --- SMART LINK LOGIC END ---
 
                 // Added alt text for better SEO
