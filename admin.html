@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranginx Creator Studio - YouTube Style</title>
+    <title>Ranginx Creator - Clean YouTube Grid</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- UI STYLES (ADMIN PANEL - UNCHANGED) --- */
+        /* --- ADMIN PANEL UI (UNCHANGED) --- */
         :root { --bg: #09090b; --surf: #18181b; --border: #27272a; --primary: #e50914; --text: #e4e4e7; --muted: #a1a1aa; }
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
@@ -72,7 +72,7 @@
             
             <div id="tab-series-main" class="tab-panel active">
                 <div class="card">
-                    <div class="sec-title">Series Landing Page Data</div>
+                    <div class="sec-title">Series Landing Page</div>
                     <div class="grid">
                         
                         <div class="full">
@@ -80,22 +80,22 @@
                             <input type="text" id="mTitle" placeholder="e.g. Farzi Season 1">
                         </div>
                         <div>
-                            <label>Poster / Thumbnail URL</label>
+                            <label>Series Header/Poster URL</label>
                             <input type="text" id="mPoster" placeholder="https://...">
                         </div>
                         <div>
                             <label>Genre / Tags</label>
-                            <input type="text" id="mTags" placeholder="Crime, Thriller, Drama">
+                            <input type="text" id="mTags" placeholder="Crime, Thriller">
                         </div>
                         
                         <div class="full ep-box">
-                            <label style="margin-bottom:10px">Episode List Builder (YouTube Grid Style)</label>
+                            <label style="margin-bottom:10px">Add Episodes (Thumbnail + Title Only)</label>
                             <div class="grid" style="grid-template-columns: 0.5fr 1fr 1fr;">
                                 <input type="number" id="listEpNum" placeholder="Ep No.">
                                 <input type="text" id="listEpTitle" placeholder="Title (e.g. The Beginning)">
-                                <input type="text" id="listEpThumb" placeholder="Thumbnail URL (16:9)">
+                                <input type="text" id="listEpThumb" placeholder="Episode Thumbnail URL">
                             </div>
-                            <button class="btn-add" style="width:100%; margin-top:10px;" onclick="addToList()">ADD EPISODE TO LIST</button>
+                            <button class="btn-add" style="width:100%; margin-top:10px;" onclick="addToList()">ADD EPISODE</button>
                             <div id="epListDisplay" class="ep-list"></div>
                         </div>
 
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="generateSeriesMain()">Generate Landing Page</button>
+                        <button class="btn btn-primary" onclick="generateSeriesMain()">Generate Series Page</button>
                         <button class="btn btn-secondary" onclick="resetForm('main')">Reset</button>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
             <div id="outputArea" class="output-area">
                 <div class="code-box">
                     <div class="box-head">
-                        <span>JSON Data (Database Record)</span>
+                        <span>JSON Data (Database)</span>
                         <button class="copy-btn" onclick="copyText('jsonOut')">COPY JSON</button>
                     </div>
                     <pre id="jsonOut"></pre>
@@ -210,8 +210,11 @@
         
         if(!n || !t) return alert("Num and Title required!");
         
+        // Push object to array
         mainListEpisodes.push({ num: n, title: t, thumb: th });
         renderList();
+        
+        // Clear inputs
         document.getElementById('listEpNum').value = "";
         document.getElementById('listEpTitle').value = "";
         document.getElementById('listEpThumb').value = "";
@@ -248,13 +251,11 @@
     function cleanUrl(url) { return url ? url.trim().replace(/\s/g, '%20') : ""; }
 
     // ============================================
-    //  Generate MAIN SERIES PAGE (YouTube Style Grid + Footer)
+    //  Generate SERIES MAIN PAGE (THUMB + TITLE ONLY)
     // ============================================
     function generateSeriesMain() {
         let titleRaw = document.getElementById('mTitle').value.trim();
-        
         if(!titleRaw) return alert("Series Name is required!");
-
         let generatedSlug = sanitizeSlug(titleRaw);
 
         let data = {
@@ -267,27 +268,25 @@
         };
 
         let finalTitle = data.seo || `Watch ${data.title} All Episodes Online Free`;
-        let finalMeta = data.meta || `Stream ${data.title} full web series in HD. All episodes available on Ranginx.`;
+        let finalMeta = data.meta || `Stream ${data.title} full web series in HD.`;
         
-        // BUILD EPISODE HTML LIST (YOUTUBE GRID STYLE)
+        // --- ⚡ BUILD EPISODE LIST (Thumbnail + Title ONLY) ⚡ ---
         let epHtml = "";
         mainListEpisodes.sort((a,b)=>a.num - b.num).forEach(ep => {
             let epLink = `/series/${data.slug}/episode-${ep.num}.html`;
-            // Using col-md-4 style logic in CSS
+            let epImg = ep.thumb ? ep.thumb : data.poster; // Use episode thumb or fallback to poster
+            
             epHtml += `
             <a href="${epLink}" class="yt-card">
                 <div class="yt-thumb">
-                    <img src="${ep.thumb || data.poster}" alt="Ep ${ep.num}" loading="lazy">
-                    <div class="play-icon">▶</div>
+                    <img src="${epImg}" alt="Ep ${ep.num}" loading="lazy">
+                    <div class="play-overlay">▶</div>
                 </div>
-                <div class="yt-info">
-                    <div class="yt-title">Episode ${ep.num}: ${ep.title}</div>
-                    <div class="yt-meta">${data.title}</div>
-                </div>
+                <div class="yt-title">Episode ${ep.num}: ${ep.title}</div>
             </a>`;
         });
 
-        // JSON Data (Necessary for Home Page indexing)
+        // JSON Data
         let jsonDb = {
             type: "series",
             seriesSlug: data.slug,
@@ -317,37 +316,37 @@
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:var(--bg);color:var(--t);font-family:'Outfit',sans-serif;padding-bottom:50px}
         a{text-decoration:none;color:inherit}
-        .hero{position:relative;height:55vh;width:100%;overflow:hidden}
+        
+        .hero{position:relative;height:50vh;width:100%;overflow:hidden}
         .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg, var(--bg) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.4) 100%)}
         .hero-img{width:100%;height:100%;object-fit:cover}
         .hero-content{position:absolute;bottom:0;left:0;width:100%;padding:20px;z-index:2;max-width:1200px;margin:0 auto;right:0}
-        h1{font-size:36px;font-weight:800;margin-bottom:10px;text-transform:uppercase;line-height:1.1;text-shadow:2px 2px 4px #000}
+        h1{font-size:32px;font-weight:800;margin-bottom:10px;text-transform:uppercase;line-height:1.1;text-shadow:2px 2px 4px #000}
         .tags{display:flex;gap:10px;font-size:12px;color:#ccc;margin-bottom:15px;flex-wrap:wrap}
         .tag{background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:4px;backdrop-filter:blur(5px)}
         
         .container{max-width:1200px;margin:0 auto;padding:20px}
         .sec-head{font-size:22px;font-weight:700;margin-bottom:20px;border-left:5px solid var(--p);padding-left:15px}
         
-        /* YOUTUBE STYLE GRID */
-        .yt-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));gap:20px}
-        .yt-card{display:block;background:transparent;border-radius:12px;overflow:hidden;transition:0.2s;cursor:pointer}
+        /* --- CLEAN YOUTUBE GRID (THUMB + TITLE ONLY) --- */
+        .yt-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:25px}
+        .yt-card{display:block;background:transparent;cursor:pointer}
         .yt-card:hover .yt-thumb img{transform:scale(1.05)}
-        .yt-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:12px;background:#222}
+        .yt-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:12px;background:#222;margin-bottom:10px}
         .yt-thumb img{width:100%;height:100%;object-fit:cover;transition:0.3s}
-        .play-icon{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.3);font-size:30px;opacity:0;transition:0.2s}
-        .yt-card:hover .play-icon{opacity:1}
-        .yt-info{padding:12px 0}
-        .yt-title{font-size:16px;font-weight:600;margin-bottom:4px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-        .yt-meta{font-size:13px;color:#aaa}
+        .play-overlay{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,0.3);font-size:30px;opacity:0;transition:0.2s}
+        .yt-card:hover .play-overlay{opacity:1}
+        
+        .yt-title{font-size:15px;font-weight:500;line-height:1.4;color:#e4e4e7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
         
         /* FOOTER */
-        footer{margin-top:50px;border-top:1px solid #222;padding:40px 20px;text-align:center}
+        footer{margin-top:50px;border-top:1px solid #222;padding:40px 20px;text-align:center;background:#000}
         .f-links{display:flex;justify-content:center;gap:20px;margin-bottom:20px;flex-wrap:wrap}
         .f-links a{color:#888;font-size:14px;transition:0.2s}
         .f-links a:hover{color:var(--p)}
         .copy{color:#555;font-size:12px}
 
-        @media(max-width:600px){ .hero{height:45vh} h1{font-size:24px} .yt-grid{grid-template-columns:1fr} }
+        @media(max-width:600px){ .hero{height:40vh} h1{font-size:24px} .yt-grid{grid-template-columns:1fr} }
     </style>
 </head>
 <body>
@@ -524,7 +523,6 @@
         showOutput(html, JSON.stringify(jsonDb, null, 2), `${data.parentSlug}-ep${data.num}`);
     }
 
-    // --- OUTPUT UTILS ---
     function showOutput(h, j, s) {
         currentSlug = s;
         document.getElementById('htmlOut').textContent = h;
