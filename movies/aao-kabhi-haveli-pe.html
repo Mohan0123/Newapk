@@ -156,18 +156,42 @@ document.addEventListener("DOMContentLoaded", ()=>{
 function loadNextBatch() {
     const grid = document.getElementById('related-grid');
     const btn = document.getElementById('loadBtn');
+
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-    
-    if(nextBatch.length === 0 && currentIndex === 0) {
-         grid.innerHTML = '<div style="padding:10px;color:#555">No matches found</div>';
-         btn.style.display = 'none'; return;
-    }
+
     nextBatch.forEach(m => {
-        let link = m.slug.includes('/') ? `/${m.slug}.html` : `/movies/${m.slug}.html`;
-        grid.innerHTML += `<a href="${link}" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">${m.title}</div></a>`;
+
+        // 🔑 TYPE DECIDES EVERYTHING
+        let type = (m.type || 'movie').toLowerCase();
+        let folder = 'movies';
+
+        if (type === 'series' || type === 'episode') {
+            folder = 'series';
+        }
+
+        // 🔧 CLEAN SLUG
+        let cleanSlug = String(m.slug || '')
+            .replace(/^movies\//, '')
+            .replace(/^series\//, '')
+            .replace(/\.html$/, '')
+            .replace(/^\//, '');
+
+        // 🔗 FINAL URL
+        let finalUrl =
+            type === 'episode'
+                ? `/series/${cleanSlug}.html`
+                : `/${folder}/${cleanSlug}.html`;
+
+        grid.innerHTML += `
+            <a href="${finalUrl}" class="rel-card">
+                <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
+                <div class="rel-title">${m.title}</div>
+            </a>
+        `;
     });
+
     currentIndex += itemsPerPage;
-    if(currentIndex >= allData.length) btn.style.display = 'none';
+    if (currentIndex >= allData.length) btn.style.display = 'none';
 }
 </script>
 </body>
