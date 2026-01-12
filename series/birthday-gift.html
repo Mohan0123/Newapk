@@ -167,18 +167,12 @@ function loadNextBatch() {
 
     nextBatch.forEach(m => {
 
-        // 🔑 TYPE BASED LOGIC (NO GUESS)
+        // 🔑 TYPE DECIDES EVERYTHING
         let type = (m.type || 'movie').toLowerCase();
         let folder = 'movies';
-        let badge = 'MOVIE';
 
-        if (type === 'series') {
+        if (type === 'series' || type === 'episode') {
             folder = 'series';
-            badge = 'SERIES';
-        }
-        if (type === 'episode') {
-            folder = 'series';
-            badge = 'EPISODE';
         }
 
         // 🔧 CLEAN SLUG
@@ -188,6 +182,7 @@ function loadNextBatch() {
             .replace(/\.html$/, '')
             .replace(/^\//, '');
 
+        // 🔗 FINAL URL
         let finalUrl =
             type === 'episode'
                 ? `/series/${cleanSlug}.html`
@@ -195,21 +190,7 @@ function loadNextBatch() {
 
         grid.innerHTML += `
             <a href="${finalUrl}" class="rel-card">
-                <div style="position:relative">
-                    <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
-                    <span style="
-                        position:absolute;
-                        top:5px;
-                        right:5px;
-                        background:rgba(0,0,0,0.7);
-                        color:#fff;
-                        padding:2px 6px;
-                        border-radius:3px;
-                        font-size:10px
-                    ">
-                        ${badge}
-                    </span>
-                </div>
+                <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
                 <div class="rel-title">${m.title}</div>
             </a>
         `;
