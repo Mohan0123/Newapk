@@ -394,19 +394,18 @@
                 // Agar nahi hai (matlab 'name'), to 'movies/' add kar do.
                 let linkSlug = item.slug;
 
-                // type ke basis par folder decide karo
-                if (!linkSlug.includes('/')) {
-                    if (item.type === 'series') {
-                        linkSlug = 'series/' + linkSlug;
-                    } else {
-                        linkSlug = 'movies/' + linkSlug;
-                    }
-                }
+// slug clean rakho
+linkSlug = linkSlug.replace('.html','');
 
-                // .html ensure karo
-                if (!linkSlug.endsWith('.html')) {
-                    linkSlug += '.html';
-                }
+// FINAL RULE
+if (item.type === 'series') {
+    linkSlug = 'series/' + linkSlug;
+} else {
+    linkSlug = 'movies/' + linkSlug;
+}
+
+// html ensure
+linkSlug += '.html';
                 // --- SMART LINK LOGIC END ---
 
                 // Added alt text for better SEO
