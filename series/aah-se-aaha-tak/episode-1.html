@@ -120,30 +120,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const grid = document.getElementById("related-grid");
     const loadBtn = document.getElementById("loadBtn");
 
-    if (!grid) {
-        console.log("Grid not found");
-        return;
-    }
+    if (!grid) return;
 
-    // 🔥 current episode number auto detect
     const match = location.pathname.match(/episode-(\d+)/);
     const currentEp = match ? parseInt(match[1]) : 0;
 
-    // 🔥 सिर्फ episodes test (movies बाद में add करेंगे)
-    fetch("https://ranginx.fun/data/episodes/aah-se-aaha-tak.json")
-        .then(res => res.json())
+    fetch("/data/episodes/aah-se-aaha-tak.json")
+        .then(res => {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+        })
         .then(data => {
 
-            console.log("Episodes JSON:", data);
-
             if (!Array.isArray(data)) {
-                grid.innerHTML = "<div style='color:red'>JSON array नहीं है</div>";
+                grid.innerHTML = "<div style='color:red'>JSON format error</div>";
                 return;
             }
 
             const episodes = data.filter(e => e.episode !== currentEp);
 
-            if (episodes.length === 0) {
+            if (!episodes.length) {
                 grid.innerHTML = "<div style='color:#777'>No episodes found</div>";
                 return;
             }
@@ -153,21 +149,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     <a href="/series/aah-se-aaha-tak/episode-${e.episode}.html"
                        class="rel-card">
                         <img src="${e.thumbnail}" class="rel-img">
-                        <div class="rel-title">
-                            Episode ${e.episode}
-                        </div>
+                        <div class="rel-title">Episode ${e.episode}</div>
                     </a>
                 `;
             });
 
-            // Load more button hide (test mode)
             loadBtn.style.display = "none";
         })
         .catch(err => {
-            console.error(err);
+            console.error("FETCH ERROR:", err);
             grid.innerHTML = "<div style='color:red'>Episode load failed</div>";
         });
-
 });
 </script>
 </body>
