@@ -115,95 +115,60 @@ Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise
 </footer>
 
 <script>
-let allData = [];
-let currentIndex = 0;
-const itemsPerPage = 6;
-
-const seriesSlug = "aah-se-aaha-tak";
-
-// 🔥 URL से episode number auto detect
-const match = location.pathname.match(/episode-(\d+)/);
-const currentEpNum = match ? parseInt(match[1]) : null;
-
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
 
     const grid = document.getElementById("related-grid");
     const loadBtn = document.getElementById("loadBtn");
 
-    Promise.all([
-        // ✅ Episodes JSON
-        fetch(`/data/episodes/${seriesSlug}.json`)
-            .then(r => r.json())
-            .catch(() => []),
-
-        // ✅ Movies / Series JSON
-        fetch(`/data/movies.json`)
-            .then(r => r.json())
-            .catch(() => [])
-    ])
-    .then(([episodes, movies]) => {
-
-        // 1️⃣ SAME SERIES EPISODES (top priority)
-        .then(([episodesData, moviesData]) => {
-
-    // 🔥 FIX: episode array extract
-    const episodes = Array.isArray(episodesData)
-        ? episodesData
-        : (episodesData.episodes || []);
-
-    const episodeItems = episodes
-        .filter(e => e.episode !== currentEpNum)
-        .map(e => ({
-            title: `Episode ${e.episode}`,
-            thumbnail: e.thumbnail,
-            url: `/series/aah-se-aaha-tak/episode-${e.episode}.html`
-        }));
-
-
-        // 2️⃣ OTHER CONTENT
-        const otherItems = movies.map(m => ({
-            title: m.title,
-            thumbnail: m.thumbnail,
-            url: `/${m.type === 'movie' ? 'movies' : 'series'}/${m.slug}.html`
-        }));
-
-        allData = [...episodeItems, ...otherItems];
-
-        if (!allData.length) {
-            grid.innerHTML = "<div style='color:#777'>No related content</div>";
-            loadBtn.style.display = "none";
-            return;
-        }
-
-        loadNextBatch();
-    })
-    .catch(err => {
-        console.error(err);
-        grid.innerHTML = "<div style='color:red'>Load failed</div>";
-        loadBtn.style.display = "none";
-    });
-});
-
-function loadNextBatch() {
-    const grid = document.getElementById("related-grid");
-    const loadBtn = document.getElementById("loadBtn");
-
-    const next = allData.slice(currentIndex, currentIndex + itemsPerPage);
-
-    next.forEach(item => {
-        grid.insertAdjacentHTML("beforeend", `
-            <a href="${item.url}" class="rel-card">
-                <img src="${item.thumbnail}" class="rel-img" loading="lazy">
-                <div class="rel-title">${item.title}</div>
-            </a>
-        `);
-    });
-
-    currentIndex += itemsPerPage;
-    if (currentIndex >= allData.length) {
-        loadBtn.style.display = "none";
+    if (!grid) {
+        console.log("Grid not found");
+        return;
     }
-}
+
+    // 🔥 current episode number auto detect
+    const match = location.pathname.match(/episode-(\d+)/);
+    const currentEp = match ? parseInt(match[1]) : 0;
+
+    // 🔥 सिर्फ episodes test (movies बाद में add करेंगे)
+    fetch("https://ranginx.fun/data/episodes/aah-se-aaha-tak.json")
+        .then(res => res.json())
+        .then(data => {
+
+            console.log("Episodes JSON:", data);
+
+            if (!Array.isArray(data)) {
+                grid.innerHTML = "<div style='color:red'>JSON array नहीं है</div>";
+                return;
+            }
+
+            const episodes = data.filter(e => e.episode !== currentEp);
+
+            if (episodes.length === 0) {
+                grid.innerHTML = "<div style='color:#777'>No episodes found</div>";
+                return;
+            }
+
+            episodes.forEach(e => {
+                grid.innerHTML += `
+                    <a href="/series/aah-se-aaha-tak/episode-${e.episode}.html"
+                       class="rel-card">
+                        <img src="${e.thumbnail}" class="rel-img">
+                        <div class="rel-title">
+                            Episode ${e.episode}
+                        </div>
+                    </a>
+                `;
+            });
+
+            // Load more button hide (test mode)
+            loadBtn.style.display = "none";
+        })
+        .catch(err => {
+            console.error(err);
+            grid.innerHTML = "<div style='color:red'>Episode load failed</div>";
+        });
+
+});
 </script>
 </body>
 </html>
