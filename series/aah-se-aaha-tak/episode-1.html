@@ -70,12 +70,12 @@
 <div class="container">
     <div class="main-col">
         <div class="content-pad">
-            <h1>Aah Se Aaha Tak New Romantic webseries </h1>
+            <h1>Aah Se Aaha Tak Episode 1</h1>
             <div class="meta-row">
                 <span class="badge">HD</span>
                 <span>Streaming</span>
                 <span>Free</span>
-                <a href="/series/aah-se-aaha-tak.html" class="series-link"> • Aah Se Aaha Tak</a>
+                <a href="/series/aah-se-aaha-tak.html" class="series-link"> • Aah Se Aaha Tak Episode 1</a>
             </div>
 
             <div class="social-row">
@@ -90,8 +90,8 @@
                 <div class="card-head">📖 Storyline</div>
                 <div class="desc-text">Aah Se Aaha Tak ek emotional romantic web series hai jo dard se shuru hokar sukoon tak pahunchne wali ek love journey ko dikhati hai. Kahani ek aise dil se shuru hoti hai jo toot chuka hota hai, jahan har saans ek “aah” ban kar reh jaati hai.
 Zindagi me achanak aayi ek nayi mulaqat dheere-dheere us dard ko pighlaana shuru karti hai. Samajh, patience aur emotional bonding ke saath pyaar phir se janam leta hai. Lekin past ke zakhm aur dar is rishte ko aasaan nahi banne dete.
-Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise dard se guzar kar hi insaan “aaha” ke ehsaas tak pahunchta hai. Yeh series batati hai ki sachcha pyaar sirf khushi nahi, balki healing bhi hota hai.</div>
-                <div class="tags"><span class="tag">Romantic</span></div>
+Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise dard se guzar kar hi insaan “aaha” ke ehsaas tak pahunchta hai. Yeh series batati hai ki sachcha pyaar sirf khushi nahi, balki healing bhi hota hai</div>
+                <div class="tags"><span class="tag">Romantic</span><span class="tag">HD</span></div>
             </div>
         </div>
     </div>
@@ -120,25 +120,71 @@ function copyLink(){
     alert("Link Copied!");
 }
 
-let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "episode-1";
+let allData = []; 
+let currentIndex = 0; 
+const itemsPerPage = 8; 
+const currentSeriesSlug = "aah-se-aaha-tak";
+const currentEpNum = 1;
 
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", () => {
     const grid = document.getElementById('related-grid');
-    fetch('/data/movies.json')
-    .then(r=>{if(!r.ok)throw new Error();return r.json()})
-    .then(d=>{
-        allData = d.filter(m=>m.slug !== currentSlug);
+    
+    // --- 3-LAYER RECOMMENDATION FETCH ---
+    Promise.all([
+        // Layer 1: Fetch Specific Series Episodes
+        fetch('/episodes/' + currentSeriesSlug + '.json').then(r => r.ok ? r.json() : []).catch(() => []),
+        
+        // Layer 2 & 3: Fetch Global Movies/Series
+        fetch('/data/movies.json').then(r => r.ok ? r.json() : []).catch(() => [])
+    ])
+    .then(([episodesData, globalData]) => {
+        
+        // --- 1. Filter Related Episodes (Highest Priority) ---
+        // Must be same series, exclude current episode number
+        const relatedEpisodes = episodesData
+            .filter(e => parseInt(e.episode) !== parseInt(currentEpNum))
+            .map(e => ({
+                title: 'Ep ' + e.episode + ': ' + e.title,
+                thumbnail: e.thumbnail,
+                url: '/series/' + currentSeriesSlug + '/episode-' + e.episode + '.html',
+                type: 'episode'
+            }));
+
+        // --- 2. Filter Recommended Series ---
+        // Must be type 'series', exclude current series
+        const recommendedSeries = globalData
+            .filter(m => m.type === 'series' && m.slug !== currentSeriesSlug)
+            .map(m => ({
+                title: m.title,
+                thumbnail: m.thumbnail,
+                url: '/series/' + m.slug + '.html',
+                type: 'series'
+            }));
+
+        // --- 3. Filter Recommended Movies ---
+        // Must be type 'movie'
+        const recommendedMovies = globalData
+            .filter(m => m.type === 'movie')
+            .map(m => ({
+                title: m.title,
+                thumbnail: m.thumbnail,
+                url: '/movies/' + m.slug + '.html',
+                type: 'movie'
+            }));
+
+        // COMBINE IN STRICT ORDER
+        allData = [...relatedEpisodes, ...recommendedSeries, ...recommendedMovies];
+
         if(allData.length === 0) {
              grid.innerHTML = '<div style="padding:10px;color:#555">No related content found</div>';
-             document.getElementById('loadBtn').style.display='none';
+             document.getElementById('loadBtn').style.display = 'none';
         } else {
              loadNextBatch();
         }
     })
-    .catch(()=>{
-        console.log("Local Mode");
-        grid.innerHTML = '<div style="padding:10px;color:#555">Related content unavailable (Server Required)</div>';
-        document.getElementById('loadBtn').style.display='none';
+    .catch(err => {
+        console.error("Fetch Error:", err);
+        grid.innerHTML = '<div style="padding:10px;color:#555">Content loading failed</div>';
     });
 });
 
@@ -146,12 +192,22 @@ function loadNextBatch() {
     const grid = document.getElementById('related-grid');
     const btn = document.getElementById('loadBtn');
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-    nextBatch.forEach(m => {
-        grid.innerHTML += `<a href="/series/${m.slug}.html" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">${m.title}</div></a>`;
+
+    nextBatch.forEach(item => {
+        grid.innerHTML += `
+            <a href="${item.url}" class="rel-card">
+                <img src="${item.thumbnail}" class="rel-img" loading="lazy" alt="${item.title}">
+                <div class="rel-title">${item.title}</div>
+            </a>
+        `;
     });
+
     currentIndex += itemsPerPage;
-    if(currentIndex >= allData.length) btn.style.display = 'none';
+    if (currentIndex >= allData.length) btn.style.display = 'none';
 }
 </script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+<script src="../app.js"></script>
 </body>
 </html>
