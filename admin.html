@@ -247,10 +247,11 @@
         }
     }
 
-    // --- HELPERS ---
+    // --- HELPERS (UPDATED TO FIX JSON ERROR) ---
     function cleanUrl(url) {
         if(!url) return "";
-        return url.replace(/['"]/g, '').trim().replace(/\s/g, '%20');
+        // Removes quotes, trims, spaces to %20 AND removes trailing slash to fix JSON
+        return url.replace(/['"]/g, '').trim().replace(/\s/g, '%20').replace(/\/$/, '');
     }
 
     function sanitizeSlug(str) { 
@@ -359,7 +360,7 @@
 
 
     // ============================================
-    //  Generate INDIVIDUAL EPISODE PAGE (Formatted + Firebase)
+    //  Generate INDIVIDUAL EPISODE PAGE (Formatted + Fixed Script)
     // ============================================
     function generateEpisodePage() {
         let parentSlug = sanitizeSlug(document.getElementById('eSeriesSlug').value);
@@ -399,7 +400,7 @@
             thumbnail: data.thumb
         };
 
-        // --- PRETTY FORMATTED HTML ---
+        // --- PRETTY FORMATTED HTML (Script Fixed) ---
         let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -560,23 +561,23 @@ function loadNextBatch() {
 
         // 🔧 CLEAN SLUG
         let cleanSlug = String(m.slug || '')
-            .replace(/^movies\//, '')
-            .replace(/^series\//, '')
-            .replace(/\.html$/, '')
-            .replace(/^\//, '');
+            .replace(/^movies\\//, '')
+            .replace(/^series\\//, '')
+            .replace(/\\.html$/, '')
+            .replace(/^\\//, '');
 
         // 🔗 FINAL URL
         let finalUrl =
             type === 'episode'
-                ? `/series/${cleanSlug}.html`
-                : `/${folder}/${cleanSlug}.html`;
+                ? \`/series/\${cleanSlug}.html\`
+                : \`/\${folder}/\${cleanSlug}.html\`;
 
-        grid.innerHTML += `
-            <a href="${finalUrl}" class="rel-card">
-                <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
-                <div class="rel-title">${m.title}</div>
+        grid.innerHTML += \`
+            <a href="\${finalUrl}" class="rel-card">
+                <img src="\${m.thumbnail}" class="rel-img" loading="lazy" alt="\${m.title}">
+                <div class="rel-title">\${m.title}</div>
             </a>
-        `;
+        \`;
     });
 
     currentIndex += itemsPerPage;
