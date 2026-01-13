@@ -205,18 +205,26 @@ function loadNextBatch(){
     const grid = document.getElementById('related-grid');
     const loadBtn = document.getElementById('loadBtn');
 
+    if (!grid) {
+        console.log("Grid not found");
+        return;
+    }
+
     const nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
 
+    console.log("Rendering items:", nextBatch);
+
     nextBatch.forEach(item => {
-        grid.innerHTML += `
+        grid.insertAdjacentHTML("beforeend", `
             <a href="${item.url}" class="rel-card">
                 <img src="${item.thumbnail}" class="rel-img" loading="lazy">
                 <div class="rel-title">${item.title}</div>
             </a>
-        `;
+        `);
     });
 
     currentIndex += itemsPerPage;
+
     if(currentIndex >= allData.length){
         loadBtn.style.display = 'none';
     }
