@@ -120,23 +120,29 @@ function copyLink(){
     alert("Link Copied!");
 }
 
-let allData = []; 
-let currentIndex = 0; 
-const itemsPerPage = 8; 
+let allData = [];
+let currentIndex = 0;
+const itemsPerPage = 8;
 const currentSeriesSlug = "aah-se-aaha-tak";
 const currentEpNum = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const grid = document.getElementById('related-grid');
-    
-    // --- 3-LAYER RECOMMENDATION FETCH ---
+
+    // 👇 YAHI PAR REPLACE KARNA HAI
+    const BASE = '/Newapk';
+
     Promise.all([
-        // Layer 1: Fetch Specific Series Episodes
-        fetch('/episodes/' + currentSeriesSlug + '.json').then(r => r.ok ? r.json() : []).catch(() => []),
-        
-        // Layer 2 & 3: Fetch Global Movies/Series
-        fetch('/data/movies.json').then(r => r.ok ? r.json() : []).catch(() => [])
+        fetch(`${BASE}/data/episodes/${currentSeriesSlug}.json`)
+            .then(r => r.ok ? r.json() : []),
+
+        fetch(`${BASE}/data/movies.json`)
+            .then(r => r.ok ? r.json() : [])
     ])
+    .then(([episodesData, globalData]) => {
+        // rest logic
+    });
+
+});
     .then(([episodesData, globalData]) => {
         
         // --- 1. Filter Related Episodes (Highest Priority) ---
