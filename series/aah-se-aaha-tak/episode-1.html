@@ -116,57 +116,94 @@ Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise
 
 <script>
 function copyLink(){
-    let t=document.createElement("textarea"); t.value=window.location.href; t.style.position="fixed";
-    document.body.appendChild(t); t.select(); document.execCommand("copy"); document.body.removeChild(t);
+    let t=document.createElement("textarea");
+    t.value=window.location.href;
+    t.style.position="fixed";
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand("copy");
+    document.body.removeChild(t);
     alert("Link Copied!");
 }
 
-let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "episode-1";
+let allData = [];
+let currentIndex = 0;
+const itemsPerPage = 6;
+
+const BASE = "/Newapk"; // 🔥 सबसे important
+const currentSeriesSlug = "aah-se-aaha-tak";
+const currentEpNum = 1;
 
 document.addEventListener("DOMContentLoaded", ()=>{
-    const grid = document.getElementById('related-grid');
-    
-Promise.all([
-    // 🔥 EPISODES JSON (ये अभी missing है)
-    fetch('/data/episodes/aah-se-aaha-tak.json')
-        .then(r => r.ok ? r.json() : [])
-        .catch(() => []),
 
-    // movies / series
-    fetch('/data/movies.json')
-        .then(r => r.ok ? r.json() : [])
-        .catch(() => [])
-])
-.then(([episodesData, moviesData]) => {
+    const grid = document.getElementById("related-grid");
+    const loadBtn = document.getElementById("loadBtn");
 
-    // 1️⃣ SAME SERIES EPISODES
-    const episodeItems = episodesData.map(e => ({
-        title: `Episode ${e.episode}`,
-        thumbnail: e.thumbnail,
-        url: `/series/aah-se-aaha-tak/episode-${e.episode}.html`
-    }));
+    Promise.all([
+        // ✅ EPISODES
+        fetch(`${BASE}/data/episodes/${currentSeriesSlug}.json`)
+            .then(r => r.ok ? r.json() : [])
+            .catch(() => []),
 
-    // 2️⃣ MOVIES / SERIES
-    const otherItems = moviesData.map(m => ({
-        title: m.title,
-        thumbnail: m.thumbnail,
-        url: `/series/${m.slug}.html`
-    }));
+        // ✅ MOVIES / SERIES
+        fetch(`${BASE}/data/movies.json`)
+            .then(r => r.ok ? r.json() : [])
+            .catch(() => [])
+    ])
+    .then(([episodesData, moviesData]) => {
 
-    allData = [...episodeItems, ...otherItems];
-    loadNextBatch();
+        // 1️⃣ Episodes (same series, current ep skip)
+        const episodeItems = episodesData
+            .filter(e => parseInt(e.episode) !== currentEpNum)
+            .map(e => ({
+                title: `Episode ${e.episode}`,
+                thumbnail: e.thumbnail,
+                url: `${BASE}/series/${currentSeriesSlug}/episode-${e.episode}.html`
+            }));
+
+        // 2️⃣ Movies / Series
+        const otherItems = moviesData.map(m => ({
+            title: m.title,
+            thumbnail: m.thumbnail,
+            url: `${BASE}/${m.type === 'movie' ? 'movies' : 'series'}/${m.slug}.html`
+        }));
+
+        allData = [...episodeItems, ...otherItems];
+
+        if(allData.length === 0){
+            grid.innerHTML = "<div style='color:#777'>No related content</div>";
+            loadBtn.style.display = "none";
+            return;
+        }
+
+        loadNextBatch();
+    })
+    .catch(err=>{
+        console.error(err);
+        grid.innerHTML = "<div style='color:red'>Failed to load</div>";
+        loadBtn.style.display = "none";
+    });
 });
 
+function loadNextBatch(){
+    const grid = document.getElementById("related-grid");
+    const loadBtn = document.getElementById("loadBtn");
 
-function loadNextBatch() {
-    const grid = document.getElementById('related-grid');
-    const btn = document.getElementById('loadBtn');
-    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-    nextBatch.forEach(m => {
-        grid.innerHTML += `<a href="/series/${m.slug}.html" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">${m.title}</div></a>`;
+    const next = allData.slice(currentIndex, currentIndex + itemsPerPage);
+
+    next.forEach(item=>{
+        grid.innerHTML += `
+            <a href="${item.url}" class="rel-card">
+                <img src="${item.thumbnail}" class="rel-img">
+                <div class="rel-title">${item.title}</div>
+            </a>
+        `;
     });
+
     currentIndex += itemsPerPage;
-    if(currentIndex >= allData.length) btn.style.display = 'none';
+    if(currentIndex >= allData.length){
+        loadBtn.style.display = "none";
+    }
 }
 </script>
 </body>
