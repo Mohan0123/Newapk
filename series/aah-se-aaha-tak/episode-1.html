@@ -125,23 +125,67 @@ let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlu
 
 document.addEventListener("DOMContentLoaded", ()=>{
     const grid = document.getElementById('related-grid');
-    fetch('/data/movies.json')
-    .then(r=>{if(!r.ok)throw new Error();return r.json()})
-    .then(d=>{
-        allData = d.filter(m=>m.slug !== currentSlug);
-        if(allData.length === 0) {
-             grid.innerHTML = '<div style="padding:10px;color:#555">No related content found</div>';
-             document.getElementById('loadBtn').style.display='none';
-        } else {
-             loadNextBatch();
-        }
-    })
-    .catch(()=>{
-        console.log("Local Mode");
-        grid.innerHTML = '<div style="padding:10px;color:#555">Related content unavailable (Server Required)</div>';
-        document.getElementById('loadBtn').style.display='none';
-    });
+    Promise.all([
+    // 🔥 EPISODES JSON (ये अभी missing है)
+    fetch('/Newapk/data/episodes/aah-se-aaha-tak.json')
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => []),
+
+    // movies / series
+    fetch('/Newapk/data/movies.json')
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => [])
+])
+.then(([episodesData, moviesData]) => {
+
+    // 1️⃣ SAME SERIES EPISODES
+    const episodeItems = episodesData.map(e => ({
+        title: `Episode ${e.episode}`,
+        thumbnail: e.thumbnail,
+        url: `/Newapk/series/aah-se-aaha-tak/episode-${e.episode}.html`
+    }));
+
+    // 2️⃣ MOVIES / SERIES
+    const otherItems = moviesData.map(m => ({
+        title: m.title,
+        thumbnail: m.thumbnail,
+        url: `/Newapk/series/${m.slug}.html`
+    }));
+
+    allData = [...episodeItems, ...otherItems];
+    loadNextBatch();
 });
+Promise.all([
+    // 🔥 EPISODES JSON (ये अभी missing है)
+    fetch('/Newapk/data/episodes/aah-se-aaha-tak.json')
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => []),
+
+    // movies / series
+    fetch('/Newapk/data/movies.json')
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => [])
+])
+.then(([episodesData, moviesData]) => {
+
+    // 1️⃣ SAME SERIES EPISODES
+    const episodeItems = episodesData.map(e => ({
+        title: `Episode ${e.episode}`,
+        thumbnail: e.thumbnail,
+        url: `/Newapk/series/aah-se-aaha-tak/episode-${e.episode}.html`
+    }));
+
+    // 2️⃣ MOVIES / SERIES
+    const otherItems = moviesData.map(m => ({
+        title: m.title,
+        thumbnail: m.thumbnail,
+        url: `/Newapk/series/${m.slug}.html`
+    }));
+
+    allData = [...episodeItems, ...otherItems];
+    loadNextBatch();
+});
+
 
 function loadNextBatch() {
     const grid = document.getElementById('related-grid');
