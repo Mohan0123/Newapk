@@ -115,21 +115,29 @@ Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise
 
 <script>
 function copyLink(){
-    let t=document.createElement("textarea"); t.value=window.location.href; t.style.position="fixed";
-    document.body.appendChild(t); t.select(); document.execCommand("copy"); document.body.removeChild(t);
+    let t=document.createElement("textarea");
+    t.value=window.location.href;
+    t.style.position="fixed";
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand("copy");
+    document.body.removeChild(t);
     alert("Link Copied!");
 }
 
 let allData = [];
 let currentIndex = 0;
 const itemsPerPage = 8;
+
+// hardcode abhi ke liye (baad me auto kar sakte hain)
 const currentSeriesSlug = "aah-se-aaha-tak";
 const currentEpNum = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 👇 YAHI PAR REPLACE KARNA HAI
     const BASE = '/Newapk';
+    const grid = document.getElementById('related-grid');
+    const loadBtn = document.getElementById('loadBtn');
 
     Promise.all([
         fetch(`${BASE}/data/episodes/${currentSeriesSlug}.json`)
@@ -139,79 +147,81 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(r => r.ok ? r.json() : [])
     ])
     .then(([episodesData, globalData]) => {
-        // rest logic
-    });
 
-});
-    .then(([episodesData, globalData]) => {
-        
-        // --- 1. Filter Related Episodes (Highest Priority) ---
-        // Must be same series, exclude current episode number
+        // ✅ 1️⃣ SAME SERIES EPISODES
         const relatedEpisodes = episodesData
-            .filter(e => parseInt(e.episode) !== parseInt(currentEpNum))
+            .filter(e => parseInt(e.num) !== parseInt(currentEpNum))
             .map(e => ({
-                title: 'Ep ' + e.episode + ': ' + e.title,
-                thumbnail: e.thumbnail,
-                url: '/series/' + currentSeriesSlug + '/episode-' + e.episode + '.html',
+                title: `Episode ${e.num}: ${e.title}`,
+                thumbnail: e.thumb || 'https://via.placeholder.com/300x169',
+                url: `/Newapk/series/${currentSeriesSlug}/episode-${e.num}.html`,
                 type: 'episode'
             }));
 
-        // --- 2. Filter Recommended Series ---
-        // Must be type 'series', exclude current series
+        // ✅ 2️⃣ OTHER SERIES
         const recommendedSeries = globalData
             .filter(m => m.type === 'series' && m.slug !== currentSeriesSlug)
             .map(m => ({
                 title: m.title,
                 thumbnail: m.thumbnail,
-                url: '/series/' + m.slug + '.html',
+                url: `/Newapk/series/${m.slug}.html`,
                 type: 'series'
             }));
 
-        // --- 3. Filter Recommended Movies ---
-        // Must be type 'movie'
+        // ✅ 3️⃣ MOVIES
         const recommendedMovies = globalData
             .filter(m => m.type === 'movie')
             .map(m => ({
                 title: m.title,
                 thumbnail: m.thumbnail,
-                url: '/movies/' + m.slug + '.html',
+                url: `/Newapk/movies/${m.slug}.html`,
                 type: 'movie'
             }));
 
-        // COMBINE IN STRICT ORDER
-        allData = [...relatedEpisodes, ...recommendedSeries, ...recommendedMovies];
+        // 🔥 COMBINE (STRICT ORDER)
+        allData = [
+            ...relatedEpisodes,
+            ...recommendedSeries,
+            ...recommendedMovies
+        ];
 
-        if(allData.length === 0) {
-             grid.innerHTML = '<div style="padding:10px;color:#555">No related content found</div>';
-             document.getElementById('loadBtn').style.display = 'none';
-        } else {
-             loadNextBatch();
+        if(allData.length === 0){
+            grid.innerHTML = '<div style="color:#777">No related content</div>';
+            loadBtn.style.display = 'none';
+            return;
         }
+
+        loadNextBatch();
     })
     .catch(err => {
-        console.error("Fetch Error:", err);
-        grid.innerHTML = '<div style="padding:10px;color:#555">Content loading failed</div>';
+        console.error(err);
+        grid.innerHTML = '<div style="color:#777">Failed to load content</div>';
+        loadBtn.style.display = 'none';
     });
 });
 
-function loadNextBatch() {
+function loadNextBatch(){
     const grid = document.getElementById('related-grid');
-    const btn = document.getElementById('loadBtn');
-    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
+    const loadBtn = document.getElementById('loadBtn');
+
+    const nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
 
     nextBatch.forEach(item => {
         grid.innerHTML += `
             <a href="${item.url}" class="rel-card">
-                <img src="${item.thumbnail}" class="rel-img" loading="lazy" alt="${item.title}">
+                <img src="${item.thumbnail}" class="rel-img" loading="lazy">
                 <div class="rel-title">${item.title}</div>
             </a>
         `;
     });
 
     currentIndex += itemsPerPage;
-    if (currentIndex >= allData.length) btn.style.display = 'none';
+    if(currentIndex >= allData.length){
+        loadBtn.style.display = 'none';
+    }
 }
 </script>
+
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 <script src="../app.js"></script>
