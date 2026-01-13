@@ -115,62 +115,53 @@ Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise
 </footer>
 
 <script>
-function copyLink(){
-    let t=document.createElement("textarea");
-    t.value=window.location.href;
-    t.style.position="fixed";
-    document.body.appendChild(t);
-    t.select();
-    document.execCommand("copy");
-    document.body.removeChild(t);
-    alert("Link Copied!");
-}
-
 let allData = [];
 let currentIndex = 0;
 const itemsPerPage = 6;
 
-const BASE = "/Newapk"; // 🔥 सबसे important
-const currentSeriesSlug = "aah-se-aaha-tak";
-const currentEpNum = 1;
+const seriesSlug = "aah-se-aaha-tak";
 
-document.addEventListener("DOMContentLoaded", ()=>{
+// 🔥 URL से episode number auto detect
+const match = location.pathname.match(/episode-(\d+)/);
+const currentEpNum = match ? parseInt(match[1]) : null;
+
+document.addEventListener("DOMContentLoaded", () => {
 
     const grid = document.getElementById("related-grid");
     const loadBtn = document.getElementById("loadBtn");
 
     Promise.all([
-        // ✅ EPISODES
-        fetch(`${BASE}/data/episodes/${currentSeriesSlug}.json`)
-            .then(r => r.ok ? r.json() : [])
+        // ✅ Episodes JSON
+        fetch(`/data/episodes/${seriesSlug}.json`)
+            .then(r => r.json())
             .catch(() => []),
 
-        // ✅ MOVIES / SERIES
-        fetch(`${BASE}/data/movies.json`)
-            .then(r => r.ok ? r.json() : [])
+        // ✅ Movies / Series JSON
+        fetch(`/data/movies.json`)
+            .then(r => r.json())
             .catch(() => [])
     ])
-    .then(([episodesData, moviesData]) => {
+    .then(([episodes, movies]) => {
 
-        // 1️⃣ Episodes (same series, current ep skip)
-        const episodeItems = episodesData
-            .filter(e => parseInt(e.episode) !== currentEpNum)
+        // 1️⃣ SAME SERIES EPISODES (top priority)
+        const episodeItems = episodes
+            .filter(e => e.episode !== currentEpNum)
             .map(e => ({
                 title: `Episode ${e.episode}`,
                 thumbnail: e.thumbnail,
-                url: `${BASE}/series/${currentSeriesSlug}/episode-${e.episode}.html`
+                url: `/series/${seriesSlug}/episode-${e.episode}.html`
             }));
 
-        // 2️⃣ Movies / Series
-        const otherItems = moviesData.map(m => ({
+        // 2️⃣ OTHER CONTENT
+        const otherItems = movies.map(m => ({
             title: m.title,
             thumbnail: m.thumbnail,
-            url: `${BASE}/${m.type === 'movie' ? 'movies' : 'series'}/${m.slug}.html`
+            url: `/${m.type === 'movie' ? 'movies' : 'series'}/${m.slug}.html`
         }));
 
         allData = [...episodeItems, ...otherItems];
 
-        if(allData.length === 0){
+        if (!allData.length) {
             grid.innerHTML = "<div style='color:#777'>No related content</div>";
             loadBtn.style.display = "none";
             return;
@@ -178,30 +169,30 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
         loadNextBatch();
     })
-    .catch(err=>{
+    .catch(err => {
         console.error(err);
-        grid.innerHTML = "<div style='color:red'>Failed to load</div>";
+        grid.innerHTML = "<div style='color:red'>Load failed</div>";
         loadBtn.style.display = "none";
     });
 });
 
-function loadNextBatch(){
+function loadNextBatch() {
     const grid = document.getElementById("related-grid");
     const loadBtn = document.getElementById("loadBtn");
 
     const next = allData.slice(currentIndex, currentIndex + itemsPerPage);
 
-    next.forEach(item=>{
-        grid.innerHTML += `
+    next.forEach(item => {
+        grid.insertAdjacentHTML("beforeend", `
             <a href="${item.url}" class="rel-card">
-                <img src="${item.thumbnail}" class="rel-img">
+                <img src="${item.thumbnail}" class="rel-img" loading="lazy">
                 <div class="rel-title">${item.title}</div>
             </a>
-        `;
+        `);
     });
 
     currentIndex += itemsPerPage;
-    if(currentIndex >= allData.length){
+    if (currentIndex >= allData.length) {
         loadBtn.style.display = "none";
     }
 }
