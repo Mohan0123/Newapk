@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,12 +71,12 @@
 <div class="container">
     <div class="main-col">
         <div class="content-pad">
-            <h1>Aah Se Aaha Tak Episode 1</h1>
+            <h1>Aah Se Aaha Tak New Romantic webseries </h1>
             <div class="meta-row">
                 <span class="badge">HD</span>
                 <span>Streaming</span>
                 <span>Free</span>
-                <a href="/series/aah-se-aaha-tak.html" class="series-link"> • Aah Se Aaha Tak Episode 1</a>
+                <a href="/series/aah-se-aaha-tak.html" class="series-link"> • Aah Se Aaha Tak</a>
             </div>
 
             <div class="social-row">
@@ -90,8 +91,8 @@
                 <div class="card-head">📖 Storyline</div>
                 <div class="desc-text">Aah Se Aaha Tak ek emotional romantic web series hai jo dard se shuru hokar sukoon tak pahunchne wali ek love journey ko dikhati hai. Kahani ek aise dil se shuru hoti hai jo toot chuka hota hai, jahan har saans ek “aah” ban kar reh jaati hai.
 Zindagi me achanak aayi ek nayi mulaqat dheere-dheere us dard ko pighlaana shuru karti hai. Samajh, patience aur emotional bonding ke saath pyaar phir se janam leta hai. Lekin past ke zakhm aur dar is rishte ko aasaan nahi banne dete.
-Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise dard se guzar kar hi insaan “aaha” ke ehsaas tak pahunchta hai. Yeh series batati hai ki sachcha pyaar sirf khushi nahi, balki healing bhi hota hai</div>
-                <div class="tags"><span class="tag">Romantic</span><span class="tag">HD</span></div>
+Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise dard se guzar kar hi insaan “aaha” ke ehsaas tak pahunchta hai. Yeh series batati hai ki sachcha pyaar sirf khushi nahi, balki healing bhi hota hai.</div>
+                <div class="tags"><span class="tag">Romantic</span></div>
             </div>
         </div>
     </div>
@@ -114,48 +115,44 @@ Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+function copyLink(){
+    let t=document.createElement("textarea"); t.value=window.location.href; t.style.position="fixed";
+    document.body.appendChild(t); t.select(); document.execCommand("copy"); document.body.removeChild(t);
+    alert("Link Copied!");
+}
 
-  const grid = document.getElementById("related-grid");
-  if (!grid) {
-    alert("❌ related-grid div hi nahi mila");
-    return;
-  }
+let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "episode-1";
 
-  const URL = "https://mohan0123.github.io/Newapk/data/episodes/aah-se-aaha-tak.json";
-
-  fetch(URL)
-    .then(res => res.json())
-    .then(data => {
-      console.log("JSON DATA:", data);
-
-      if (!Array.isArray(data) || data.length === 0) {
-        grid.innerHTML = "<div style='color:red'>❌ JSON empty hai</div>";
-        return;
-      }
-
-      // sirf test ke liye — current episode 1 skip
-      const filtered = data.filter(e => e.episode !== 1);
-
-      grid.innerHTML = "";
-
-      filtered.forEach(e => {
-        grid.innerHTML += `
-          <div style="border:1px solid #333;padding:10px;color:white">
-            Episode ${e.episode} – ${e.title}
-          </div>
-        `;
-      });
+document.addEventListener("DOMContentLoaded", ()=>{
+    const grid = document.getElementById('related-grid');
+    fetch('/data/movies.json')
+    .then(r=>{if(!r.ok)throw new Error();return r.json()})
+    .then(d=>{
+        allData = d.filter(m=>m.slug !== currentSlug);
+        if(allData.length === 0) {
+             grid.innerHTML = '<div style="padding:10px;color:#555">No related content found</div>';
+             document.getElementById('loadBtn').style.display='none';
+        } else {
+             loadNextBatch();
+        }
     })
-    .catch(err => {
-      console.error(err);
-      grid.innerHTML = "<div style='color:red'>❌ JSON load fail</div>";
+    .catch(()=>{
+        console.log("Local Mode");
+        grid.innerHTML = '<div style="padding:10px;color:#555">Related content unavailable (Server Required)</div>';
+        document.getElementById('loadBtn').style.display='none';
     });
-
 });
+
+function loadNextBatch() {
+    const grid = document.getElementById('related-grid');
+    const btn = document.getElementById('loadBtn');
+    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
+    nextBatch.forEach(m => {
+        grid.innerHTML += `<a href="/series/${m.slug}.html" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">${m.title}</div></a>`;
+    });
+    currentIndex += itemsPerPage;
+    if(currentIndex >= allData.length) btn.style.display = 'none';
+}
 </script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
-<script src="../app.js"></script>
 </body>
 </html>
