@@ -150,13 +150,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ✅ 1️⃣ SAME SERIES EPISODES
         const relatedEpisodes = episodesData
-            .filter(e => parseInt(e.num) !== parseInt(currentEpNum))
-            .map(e => ({
-                title: `Episode ${e.num}: ${e.title}`,
-                thumbnail: e.thumb || 'https://via.placeholder.com/300x169',
-                url: `/Newapk/series/${currentSeriesSlug}/episode-${e.num}.html`,
-                type: 'episode'
-            }));
+  .filter(e => parseInt(e.episode) !== parseInt(currentEpNum))
+  .map(e => ({
+      title: `Episode ${e.episode}: ${e.title}`,
+      thumbnail: e.thumbnail,
+      url: `/Newapk/series/${currentSeriesSlug}/episode-${e.episode}.html`,
+      type: 'episode'
+  }));
+
 
         // ✅ 2️⃣ OTHER SERIES
         const recommendedSeries = globalData
