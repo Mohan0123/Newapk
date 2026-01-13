@@ -115,52 +115,95 @@ Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+let allData = [];
+let currentIndex = 0;
+const itemsPerPage = 6;
+
+const seriesSlug = "aah-se-aaha-tak";
+
+// 🔥 URL से episode number auto detect
+const match = location.pathname.match(/episode-(\d+)/);
+const currentEpNum = match ? parseInt(match[1]) : null;
+
+document.addEventListener("DOMContentLoaded", () => {
 
     const grid = document.getElementById("related-grid");
     const loadBtn = document.getElementById("loadBtn");
 
-    if (!grid) return;
+    Promise.all([
+        // ✅ Episodes JSON
+        fetch(`/data/episodes/${seriesSlug}.json`)
+            .then(r => r.json())
+            .catch(() => []),
 
-    const match = location.pathname.match(/episode-(\d+)/);
-    const currentEp = match ? parseInt(match[1]) : 0;
+        // ✅ Movies / Series JSON
+        fetch(`/data/movies.json`)
+            .then(r => r.json())
+            .catch(() => [])
+    ])
+    .then(([episodes, movies]) => {
 
-    fetch("/data/episodes/aah-se-aaha-tak.json")
-        .then(res => {
-            if (!res.ok) throw new Error("HTTP " + res.status);
-            return res.json();
-        })
-        .then(data => {
+        // 1️⃣ SAME SERIES EPISODES (top priority)
+        .then(([episodesData, moviesData]) => {
 
-            if (!Array.isArray(data)) {
-                grid.innerHTML = "<div style='color:red'>JSON format error</div>";
-                return;
-            }
+    // 🔥 FIX: episode array extract
+    const episodes = Array.isArray(episodesData)
+        ? episodesData
+        : (episodesData.episodes || []);
 
-            const episodes = data.filter(e => e.episode !== currentEp);
+    const episodeItems = episodes
+        .filter(e => e.episode !== currentEpNum)
+        .map(e => ({
+            title: `Episode ${e.episode}`,
+            thumbnail: e.thumbnail,
+            url: `/series/aah-se-aaha-tak/episode-${e.episode}.html`
+        }));
 
-            if (!episodes.length) {
-                grid.innerHTML = "<div style='color:#777'>No episodes found</div>";
-                return;
-            }
 
-            episodes.forEach(e => {
-                grid.innerHTML += `
-                    <a href="/series/aah-se-aaha-tak/episode-${e.episode}.html"
-                       class="rel-card">
-                        <img src="${e.thumbnail}" class="rel-img">
-                        <div class="rel-title">Episode ${e.episode}</div>
-                    </a>
-                `;
-            });
+        // 2️⃣ OTHER CONTENT
+        const otherItems = movies.map(m => ({
+            title: m.title,
+            thumbnail: m.thumbnail,
+            url: `/${m.type === 'movie' ? 'movies' : 'series'}/${m.slug}.html`
+        }));
 
+        allData = [...episodeItems, ...otherItems];
+
+        if (!allData.length) {
+            grid.innerHTML = "<div style='color:#777'>No related content</div>";
             loadBtn.style.display = "none";
-        })
-        .catch(err => {
-            console.error("FETCH ERROR:", err);
-            grid.innerHTML = "<div style='color:red'>Episode load failed</div>";
-        });
+            return;
+        }
+
+        loadNextBatch();
+    })
+    .catch(err => {
+        console.error(err);
+        grid.innerHTML = "<div style='color:red'>Load failed</div>";
+        loadBtn.style.display = "none";
+    });
 });
+
+function loadNextBatch() {
+    const grid = document.getElementById("related-grid");
+    const loadBtn = document.getElementById("loadBtn");
+
+    const next = allData.slice(currentIndex, currentIndex + itemsPerPage);
+
+    next.forEach(item => {
+        grid.insertAdjacentHTML("beforeend", `
+            <a href="${item.url}" class="rel-card">
+                <img src="${item.thumbnail}" class="rel-img" loading="lazy">
+                <div class="rel-title">${item.title}</div>
+            </a>
+        `);
+    });
+
+    currentIndex += itemsPerPage;
+    if (currentIndex >= allData.length) {
+        loadBtn.style.display = "none";
+    }
+}
 </script>
 </body>
 </html>
