@@ -163,9 +163,8 @@ function loadNextBatch() {
     const grid = document.getElementById('related-grid');
     const btn = document.getElementById('loadBtn');
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-    
     nextBatch.forEach(m => {
-        grid.innerHTML += `<a href="/movies/${m.slug}.html" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">${m.title}</div></a>`;
+        grid.innerHTML += `<a href="/series/${m.slug}.html" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy"><div class="rel-title">${m.title}</div></a>`;
     });
     currentIndex += itemsPerPage;
     if(currentIndex >= allData.length) btn.style.display = 'none';
