@@ -125,44 +125,15 @@ let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlu
 
 document.addEventListener("DOMContentLoaded", ()=>{
     const grid = document.getElementById('related-grid');
-    Promise.all([
-    // 🔥 EPISODES JSON (ये अभी missing है)
-    fetch('/Newapk/data/episodes/aah-se-aaha-tak.json')
-        .then(r => r.ok ? r.json() : [])
-        .catch(() => []),
-
-    // movies / series
-    fetch('/Newapk/data/movies.json')
-        .then(r => r.ok ? r.json() : [])
-        .catch(() => [])
-])
-.then(([episodesData, moviesData]) => {
-
-    // 1️⃣ SAME SERIES EPISODES
-    const episodeItems = episodesData.map(e => ({
-        title: `Episode ${e.episode}`,
-        thumbnail: e.thumbnail,
-        url: `/Newapk/series/aah-se-aaha-tak/episode-${e.episode}.html`
-    }));
-
-    // 2️⃣ MOVIES / SERIES
-    const otherItems = moviesData.map(m => ({
-        title: m.title,
-        thumbnail: m.thumbnail,
-        url: `/Newapk/series/${m.slug}.html`
-    }));
-
-    allData = [...episodeItems, ...otherItems];
-    loadNextBatch();
-});
+    
 Promise.all([
     // 🔥 EPISODES JSON (ये अभी missing है)
-    fetch('/Newapk/data/episodes/aah-se-aaha-tak.json')
+    fetch('/data/episodes/aah-se-aaha-tak.json')
         .then(r => r.ok ? r.json() : [])
         .catch(() => []),
 
     // movies / series
-    fetch('/Newapk/data/movies.json')
+    fetch('/data/movies.json')
         .then(r => r.ok ? r.json() : [])
         .catch(() => [])
 ])
@@ -172,14 +143,14 @@ Promise.all([
     const episodeItems = episodesData.map(e => ({
         title: `Episode ${e.episode}`,
         thumbnail: e.thumbnail,
-        url: `/Newapk/series/aah-se-aaha-tak/episode-${e.episode}.html`
+        url: `/series/aah-se-aaha-tak/episode-${e.episode}.html`
     }));
 
     // 2️⃣ MOVIES / SERIES
     const otherItems = moviesData.map(m => ({
         title: m.title,
         thumbnail: m.thumbnail,
-        url: `/Newapk/series/${m.slug}.html`
+        url: `/series/${m.slug}.html`
     }));
 
     allData = [...episodeItems, ...otherItems];
