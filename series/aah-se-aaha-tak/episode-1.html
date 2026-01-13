@@ -144,13 +144,21 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(([episodes, movies]) => {
 
         // 1️⃣ SAME SERIES EPISODES (top priority)
-        const episodeItems = episodes
-            .filter(e => e.episode !== currentEpNum)
-            .map(e => ({
-                title: `Episode ${e.episode}`,
-                thumbnail: e.thumbnail,
-                url: `/series/${seriesSlug}/episode-${e.episode}.html`
-            }));
+        .then(([episodesData, moviesData]) => {
+
+    // 🔥 FIX: episode array extract
+    const episodes = Array.isArray(episodesData)
+        ? episodesData
+        : (episodesData.episodes || []);
+
+    const episodeItems = episodes
+        .filter(e => e.episode !== currentEpNum)
+        .map(e => ({
+            title: `Episode ${e.episode}`,
+            thumbnail: e.thumbnail,
+            url: `/series/aah-se-aaha-tak/episode-${e.episode}.html`
+        }));
+
 
         // 2️⃣ OTHER CONTENT
         const otherItems = movies.map(m => ({
