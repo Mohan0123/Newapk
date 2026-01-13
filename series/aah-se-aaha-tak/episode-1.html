@@ -114,123 +114,46 @@ Har episode me emotions ka ek naya rang saamne aata hai, jo dikhata hai ki kaise
 </footer>
 
 <script>
-function copyLink(){
-    let t=document.createElement("textarea");
-    t.value=window.location.href;
-    t.style.position="fixed";
-    document.body.appendChild(t);
-    t.select();
-    document.execCommand("copy");
-    document.body.removeChild(t);
-    alert("Link Copied!");
-}
-
-let allData = [];
-let currentIndex = 0;
-const itemsPerPage = 8;
-
-// hardcode abhi ke liye (baad me auto kar sakte hain)
-const currentSeriesSlug = "aah-se-aaha-tak";
-const currentEpNum = 1;
-
 document.addEventListener("DOMContentLoaded", () => {
 
-    const BASE = '/Newapk';
-    const grid = document.getElementById('related-grid');
-    const loadBtn = document.getElementById('loadBtn');
+  const grid = document.getElementById("related-grid");
+  if (!grid) {
+    alert("❌ related-grid div hi nahi mila");
+    return;
+  }
 
-    Promise.all([
-        fetch(`${BASE}/data/episodes/${currentSeriesSlug}.json`)
-            .then(r => r.ok ? r.json() : []),
+  const URL = "https://mohan0123.github.io/Newapk/data/episodes/aah-se-aaha-tak.json";
 
-        fetch(`${BASE}/data/movies.json`)
-            .then(r => r.ok ? r.json() : [])
-    ])
-    .then(([episodesData, globalData]) => {
+  fetch(URL)
+    .then(res => res.json())
+    .then(data => {
+      console.log("JSON DATA:", data);
 
-        // ✅ 1️⃣ SAME SERIES EPISODES
-        const relatedEpisodes = episodesData
-  .filter(e => parseInt(e.episode) !== parseInt(currentEpNum))
-  .map(e => ({
-      title: `Episode ${e.episode}: ${e.title}`,
-      thumbnail: e.thumbnail,
-      url: `/Newapk/series/${currentSeriesSlug}/episode-${e.episode}.html`,
-      type: 'episode'
-  }));
+      if (!Array.isArray(data) || data.length === 0) {
+        grid.innerHTML = "<div style='color:red'>❌ JSON empty hai</div>";
+        return;
+      }
 
+      // sirf test ke liye — current episode 1 skip
+      const filtered = data.filter(e => e.episode !== 1);
 
-        // ✅ 2️⃣ OTHER SERIES
-        const recommendedSeries = globalData
-            .filter(m => m.type === 'series' && m.slug !== currentSeriesSlug)
-            .map(m => ({
-                title: m.title,
-                thumbnail: m.thumbnail,
-                url: `/Newapk/series/${m.slug}.html`,
-                type: 'series'
-            }));
+      grid.innerHTML = "";
 
-        // ✅ 3️⃣ MOVIES
-        const recommendedMovies = globalData
-            .filter(m => m.type === 'movie')
-            .map(m => ({
-                title: m.title,
-                thumbnail: m.thumbnail,
-                url: `/Newapk/movies/${m.slug}.html`,
-                type: 'movie'
-            }));
-
-        // 🔥 COMBINE (STRICT ORDER)
-        allData = [
-            ...relatedEpisodes,
-            ...recommendedSeries,
-            ...recommendedMovies
-        ];
-
-        if(allData.length === 0){
-            grid.innerHTML = '<div style="color:#777">No related content</div>';
-            loadBtn.style.display = 'none';
-            return;
-        }
-
-        loadNextBatch();
+      filtered.forEach(e => {
+        grid.innerHTML += `
+          <div style="border:1px solid #333;padding:10px;color:white">
+            Episode ${e.episode} – ${e.title}
+          </div>
+        `;
+      });
     })
     .catch(err => {
-        console.error(err);
-        grid.innerHTML = '<div style="color:#777">Failed to load content</div>';
-        loadBtn.style.display = 'none';
+      console.error(err);
+      grid.innerHTML = "<div style='color:red'>❌ JSON load fail</div>";
     });
+
 });
-
-function loadNextBatch(){
-    const grid = document.getElementById('related-grid');
-    const loadBtn = document.getElementById('loadBtn');
-
-    if (!grid) {
-        console.log("Grid not found");
-        return;
-    }
-
-    const nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-
-    console.log("Rendering items:", nextBatch);
-
-    nextBatch.forEach(item => {
-        grid.insertAdjacentHTML("beforeend", `
-            <a href="${item.url}" class="rel-card">
-                <img src="${item.thumbnail}" class="rel-img" loading="lazy">
-                <div class="rel-title">${item.title}</div>
-            </a>
-        `);
-    });
-
-    currentIndex += itemsPerPage;
-
-    if(currentIndex >= allData.length){
-        loadBtn.style.display = 'none';
-    }
-}
 </script>
-
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 <script src="../app.js"></script>
