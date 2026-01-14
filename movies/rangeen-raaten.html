@@ -152,14 +152,47 @@ document.addEventListener("DOMContentLoaded", ()=>{
 function loadNextBatch() {
     const grid = document.getElementById('related-grid');
     const btn = document.getElementById('loadBtn');
+
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
-    
+
     nextBatch.forEach(m => {
-        grid.innerHTML += `<a href="/movies/${m.slug}.html" class="rel-card"><img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}"><div class="rel-title">${m.title}</div></a>`;
+
+        // 🔑 TYPE DECIDES EVERYTHING
+        let type = (m.type || 'movie').toLowerCase();
+        let folder = 'movies';
+
+        if (type === 'series' || type === 'episode') {
+            folder = 'series';
+        }
+
+        // 🔧 CLEAN SLUG
+        let cleanSlug = String(m.slug || '')
+            .replace(/^movies\//, '')
+            .replace(/^series\//, '')
+            .replace(/\.html$/, '')
+            .replace(/^\//, '');
+
+        // 🔗 FINAL URL
+        let finalUrl =
+            type === 'episode'
+                ? `/series/${cleanSlug}.html`
+                : `/${folder}/${cleanSlug}.html`;
+
+        grid.innerHTML += `
+            <a href="${finalUrl}" class="rel-card">
+                <img src="${m.thumbnail}" class="rel-img" loading="lazy" alt="${m.title}">
+                <div class="rel-title">${m.title}</div>
+            </a>
+        `;
     });
+
     currentIndex += itemsPerPage;
-    if(currentIndex >= allData.length) btn.style.display = 'none';
+    if (currentIndex >= allData.length) btn.style.display = 'none';
 }
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+<script src="../app.js"></script>
 </script>
 </body>
 </html>
