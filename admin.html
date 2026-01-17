@@ -52,7 +52,11 @@
 <div class="sidebar">
     <div class="brand">RANGINX <span>CREATOR</span></div>
     
-    <div class="menu-btn active" onclick="switchTab(event,'series-main')">
+    <div class="menu-btn active" onclick="switchTab(event,'movie')">
+        🎬 <span>Movie Generator</span>
+    </div>
+
+    <div class="menu-btn" onclick="switchTab(event,'series-main')">
         📺 <span>Series Home</span>
     </div>
 
@@ -63,14 +67,58 @@
 
 <div class="main">
     <div class="top-bar">
-        <span id="pageTitle">Series Main Generator</span>
+        <span id="pageTitle">Movie Generator</span>
         <a href="/" class="btn-secondary" style="padding:8px 15px; border-radius:4px; font-size:12px; text-decoration:none; color:white;">🏠 DASHBOARD</a>
     </div>
     
     <div class="scroll-view">
         <div class="container">
             
-            <div id="tab-series-main" class="tab-panel active">
+            <div id="tab-movie" class="tab-panel active">
+                <div class="card">
+                    <div class="sec-title">Movie Input (Admin)</div>
+                    <div class="grid">
+                        <div class="full">
+                            <label>Slug (Example: spicy-malkin)</label>
+                            <input type="text" id="movSlug" placeholder="spicy-malkin" style="color:var(--primary); font-weight:bold;">
+                        </div>
+                        <div class="full">
+                            <label>Movie Name (Required)</label>
+                            <input type="text" id="movTitle" placeholder="Movie Name">
+                        </div>
+                        <div class="full">
+                            <label>Video URL (MP4 / Embed)</label>
+                            <input type="text" id="movVideo" placeholder="https://example.com/video.mp4">
+                        </div>
+                        <div>
+                            <label>Poster URL</label>
+                            <input type="text" id="movPoster" placeholder="https://example.com/poster.jpg">
+                        </div>
+                        <div>
+                            <label>Tags (Comma separated, Max 8)</label>
+                            <input type="text" id="movTags" placeholder="Drama, Romance">
+                        </div>
+                        <div class="full">
+                            <label>SEO Title (Optional - Leave empty for Auto)</label>
+                            <input type="text" id="movSeo" placeholder="Auto-generated if empty">
+                        </div>
+                        <div class="full">
+                            <label>Meta Description (Optional - Leave empty for Auto)</label>
+                            <textarea id="movMeta" placeholder="Auto-generated if empty"></textarea>
+                        </div>
+                        <div class="full">
+                            <label>Storyline (Optional - Leave empty for Auto)</label>
+                            <textarea id="movDesc" class="desc-box" placeholder="Auto-generated if empty"></textarea>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="generateMoviePage()">Generate Movie Page</button>
+                        <button class="btn btn-secondary" onclick="resetForm('movie')">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-series-main" class="tab-panel">
                 <div class="card">
                     <div class="sec-title">Series Landing Page</div>
                     <div class="grid">
@@ -208,13 +256,14 @@
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.getElementById('tab-'+t).classList.add('active');
         
+        if(t === 'movie') document.getElementById('pageTitle').innerText = 'Movie Generator';
         if(t === 'series-main') document.getElementById('pageTitle').innerText = 'Series Main Generator';
         if(t === 'series-ep') document.getElementById('pageTitle').innerText = 'Episode Page Generator';
         
         document.getElementById('outputArea').style.display = 'none';
     }
 
-    // --- LIST BUILDER ---
+    // --- LIST BUILDER (SERIES) ---
     function addToList() {
         let n = document.getElementById('listEpNum').value.trim();
         let t = document.getElementById('listEpTitle').value.trim();
@@ -239,7 +288,9 @@
     function delFromList(i) { mainListEpisodes.splice(i,1); renderList(); }
     
     function resetForm(type) {
-        if(type === 'main') {
+        if(type === 'movie') {
+            document.querySelectorAll('#tab-movie input, #tab-movie textarea').forEach(e=>e.value='');
+        } else if(type === 'main') {
              document.querySelectorAll('#tab-series-main input, #tab-series-main textarea').forEach(e=>e.value='');
              mainListEpisodes = []; renderList();
         } else {
@@ -247,10 +298,9 @@
         }
     }
 
-    // --- HELPERS (UPDATED TO FIX JSON ERROR) ---
+    // --- HELPERS ---
     function cleanUrl(url) {
         if(!url) return "";
-        // Removes quotes, trims, spaces to %20 AND removes trailing slash to fix JSON
         return url.replace(/['"]/g, '').trim().replace(/\s/g, '%20').replace(/\/$/, '');
     }
 
@@ -260,6 +310,249 @@
     }
     
     function cleanStr(str) { return str ? str.replace(/"/g, '&quot;') : ""; }
+
+    // ============================================
+    //  Generate MOVIE PAGE (Merged from index.html)
+    // ============================================
+    function generateMoviePage() {
+        // IDs renamed to avoid conflict with Series Main
+        let data = {
+            name: document.getElementById('movTitle').value.trim(),
+            slugRaw: document.getElementById('movSlug').value.trim(),
+            video: cleanUrl(document.getElementById('movVideo').value),
+            poster: cleanUrl(document.getElementById('movPoster').value),
+            tagsRaw: document.getElementById('movTags').value.trim(),
+            seoTitle: document.getElementById('movSeo').value.trim(),
+            metaDesc: document.getElementById('movMeta').value.trim(),
+            storyline: document.getElementById('movDesc').value.trim()
+        };
+
+        if(!data.name || !data.slugRaw || !data.video) return alert("Movie Name, Slug and Video URL are required!");
+
+        let finalSlug = sanitizeSlug(data.slugRaw);
+        document.getElementById('movSlug').value = finalSlug; // Update input
+
+        // Auto-Gen Text
+        let finalTitle = data.seoTitle || `Watch ${data.name} Full HD Movie Online Free | Ranginx`;
+        finalTitle = finalTitle.substring(0, 60);
+
+        let finalMeta = data.metaDesc || `Watch ${data.name} full HD movie online free on Ranginx. Fast streaming, no registration required, smooth playback.`;
+
+        let finalStoryHtml = "";
+        if(data.storyline) {
+            finalStoryHtml = data.storyline.split('\n').map(l => l.trim() ? `<p>${l}</p>` : '').join('');
+        } else {
+            finalStoryHtml = `
+            <p><strong>${data.name}</strong> is now available to watch online in full HD quality on Ranginx. This movie delivers an engaging experience with high-quality visuals and audio. You can enjoy the complete film without any interruptions.</p>
+            <p>Stream <strong>${data.name}</strong> with <strong>free streaming</strong> and <strong>no registration</strong>. Our platform is optimized for <strong>mobile & desktop</strong> devices, ensuring fast loading speeds and smooth playback.</p>
+            <p>Ranginx is your trusted destination for free entertainment. We provide a secure and premium viewing experience. Start watching ${data.name} now and enjoy the best of cinema.</p>`;
+        }
+
+        // Tags
+        let tagsList = data.tagsRaw.split(',').map(t => t.trim()).filter(t => t.length > 0).slice(0, 8);
+        let tagsHtml = tagsList.length > 0 ? 
+            `<div class="tags">${tagsList.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
+
+        // Player Logic
+        let isMp4 = data.video.includes('.mp4') || data.video.includes('.mkv');
+        let style = `width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;`;
+        let playerHtml = "";
+        if(isMp4) {
+            playerHtml = `<video controls playsinline preload="metadata" poster="${data.poster}" style="${style}"><source src="${data.video}" type="video/mp4"></video>`;
+        } else {
+            playerHtml = `<iframe src="${data.video}" allowfullscreen scrolling="no" allow="encrypted-media; picture-in-picture" style="${style};border:none"></iframe>`;
+        }
+
+        // Schema
+        let schemaData = {
+            "@context": "https://schema.org",
+            "@type": "Movie",
+            "name": data.name,
+            "description": finalMeta,
+            "image": data.poster,
+            "url": `https://ranginx.fun/movies/${finalSlug}.html`,
+            "inLanguage": "en",
+            "genre": tagsList.length > 0 ? tagsList : ["Entertainment"],
+            "publisher": { "@type": "Organization", "name": "Ranginx" },
+            "potentialAction": {
+                "@type": "WatchAction",
+                "target": `https://ranginx.fun/movies/${finalSlug}.html`
+            }
+        };
+
+        // Final HTML Construction
+        let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" href="/favicon.ico">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${cleanStr(finalTitle)}</title>
+<meta name="description" content="${cleanStr(finalMeta)}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ranginx.fun/movies/${finalSlug}.html">
+<meta property="og:site_name" content="Ranginx">
+<meta property="og:title" content="${cleanStr(finalTitle)}">
+<meta property="og:description" content="${cleanStr(finalMeta)}">
+<meta property="og:image" content="${data.poster}">
+<meta property="og:type" content="video.movie">
+<meta property="og:url" content="https://ranginx.fun/movies/${finalSlug}.html">
+<meta name="twitter:title" content="${cleanStr(finalTitle)}">
+<meta name="twitter:description" content="${cleanStr(finalMeta)}">
+<script type="application/ld+json">${JSON.stringify(schemaData)}<\/script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="/ads/movie-ads.js" defer><\/script>
+<script src="/ads/popunder.js" defer><\/script>
+<style>
+:root{--bg:#050505;--card:#121212;--p:#E50914;--t:#fff;--m:#aaa}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t);line-height:1.6}
+a{text-decoration:none;color:inherit}
+header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:#000;position:sticky;top:0;z-index:99;border-bottom:1px solid #222}
+.logo{color:var(--p);font-weight:800;font-size:24px;text-transform:uppercase}
+.home-btn{padding:8px 16px;background:var(--card);border:1px solid #333;border-radius:20px;font-size:12px;font-weight:600;color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0}
+.video-area{position:relative;width:100%;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
+.content-pad{padding:20px}
+h1{font-size:24px;margin-bottom:10px;font-weight:700;line-height:1.2}
+.meta-row{display:flex;gap:10px;align-items:center;margin-bottom:20px;font-size:13px;color:var(--m)}
+.badge{background:#333;color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;font-size:11px}
+.story-card{background:var(--card);padding:25px;border-radius:12px;margin-top:10px;margin-bottom:20px;}
+.card-head{display:flex;align-items:center;gap:10px;color:var(--p);font-weight:700;margin-bottom:15px;font-size:16px}
+.desc-text{color:#ccc;font-size:15px;line-height:1.7}
+.desc-text p{margin-bottom:15px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{background:#222;border:1px solid #333;padding:6px 14px;border-radius:50px;font-size:12px;color:#ccc}
+.social-row{display:flex;gap:10px;margin-bottom:25px}
+.soc-btn{flex:1;height:48px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid #333;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;color:white;transition:0.2s}
+.tg{color:#38bdf8;border-color:rgba(56,189,248,0.2)}
+.wa{color:#4ade80;border-color:rgba(74,222,128,0.2)}
+.cp{background:#7c3aed;border-color:#7c3aed;color:white}
+.soc-btn:hover{filter:brightness(1.2);transform:translateY(-2px)}
+.ad-box{width:100%;background:#000;display:flex;align-items:center;justify-content:center;margin:20px 0;min-height:50px}
+.ad-box:empty{display:none;}
+.related-sec{padding:0 20px 40px 20px}
+.sec-title{font-weight:700;margin-bottom:15px;border-left:4px solid var(--p);padding-left:12px;font-size:16px}
+.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.rel-card{display:block;border-radius:8px;overflow:hidden;background:var(--card);transition:0.2s}
+.rel-card:hover{transform:translateY(-3px)}
+.rel-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#111}
+.rel-title{padding:12px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.load-more{width:100%;padding:15px;background:var(--card);border:1px solid #333;color:#fff;font-weight:700;margin-top:20px;border-radius:8px;cursor:pointer}
+footer{background:#000;padding:50px 20px;text-align:center;font-size:13px;color:#555;border-top:1px solid #222}
+@media(min-width:768px){ .container{display:grid;grid-template-columns:70% 30%;gap:30px;padding:40px} .video-area{border-radius:12px;overflow:hidden;margin-top:0} .content-pad{padding:0;margin-top:25px} .rel-grid{grid-template-columns:1fr} }
+@media(max-width:768px){ .content-pad{padding-bottom:10px;} }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo">RANGINX</div>
+    <a href="/" class="home-btn">🏠 HOME</a>
+</header>
+
+<div class="video-area" id="video-box">${playerHtml}</div>
+
+<div class="container">
+    <div class="main-col">
+        <div class="content-pad">
+            <h1>${data.name}</h1>
+            <div class="meta-row">
+                <span class="badge">HD</span>
+                <span class="badge" style="background:var(--p)">Free</span>
+                <span>Streaming Now</span>
+            </div>
+
+            <div class="social-row">
+                 <a href="https://t.me/share/url?url=https://ranginx.fun/movies/${finalSlug}.html" target="_blank" class="soc-btn tg">Telegram</a>
+                 <a href="https://api.whatsapp.com/send?text=Watch: https://ranginx.fun/movies/${finalSlug}.html" target="_blank" class="soc-btn wa">WhatsApp</a>
+                 <button class="soc-btn cp" onclick="copyLink()">Copy Link</button>
+            </div>
+
+            <div id="ad-banner" class="ad-box"></div>
+
+            <div class="story-card">
+                <div class="card-head">📝 Storyline</div>
+                <div class="desc-text">${finalStoryHtml}</div>
+                ${tagsHtml}
+            </div>
+        </div>
+    </div>
+
+    <div class="side-col">
+        <div class="related-sec">
+            <div class="sec-title">You May Also Like</div>
+            <div class="rel-grid" id="related-grid"></div>
+            <button class="load-more" id="loadBtn" onclick="loadNextBatch()">Load More</button>
+            <div id="ad-sidebar" class="ad-box"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2025 Ranginx. All rights reserved.<br><br>
+    <a href="/dmca.html" style="color:#777;margin:0 10px">DMCA</a>
+    <a href="/terms.html" style="color:#777;margin:0 10px">Terms</a>
+    <a href="/privacy.html" style="color:#777;margin:0 10px">Privacy</a>
+</footer>
+
+<script>
+function copyLink(){ navigator.clipboard.writeText(window.location.href).then(()=>alert("Link Copied!")); }
+
+let allData = []; let currentIndex = 0; const itemsPerPage = 6; const currentSlug = "${finalSlug}";
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    const grid = document.getElementById('related-grid');
+    fetch('/data/movies.json')
+    .then(r=>{if(!r.ok)throw new Error();return r.json()})
+    .then(d=>{
+        allData = d.filter(m=>m.slug !== currentSlug);
+        if(allData.length > 0) loadNextBatch();
+        else grid.innerHTML = '<div style="padding:10px;color:#555">No related content</div>';
+    })
+    .catch(()=>{
+        console.log("Local Mode");
+        grid.innerHTML = '<div style="padding:10px;color:#555">Loading related... (Server needed)</div>';
+        document.getElementById('loadBtn').style.display='none';
+    });
+});
+
+function loadNextBatch() {
+    const grid = document.getElementById('related-grid');
+    const btn = document.getElementById('loadBtn');
+    let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
+
+    nextBatch.forEach(m => {
+        let type = (m.type || 'movie').toLowerCase();
+        let folder = 'movies';
+        if (type === 'series' || type === 'episode') folder = 'series';
+        let cleanSlug = String(m.slug || '').replace(/^movies\\//,'').replace(/^series\\//,'').replace(/\\.html$/,'').replace(/^\\//,'');
+        let finalUrl = type === 'episode' ? \`/series/\${cleanSlug}.html\` : \`/\${folder}/\${cleanSlug}.html\`;
+
+        grid.innerHTML += \`
+            <a href="\${finalUrl}" class="rel-card">
+                <img src="\${m.thumbnail}" class="rel-img" loading="lazy" alt="\${m.title}">
+                <div class="rel-title">\${m.title}</div>
+            </a>\`;
+    });
+    currentIndex += itemsPerPage;
+    if (currentIndex >= allData.length) btn.style.display = 'none';
+}
+<\/script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"><\/script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"><\/script>
+<script src="../app.js"><\/script>
+</body>
+</html>`;
+
+        let jsonDb = {
+            title: data.name,
+            slug: finalSlug,
+            thumbnail: data.poster,
+            type: "movie"
+        };
+
+        showOutput(html, JSON.stringify(jsonDb, null, 2) + ",", finalSlug);
+    }
 
     // ============================================
     //  Generate SERIES MAIN PAGE (Formatted)
@@ -355,12 +648,10 @@
 </html>`;
 
         showOutput(html, JSON.stringify(jsonDb, null, 2), data.slug + "-main");
-        document.getElementById('jsonBox').style.display = 'block'; 
     }
 
-
     // ============================================
-    //  Generate INDIVIDUAL EPISODE PAGE (Formatted + Fixed Script)
+    //  Generate INDIVIDUAL EPISODE PAGE
     // ============================================
     function generateEpisodePage() {
         let parentSlug = sanitizeSlug(document.getElementById('eSeriesSlug').value);
@@ -400,7 +691,7 @@
             thumbnail: data.thumb
         };
 
-        // --- PRETTY FORMATTED HTML (Script Fixed) ---
+        // --- PRETTY FORMATTED HTML ---
         let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -546,40 +837,21 @@ document.addEventListener("DOMContentLoaded", ()=>{
 function loadNextBatch() {
     const grid = document.getElementById('related-grid');
     const btn = document.getElementById('loadBtn');
-
     let nextBatch = allData.slice(currentIndex, currentIndex + itemsPerPage);
 
     nextBatch.forEach(m => {
-
-        // 🔑 TYPE DECIDES EVERYTHING
         let type = (m.type || 'movie').toLowerCase();
         let folder = 'movies';
-
-        if (type === 'series' || type === 'episode') {
-            folder = 'series';
-        }
-
-        // 🔧 CLEAN SLUG
-        let cleanSlug = String(m.slug || '')
-            .replace(/^movies\\//, '')
-            .replace(/^series\\//, '')
-            .replace(/\\.html$/, '')
-            .replace(/^\\//, '');
-
-        // 🔗 FINAL URL
-        let finalUrl =
-            type === 'episode'
-                ? \`/series/\${cleanSlug}.html\`
-                : \`/\${folder}/\${cleanSlug}.html\`;
+        if (type === 'series' || type === 'episode') folder = 'series';
+        let cleanSlug = String(m.slug || '').replace(/^movies\\//, '').replace(/^series\\//, '').replace(/\\.html$/, '').replace(/^\\//, '');
+        let finalUrl = type === 'episode' ? \`/series/\${cleanSlug}.html\` : \`/\${folder}/\${cleanSlug}.html\`;
 
         grid.innerHTML += \`
             <a href="\${finalUrl}" class="rel-card">
                 <img src="\${m.thumbnail}" class="rel-img" loading="lazy" alt="\${m.title}">
                 <div class="rel-title">\${m.title}</div>
-            </a>
-        \`;
+            </a>\`;
     });
-
     currentIndex += itemsPerPage;
     if (currentIndex >= allData.length) btn.style.display = 'none';
 }
@@ -591,7 +863,6 @@ function loadNextBatch() {
 </html>`;
 
         showOutput(html, JSON.stringify(jsonDb, null, 2), `${data.parentSlug}-${slug}`);
-        document.getElementById('jsonBox').style.display = 'block'; 
     }
 
     function showOutput(h, j, s) {
@@ -600,6 +871,7 @@ function loadNextBatch() {
         document.getElementById('jsonOut').textContent = j;
         document.getElementById('outputArea').style.display = 'block';
         document.getElementById('outputArea').scrollIntoView({behavior:'smooth'});
+        document.getElementById('jsonBox').style.display = 'block'; 
     }
 
     function copyText(id){
