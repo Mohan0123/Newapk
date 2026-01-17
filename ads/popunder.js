@@ -1,6 +1,6 @@
 /* ===============================
    POPUNDER SCRIPT
-================================ */
+
 (function () {
   // Unique key per page
   const pageKey = "ranginx_pop_" + location.pathname;
@@ -26,7 +26,7 @@
   document.addEventListener("click", triggerPop);
 })();
 
-
+================================ */
 
 /* ===============================
    SOCIAL BAR SCRIPT
